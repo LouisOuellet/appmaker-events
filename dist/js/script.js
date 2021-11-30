@@ -317,19 +317,16 @@ API.Plugins.events = {
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
-			if(API.Auth.validate('custom', 'organizations_notes', 2)){
+			if(API.Auth.validate('custom', 'events_notes', 2)){
 				layout.content.notes.find('button').off().click(function(){
 				  if(!layout.content.notes.find('textarea').summernote('isEmpty')){
 				    var note = {
 				      by:API.Contents.Auth.User.id,
 				      content:layout.content.notes.find('textarea').summernote('code'),
-				      relationship:'organizations',
+				      relationship:'events',
 				      link_to:dataset.this.dom.id,
 				      status:dataset.this.raw.status,
 				    };
-				    if(API.Helper.isSet(API.Plugins,['statuses']) && API.Auth.validate('custom', 'organizations_status', 1)){
-				      note.status = layout.content.notes.find('select').val();
-				    }
 				    layout.content.notes.find('textarea').val('');
 				    layout.content.notes.find('textarea').summernote('code','');
 				    layout.content.notes.find('textarea').summernote('destroy');
@@ -342,20 +339,12 @@ API.Plugins.events = {
 				      ],
 				      height: 250,
 				    });
-				    API.request('organizations','note',{data:note},function(result){
+				    API.request('events','note',{data:note},function(result){
 				      var data = JSON.parse(result);
 				      if(data.success != undefined){
-				        if(data.output.status != null){
-				          var status = {};
-				          for(var [key, value] of Object.entries(data.output.status)){ status[key] = value; }
-				          status.created = data.output.note.raw.created;
-				          API.Builder.Timeline.add.status(layout.timeline,status);
-				          layout.content.notes.find('select').val(status.order);
-				          layout.details.find('td[data-plugin="organizations"][data-key="status"]').html('<span class="badge bg-'+API.Contents.Statuses.organizations[status.order].color+'"><i class="'+API.Contents.Statuses.organizations[status.order].icon+' mr-1" aria-hidden="true"></i>'+API.Contents.Language[API.Contents.Statuses.organizations[status.order].name]+'</span>');
-				        }
 				        API.Builder.Timeline.add.card(layout.timeline,data.output.note.dom,'sticky-note','warning',function(item){
 				          item.find('.timeline-footer').remove();
-				          if(API.Auth.validate('custom', 'organizations_notes', 4)){
+				          if(API.Auth.validate('custom', 'events_notes', 4)){
 				            $('<a class="time bg-warning pointer"><i class="fas fa-trash-alt"></i></a>').insertAfter(item.find('span.time.bg-warning'));
 										item.find('a.pointer').off().click(function(){
 											API.CRUD.delete.show({ keys:data.output.note.dom,key:'id', modal:true, plugin:'notes' },function(note){
