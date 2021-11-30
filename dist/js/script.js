@@ -446,6 +446,116 @@ API.Plugins.events = {
 			});
 		},
 	},
+	GUI:{
+		contact:function(dataset,layout,plugin = 'contacts'){
+			var area = layout.content[plugin].find('div.row').eq(1);
+			area.prepend(API.Plugins.events.GUI.card(dataset));
+			var card = area.find('div.col-sm-12.col-md-6').first();
+			if(API.Auth.validate('custom', 'events_'+plugin+'_btn_share', 1)){
+				card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'navy',icon:'fas fa-share-alt',action:'share',content:API.Contents.Language['Share']}));
+			}
+			if(API.Auth.validate('custom', 'events_'+plugin+'_btn_edit', 1)){
+				card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'warning',icon:'fas fa-edit',action:'edit',content:API.Contents.Language['Edit']}));
+			}
+			if(API.Auth.validate('custom', 'events_'+plugin+'_btn_delete', 1)){
+				card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'danger',icon:'fas fa-trash-alt',action:'delete',content:''}));
+			}
+		},
+		button:function(dataset,options = {}){
+			var defaults = {
+				icon:"fas fa-building",
+				action:"details",
+				color:"primary",
+				key:"name",
+				id:"id",
+				content:"",
+			};
+			if(API.Helper.isSet(options,['icon'])){ defaults.icon = options.icon; }
+			if(API.Helper.isSet(options,['action'])){ defaults.action = options.action; }
+			if(API.Helper.isSet(options,['color'])){ defaults.color = options.color; }
+			if(API.Helper.isSet(options,['key'])){ defaults.key = options.key; }
+			if(API.Helper.isSet(options,['id'])){ defaults.id = options.id; }
+			if(API.Helper.isSet(options,['content'])){ defaults.content = options.content; }
+			else { defaults.content = dataset[defaults.key]; }
+			if(defaults.content != ''){ defaults.icon += ' mr-1'; }
+			return '<button type="button" class="btn btn-sm bg-'+defaults.color+'" data-id="'+dataset[defaults.id]+'" data-action="'+defaults.action+'"><i class="'+defaults.icon+'"></i>'+defaults.content+'</button>';
+		},
+		buttons:{
+			details:function(dataset,options = {}){
+				var defaults = {
+					icon:{details:"fas fa-building",remove:"fas fa-unlink"},
+					action:{details:"details",remove:"unlink"},
+					color:{details:"primary",remove:"danger"},
+					key:"name",
+					id:"id",
+					content:"",
+					remove:false,
+				};
+				if(API.Helper.isSet(options,['icon','details'])){ defaults.icon.details = options.icon.details; }
+				if(API.Helper.isSet(options,['icon','remove'])){ defaults.icon.remove = options.icon.remove; }
+				if(API.Helper.isSet(options,['color','details'])){ defaults.color.details = options.color.details; }
+				if(API.Helper.isSet(options,['color','remove'])){ defaults.color.remove = options.color.remove; }
+				if(API.Helper.isSet(options,['action','details'])){ defaults.action.details = options.action.details; }
+				if(API.Helper.isSet(options,['action','remove'])){ defaults.action.remove = options.action.remove; }
+				if(API.Helper.isSet(options,['key'])){ defaults.key = options.key; }
+				if(API.Helper.isSet(options,['id'])){ defaults.id = options.id; }
+				if(API.Helper.isSet(options,['remove'])){ defaults.remove = options.remove; }
+				if(API.Helper.isSet(options,['content'])){ defaults.content = options.content; }
+				else { defaults.content = dataset[defaults.key]; }
+				var html = '';
+				html += '<div class="btn-group m-1" data-id="'+dataset[defaults.id]+'">';
+					html += '<button type="button" class="btn btn-xs bg-'+defaults.color.details+'" data-id="'+dataset[defaults.id]+'" data-action="'+defaults.action.details+'"><i class="'+defaults.icon.details+' mr-1"></i>'+defaults.content+'</button>';
+					if(defaults.remove){
+						html += '<button type="button" class="btn btn-xs bg-'+defaults.color.remove+'" data-id="'+dataset[[defaults.id]]+'" data-action="'+defaults.action.remove+'"><i class="'+defaults.icon.remove+'"></i></button>';
+					}
+				html += '</div>';
+				return html;
+			},
+		},
+		card:function(dataset,options = {}){
+			var csv = '';
+			for(var [key, value] of Object.entries(dataset)){
+				if(value == null){ value = '';dataset[key] = value; };
+				if(jQuery.inArray(key,['first_name','middle_name','last_name','name','email','phone','mobile','office_num','other_num','about','job_title']) != -1){
+					if(typeof value == 'string'){ csv += value.replace(',','').toLowerCase()+','; }
+					else { csv += value+','; }
+				}
+			}
+			var html = '';
+			html += '<div class="col-sm-12 col-md-6 contactCard" data-csv="'+csv+'" data-id="'+dataset.id+'">';
+			  html += '<div class="card">';
+					if(!dataset.isActive){ html += '<div class="ribbon-wrapper ribbon-xl"><div class="ribbon bg-danger text-xl">'+API.Contents.Language['Inactive']+'</div></div>'; }
+			    html += '<div class="card-header border-bottom-0">';
+			      html += '<b class="mr-1">Title:</b>'+dataset.job_title;
+			    html += '</div>';
+			    html += '<div class="card-body pt-0">';
+			      html += '<div class="row">';
+			        html += '<div class="col-7">';
+			          html += '<h2 class="lead"><b>'+dataset.name+'</b></h2>';
+			          html += '<p class="text-sm"><b>About: </b> '+dataset.about+' </p>';
+			          html += '<ul class="ml-4 mb-0 fa-ul">';
+			            html += '<li class="small"><span class="fa-li"><i class="fas fa-lg fa-at"></i></span><b class="mr-1">Email:</b><a href="mailto:'+dataset.email+'">'+dataset.email+'</a></li>';
+			            html += '<li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span><b class="mr-1">Phone #:</b><a href="tel:'+dataset.phone+'">'+dataset.phone+'</a></li>';
+			            html += '<li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span><b class="mr-1">Office #:</b><a href="tel:'+dataset.office_num+'">'+dataset.office_num+'</a></li>';
+			            html += '<li class="small"><span class="fa-li"><i class="fas fa-lg fa-mobile"></i></span><b class="mr-1">Mobile #:</b><a href="tel:'+dataset.mobile+'">'+dataset.mobile+'</a></li>';
+			            html += '<li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span><b class="mr-1">Other #:</b><a href="tel:'+dataset.other_num+'">'+dataset.other_num+'</a></li>';
+			          html += '</ul>';
+			        html += '</div>';
+			        html += '<div class="col-5 text-center">';
+			          html += '<img src="/dist/img/default.png" alt="user-avatar" class="img-circle img-fluid">';
+			        html += '</div>';
+			      html += '</div>';
+			    html += '</div>';
+			    html += '<div class="card-footer">';
+			      html += '<div class="text-right">';
+			        html += '<div class="btn-group"></div>';
+			      html += '</div>';
+			    html += '</div>';
+			  html += '</div>';
+			html += '</div>';
+			return html;
+		},
+	},
 	Events:{
 		notes:function(dataset,layout,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
