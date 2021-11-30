@@ -82,6 +82,49 @@ API.Plugins.events = {
 							options.field = "name";
 							if(API.Helper.isSet(options,['td'])){ delete options.td; }
 							API.GUI.Layouts.details.data(data,layout,options);
+							// Address
+							options.field = "address";
+							options.td = '<td data-plugin="events">';
+								options.td += '<span data-plugin="events" data-key="address">'+data.this.dom.address+'</span>, ';
+								options.td += '<span data-plugin="events" data-key="city">'+data.this.dom.city+'</span>, ';
+								options.td += '<span data-plugin="events" data-key="zipcode">'+data.this.dom.zipcode+'</span>';
+							options.td += '</td>';
+							API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){});
+							// Notes
+							if(API.Helper.isSet(API.Plugins,['notes']) && API.Auth.validate('custom', 'events_notes', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-sticky-note",text:API.Contents.Language["Notes"]},function(data,layout,tab,content){
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="notes">'+API.Contents.Language['Notes']+'</button>');
+									layout.content.notes = content;
+									layout.tabs.notes = tab;
+									if(API.Auth.validate('custom', 'events_notes', 2)){
+										content.append('<div><textarea title="Note" name="note" class="form-control"></textarea></div>');
+										content.find('textarea').summernote({
+											toolbar: [
+												['font', ['fontname', 'fontsize']],
+												['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+												['color', ['color']],
+												['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+											],
+											height: 250,
+										});
+										var html = '';
+										html += '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">';
+											html += '<form class="form-inline my-2 my-lg-0 ml-auto">';
+												if(API.Helper.isSet(API.Plugins,['statuses']) && API.Auth.validate('custom', 'events_status', 1)){
+													html += '<select class="form-control mr-sm-2" name="status" style="width: 150px;">';
+													for(var [order, status] of Object.entries(API.Contents.Statuses.events)){
+														html += '<option value="'+order+'">'+API.Helper.ucfirst(status.name)+'</option>'
+													}
+													html += '</select>';
+												}
+												html += '<button class="btn btn-warning my-2 my-sm-0" type="button" data-action="reply"><i class="fas fa-sticky-note mr-1"></i>'+API.Contents.Language['Add Note']+'</button>';
+											html += '</form>';
+										html += '</nav>';
+										content.append(html);
+									}
+								});
+								API.Plugins.events.Events.notes(data,layout);
+							}
 							// Continue
 						});
 					});
