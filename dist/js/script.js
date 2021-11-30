@@ -215,7 +215,7 @@ API.Plugins.events = {
 								if(layout.timeline.find('.time-label').first().find('div.btn-group button[data-table="users"]').length <= 0){
 									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Hosts']+'</button>');
 								}
-								options.field = "setHosts";
+								options.field = "setPlanners";
 								options.td = '<td data-plugin="events" data-key="'+options.field+'"></td>';
 								API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
 									var td = tr.find('td[data-plugin="events"][data-key="'+options.field+'"]');
