@@ -12,5 +12,6 @@
 		"SetStaffs": "Staffs",
 		"SetMinInvites": "Min Attendees",
 		"SetMaxInvites": "Max Attendees",
-		"SetToken": "Token"
+		"SetToken": "Token",
+		"Page": "Page"
 }

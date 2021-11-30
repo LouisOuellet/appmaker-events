@@ -78,6 +78,15 @@ API.Plugins.events = {
 									});
 								});
 							}
+							// Page
+							if(API.Auth.validate('custom', 'events_page', 1)){
+								API.GUI.Layouts.details.control(data,layout,{color:"info",icon:"fas fa-globe",text:API.Contents.Language["Page"]},function(data,layout,button){
+									button.off().click(function(){
+										API.GUI.Breadcrumbs.add(data.this.raw.name, '?p=events&v=page&id='+data.this.raw.id);
+										API.CRUD.read.show({ href:'?p=events&v=page&id='+data.this.raw.id});
+									});
+								});
+							}
 							// Name
 							options.field = "name";
 							if(API.Helper.isSet(options,['td'])){ delete options.td; }
