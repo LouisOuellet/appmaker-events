@@ -3,7 +3,30 @@ API.Plugins.events = {
 		API.GUI.Sidebar.Nav.add('events', 'main_navigation');
 	},
 	load:{
-		index:function(){},
+		index:function(){
+			API.Builder.card($('#pagecontent'),{ title: 'Events', icon: 'events'}, function(card){
+				API.request('events','read',{
+					data:{options:{ link_to:'EventsIndex',plugin:'events',view:'index' }},
+				},function(result) {
+					var dataset = JSON.parse(result);
+					if(dataset.success != undefined){
+						for(var [key, value] of Object.entries(dataset.output.dom)){ API.Helper.set(API.Contents,['data','dom','events',value.id],value); }
+						for(var [key, value] of Object.entries(dataset.output.raw)){ API.Helper.set(API.Contents,['data','raw','events',value.id],value); }
+						API.Builder.table(card.children('.card-body'), dataset.output.dom, {
+							headers:dataset.output.headers,
+							id:'EventsIndex',
+							modal:true,
+							key:'id',
+							clickable:{ enable:true, view:'details'},
+							set:{isActive:"true"},
+							controls:{ toolbar:true},
+							import:{ key:'id', },
+							load:false,
+						});
+					}
+				});
+			});
+		},
 		details:function(){
 			$('div.wrapper').hide();
 			var url = new URL(window.location.href);
