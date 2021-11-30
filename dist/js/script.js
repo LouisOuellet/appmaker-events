@@ -141,7 +141,7 @@ API.Plugins.events = {
 												['color', ['color']],
 												['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
 											],
-											height: 250,
+											height: 500,
 										});
 										var html = '';
 										html += '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">';
