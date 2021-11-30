@@ -127,6 +127,27 @@ API.Plugins.events = {
 								});
 								API.Plugins.events.Events.notes(data,layout);
 							}
+							// About
+							if(API.Auth.validate('custom', 'events_about', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-reader",text:API.Contents.Language["About"]},function(data,layout,tab,content){
+									layout.content.about = content;
+									layout.tabs.about = tab;
+								});
+							}
+							// Menus
+							if(API.Auth.validate('custom', 'events_menus', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-open",text:API.Contents.Language["Menus"]},function(data,layout,tab,content){
+									layout.content.menus = content;
+									layout.tabs.menus = tab;
+								});
+							}
+							// Planning
+							if(API.Auth.validate('custom', 'events_planning', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-open",text:API.Contents.Language["Planning"]},function(data,layout,tab,content){
+									layout.content.event_items = content;
+									layout.tabs.event_items = tab;
+								});
+							}
 							// Contacts
 							if(API.Helper.isSet(API.Plugins,['contacts']) && API.Auth.validate('custom', 'events_contacts', 1)){
 								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-address-book",text:API.Contents.Language["Contacts"]},function(data,layout,tab,content){
@@ -173,6 +194,13 @@ API.Plugins.events = {
 									}
 								});
 								API.Plugins.events.Events.contacts(data,layout);
+							}
+							// Galleries
+							if(API.Helper.isSet(API.Plugins,['galleries']) && API.Auth.validate('custom', 'events_galleries', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-images",text:API.Contents.Language["Galleries"]},function(data,layout,tab,content){
+									layout.content.galleries = content;
+									layout.tabs.galleries = tab;
+								});
 							}
 							// Hosts
 							if(API.Helper.isSet(API.Plugins,['users']) && API.Auth.validate('custom', 'events_hosts', 1)){
