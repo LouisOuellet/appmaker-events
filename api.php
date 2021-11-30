@@ -11,6 +11,7 @@ class eventsAPI extends CRUDAPI {
 			if($gallery->numRows() > 0){
 				$gallery = $gallery->fetchAll()->All()[0];
 			} else {
+				$gallery = dirname(__FILE__,3).'/data/events/'.$data['id'].'/gallery';
 				$gallery = $this->Auth->create('galleries',['dirname' => $gallery]);
 				$gallery = $this->Auth->read('galleries',$gallery)->all()[0];
 				$this->createRelationship([
