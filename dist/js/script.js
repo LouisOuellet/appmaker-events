@@ -132,6 +132,25 @@ API.Plugins.events = {
 								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-reader",text:API.Contents.Language["About"]},function(data,layout,tab,content){
 									layout.content.about = content;
 									layout.tabs.about = tab;
+									if(API.Auth.validate('custom', 'events_about', 3)){
+										content.append('<div><textarea title="About" name="about" class="form-control"></textarea></div>');
+										content.find('textarea').html(data.this.raw.about).summernote({
+											toolbar: [
+												['font', ['fontname', 'fontsize']],
+												['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+												['color', ['color']],
+												['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+											],
+											height: 250,
+										});
+										var html = '';
+										html += '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">';
+											html += '<form class="form-inline my-2 my-lg-0 ml-auto">';
+												html += '<button class="btn btn-success my-2 my-sm-0" type="button" data-action="about"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>';
+											html += '</form>';
+										html += '</nav>';
+										content.append(html);
+									}
 								});
 							}
 							// Menus
