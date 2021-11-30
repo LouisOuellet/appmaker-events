@@ -153,24 +153,6 @@
             "updated_by": "2",
             "name": "Mariage de Louis et Christelle",
             "dirname": "\/Users\/louis\/Projects\/appmaker\/data\/events\/1\/gallery"
-        },
-        {
-            "id": 2,
-            "created": "2021-11-25 20:45:45",
-            "modified": "2021-11-25 20:45:45",
-            "owner": "2",
-            "updated_by": "2",
-            "name": null,
-            "dirname": null
-        },
-        {
-            "id": 3,
-            "created": "2021-11-25 21:04:39",
-            "modified": "2021-11-25 21:04:39",
-            "owner": "2",
-            "updated_by": "2",
-            "name": null,
-            "dirname": null
         }
     ],
     "pictures": [],

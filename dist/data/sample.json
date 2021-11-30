@@ -155,49 +155,24 @@
             "dirname": "\/Users\/louis\/Projects\/appmaker\/data\/events\/1\/gallery"
         },
         {
-            "id": 2,
-            "created": "2021-11-25 20:45:45",
-            "modified": "2021-11-25 20:45:45",
+            "id": 100008,
+            "created": "2021-11-29 20:20:03",
+            "modified": "2021-11-29 20:20:03",
             "owner": "2",
             "updated_by": "2",
             "name": null,
             "dirname": null
         },
         {
-            "id": 3,
-            "created": "2021-11-25 21:04:39",
-            "modified": "2021-11-25 21:04:39",
+            "id": 100009,
+            "created": "2021-11-30 09:34:36",
+            "modified": "2021-11-30 09:34:36",
             "owner": "2",
             "updated_by": "2",
             "name": null,
             "dirname": null
         }
     ],
-    "pictures": [
-        {
-            "id": 100000,
-            "created": "2021-11-25 14:58:40",
-            "modified": "2021-11-25 14:58:40",
-            "owner": "2",
-            "updated_by": "2",
-            "dirname": "\/Users\/louis\/Projects\/appmaker\/data\/events\/1\/gallery",
-            "basename": "hands.png",
-            "extension": "png",
-            "filename": "hands",
-            "size": "3258764"
-        },
-        {
-            "id": 100001,
-            "created": "2021-11-25 14:58:40",
-            "modified": "2021-11-25 14:58:40",
-            "owner": "2",
-            "updated_by": "2",
-            "dirname": "\/Users\/louis\/Projects\/appmaker\/data\/events\/1\/gallery",
-            "basename": "roses.png",
-            "extension": "png",
-            "filename": "roses",
-            "size": "27478551"
-        }
-    ],
+    "pictures": [],
     "vows": []
 }
