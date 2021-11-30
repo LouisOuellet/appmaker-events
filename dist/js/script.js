@@ -17,6 +17,7 @@ API.Plugins.events = {
 							id:'EventsIndex',
 							modal:true,
 							key:'id',
+							hide:['created','modified'],
 							clickable:{ enable:true, view:'details'},
 							set:{isActive:"true"},
 							controls:{ toolbar:true},
