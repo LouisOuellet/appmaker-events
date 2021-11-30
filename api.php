@@ -1,50 +1,53 @@
 <?php
 class eventsAPI extends CRUDAPI {
 
+	protected function scan($id){
+		// Scan Gallery
+		$gallery = dirname(__FILE__,3).'/data/events/'.events$id.'/gallery';
+		$gallery = $this->Auth->query('SELECT * FROM `galleries` WHERE `dirname` = ?',$gallery);
+		if($gallery->numRows() > 0){
+			$gallery = $gallery->fetchAll()->All()[0];
+		} else {
+			$gallery = dirname(__FILE__,3).'/data/events/'.events$id.'/gallery';
+			$gallery = $this->Auth->create('galleries',['dirname' => $gallery]);
+			$gallery = $this->Auth->read('galleries',$gallery)->all()[0];
+			$this->createRelationship([
+				'relationship_1' => 'events',
+				'link_to_1' => events$id,
+				'relationship_2' => 'galleries',
+				'link_to_2' => $gallery['id'],
+			]);
+		}
+		$files = $this->Auth->query('SELECT * FROM `pictures` WHERE `dirname` = ?',$gallery['dirname']);
+		if($files->numRows() > 0){
+			$files = $files->fetchAll()->All();
+		} else { $files = []; }
+		$pictures = [];
+		foreach($files as $picture){ $pictures[$picture['basename']] = $picture; }
+		if(is_file($gallery['dirname'])||is_dir($gallery['dirname'])){
+			$files = scandir($gallery['dirname']);
+			$files = array_diff($files, array('.', '..'));
+			foreach($files as $key => $picture){
+				if(!array_key_exists($picture,$pictures)){
+					$picture = pathinfo($gallery['dirname'].'/'.$picture);
+					$picture['size'] = filesize($gallery['dirname'].'/'.$picture['basename']);
+					$picture['id'] = $this->Auth->create('pictures',$picture);
+					$pictures[$picture['basename']] = $this->Auth->read('pictures',$picture['id'])->all()[0];
+					$this->createRelationship([
+						'relationship_1' => 'galleries',
+						'link_to_1' => $gallery['id'],
+						'relationship_2' => 'pictures',
+						'link_to_2' => $pictures[$picture['basename']]['id'],
+					]);
+				}
+			}
+		} else { $this->mkdir('/data/events/'.events$id.'/gallery'); }
+	}
+
 	public function get($request = null, $data = null){
 		if(isset($data)){
 			if(!is_array($data)){ $data = json_decode($data, true); }
 			$this->Auth->setLimit(0);
-			// Scan Gallery
-			$gallery = dirname(__FILE__,3).'/data/events/'.$data['id'].'/gallery';
-			$gallery = $this->Auth->query('SELECT * FROM `galleries` WHERE `dirname` = ?',$gallery);
-			if($gallery->numRows() > 0){
-				$gallery = $gallery->fetchAll()->All()[0];
-			} else {
-				$gallery = dirname(__FILE__,3).'/data/events/'.$data['id'].'/gallery';
-				$gallery = $this->Auth->create('galleries',['dirname' => $gallery]);
-				$gallery = $this->Auth->read('galleries',$gallery)->all()[0];
-				$this->createRelationship([
-					'relationship_1' => 'events',
-					'link_to_1' => $data['id'],
-					'relationship_2' => 'galleries',
-					'link_to_2' => $gallery['id'],
-				]);
-			}
-			$files = $this->Auth->query('SELECT * FROM `pictures` WHERE `dirname` = ?',$gallery['dirname']);
-			if($files->numRows() > 0){
-				$files = $files->fetchAll()->All();
-			} else { $files = []; }
-			$pictures = [];
-			foreach($files as $picture){ $pictures[$picture['basename']] = $picture; }
-			if(is_file($gallery['dirname'])||is_dir($gallery['dirname'])){
-				$files = scandir($gallery['dirname']);
-				$files = array_diff($files, array('.', '..'));
-				foreach($files as $key => $picture){
-					if(!array_key_exists($picture,$pictures)){
-						$picture = pathinfo($gallery['dirname'].'/'.$picture);
-						$picture['size'] = filesize($gallery['dirname'].'/'.$picture['basename']);
-						$picture['id'] = $this->Auth->create('pictures',$picture);
-						$pictures[$picture['basename']] = $this->Auth->read('pictures',$picture['id'])->all()[0];
-						$this->createRelationship([
-							'relationship_1' => 'galleries',
-						  'link_to_1' => $gallery['id'],
-						  'relationship_2' => 'pictures',
-						  'link_to_2' => $pictures[$picture['basename']]['id'],
-						]);
-					}
-				}
-			} else { $this->mkdir('/data/events/'.$data['id'].'/gallery'); }
 			// Load Event
 			$get = parent::get('events', $data);
 			// Load Items
