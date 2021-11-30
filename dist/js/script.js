@@ -133,7 +133,7 @@ API.Plugins.events = {
 									layout.content.about = content;
 									layout.tabs.about = tab;
 									if(API.Auth.validate('custom', 'events_about', 3)){
-										content.append('<div><textarea title="About" name="about" class="form-control"></textarea></div>');
+										content.append('<div><textarea name="about" class="form-control"></textarea></div>');
 										content.find('textarea').html(data.this.raw.about).summernote({
 											toolbar: [
 												['font', ['fontname', 'fontsize']],
@@ -146,7 +146,7 @@ API.Plugins.events = {
 										var html = '';
 										html += '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">';
 											html += '<form class="form-inline my-2 my-lg-0 ml-auto">';
-												html += '<button class="btn btn-success my-2 my-sm-0" type="button" data-action="about"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>';
+												html += '<button class="btn btn-success my-2 my-sm-0" type="button" data-action="save"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>';
 											html += '</form>';
 										html += '</nav>';
 										content.append(html);
@@ -158,6 +158,49 @@ API.Plugins.events = {
 								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-open",text:API.Contents.Language["Menus"]},function(data,layout,tab,content){
 									layout.content.menus = content;
 									layout.tabs.menus = tab;
+									if(API.Auth.validate('custom', 'events_menus', 3)){
+										var html = '';
+										html += '<div class="btn-group">';
+										  html += '<button type="button" class="btn btn-info" data-field="menuAdult">Adult</button>';
+										  html += '<button type="button" class="btn btn-secondary" data-field="menuKid">Kid</button>';
+										html += '</div>';
+										html += '<div>';
+											html += '<div data-field="menuAdult"><textarea name="menuAdult" class="form-control"></textarea><div>';
+											html += '<div class="hide" data-field="menuKid"><textarea name="menuKid" class="form-control"></textarea><div>';
+										html += '<div>';
+										content.append(html);
+										content.find('button[data-field]').off().click(function(){
+											content.find('button[data-field].btn-info').removeClass('btn-info').addClass('btn-secondary');
+											$(this).removeClass('btn-secondary').addClass('btn-info');
+											content.find('div[data-field]').hide();
+											content.find('div[data-field="'+$(this).attr('data-field')+'"]').show();
+										});
+										content.find('textarea[name="menuAdult"]').html(data.this.raw.menuAdult).summernote({
+											toolbar: [
+												['font', ['fontname', 'fontsize']],
+												['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+												['color', ['color']],
+												['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+											],
+											height: 500,
+										});
+										content.find('textarea[name="menuKid"]').html(data.this.raw.menuKid).summernote({
+											toolbar: [
+												['font', ['fontname', 'fontsize']],
+												['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+												['color', ['color']],
+												['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+											],
+											height: 500,
+										});
+										var html = '';
+										html += '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">';
+											html += '<form class="form-inline my-2 my-lg-0 ml-auto">';
+												html += '<button class="btn btn-success my-2 my-sm-0" type="button" data-action="save"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>';
+											html += '</form>';
+										html += '</nav>';
+										content.append(html);
+									}
 								});
 							}
 							// Planning
