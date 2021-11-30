@@ -1,4 +1,16 @@
 {
 		"events": "events",
-		"Events": "Events"
+		"Events": "Events",
+		"MenuAdult": "Adults Menu",
+		"MenuKid": "Kids Menu",
+		"HasGallery": "Gallery",
+		"HasVows": "Vows",
+		"HasMenu": "Menu",
+		"SetHosts": "Hosts",
+		"SetHostType": "Host Type",
+		"SetPlanners": "Planners",
+		"SetStaffs": "Staffs",
+		"SetMinInvites": "Min Attendees",
+		"SetMaxInvites": "Max Attendees",
+		"SetToken": "Token"
 }
