@@ -3,17 +3,17 @@ class eventsAPI extends CRUDAPI {
 
 	protected function scan($id){
 		// Scan Gallery
-		$gallery = dirname(__FILE__,3).'/data/events/'.events$id.'/gallery';
+		$gallery = dirname(__FILE__,3).'/data/events/'.$id.'/gallery';
 		$gallery = $this->Auth->query('SELECT * FROM `galleries` WHERE `dirname` = ?',$gallery);
 		if($gallery->numRows() > 0){
 			$gallery = $gallery->fetchAll()->All()[0];
 		} else {
-			$gallery = dirname(__FILE__,3).'/data/events/'.events$id.'/gallery';
+			$gallery = dirname(__FILE__,3).'/data/events/'.$id.'/gallery';
 			$gallery = $this->Auth->create('galleries',['dirname' => $gallery]);
 			$gallery = $this->Auth->read('galleries',$gallery)->all()[0];
 			$this->createRelationship([
 				'relationship_1' => 'events',
-				'link_to_1' => events$id,
+				'link_to_1' => $id,
 				'relationship_2' => 'galleries',
 				'link_to_2' => $gallery['id'],
 			]);
@@ -41,7 +41,7 @@ class eventsAPI extends CRUDAPI {
 					]);
 				}
 			}
-		} else { $this->mkdir('/data/events/'.events$id.'/gallery'); }
+		} else { $this->mkdir('/data/events/'.$id.'/gallery'); }
 	}
 
 	public function get($request = null, $data = null){
