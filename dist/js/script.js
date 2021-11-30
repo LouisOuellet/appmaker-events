@@ -143,7 +143,7 @@ API.Plugins.events = {
 							}
 							// Planning
 							if(API.Auth.validate('custom', 'events_planning', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-open",text:API.Contents.Language["Planning"]},function(data,layout,tab,content){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-calendar-day",text:API.Contents.Language["Planning"]},function(data,layout,tab,content){
 									layout.content.event_items = content;
 									layout.tabs.event_items = tab;
 								});

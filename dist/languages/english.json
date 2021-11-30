@@ -17,5 +17,8 @@
 		"SetMinInvites": "Min Attendees",
 		"SetMaxInvites": "Max Attendees",
 		"SetToken": "Token",
-		"Page": "Page"
+		"Page": "Page",
+		"Planning": "Planning",
+		"Galleries": "Galleries",
+		"Menus": "Menus"
 }
