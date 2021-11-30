@@ -160,15 +160,17 @@ API.Plugins.events = {
 									layout.tabs.menus = tab;
 									if(API.Auth.validate('custom', 'events_menus', 3)){
 										var html = '';
-										html += '<div class="btn-group">';
-										  html += '<button type="button" class="btn btn-info" data-field="menuAdult">Adult</button>';
-										  html += '<button type="button" class="btn btn-secondary" data-field="menuKid">Kid</button>';
+										html += '<div class="btn-group btn-block">';
+										  html += '<button type="button" class="btn btn-flat btn-info" data-field="menuAdult">Adult</button>';
+										  html += '<button type="button" class="btn btn-flat btn-secondary" data-field="menuKid">Kid</button>';
 										html += '</div>';
 										html += '<div>';
 											html += '<div data-field="menuAdult"><textarea name="menuAdult" class="form-control"></textarea><div>';
-											html += '<div class="hide" data-field="menuKid"><textarea name="menuKid" class="form-control"></textarea><div>';
+											html += '<div data-field="menuKid"><textarea name="menuKid" class="form-control"></textarea><div>';
 										html += '<div>';
 										content.append(html);
+										content.find('div[data-field]').hide();
+										content.find('div[data-field="'+content.find('button[data-field].btn-info').attr('data-field')+'"]').show();
 										content.find('button[data-field]').off().click(function(){
 											content.find('button[data-field].btn-info').removeClass('btn-info').addClass('btn-secondary');
 											$(this).removeClass('btn-secondary').addClass('btn-info');
