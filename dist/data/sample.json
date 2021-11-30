@@ -144,35 +144,5 @@
             "setGallery": null
         }
     ],
-    "galleries": [
-        {
-            "id": 1,
-            "created": "2021-11-25 14:34:30",
-            "modified": "2021-11-25 14:34:30",
-            "owner": "2",
-            "updated_by": "2",
-            "name": "Mariage de Louis et Christelle",
-            "dirname": "\/Users\/louis\/Projects\/appmaker\/data\/events\/1\/gallery"
-        },
-        {
-            "id": 100008,
-            "created": "2021-11-29 20:20:03",
-            "modified": "2021-11-29 20:20:03",
-            "owner": "2",
-            "updated_by": "2",
-            "name": null,
-            "dirname": null
-        },
-        {
-            "id": 100009,
-            "created": "2021-11-30 09:34:36",
-            "modified": "2021-11-30 09:34:36",
-            "owner": "2",
-            "updated_by": "2",
-            "name": null,
-            "dirname": null
-        }
-    ],
-    "pictures": [],
     "vows": []
 }

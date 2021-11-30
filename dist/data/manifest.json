@@ -1,5 +1,5 @@
 {
-    "build": 3,
+    "build": 4,
     "version": "21.11-dev",
     "name": "events",
     "repository": {
@@ -9,19 +9,12 @@
             "git": "https:\/\/github.com\/LouisOuellet\/",
             "raw": "https:\/\/raw.githubusercontent.com\/LouisOuellet\/"
         },
-        "manifest": "\/dist\/data\/manifest.json",
-        "branches": [
-            "main",
-            "beta",
-            "dev"
-        ]
+        "manifest": "\/dist\/data\/manifest.json"
     },
     "requirements": {
         "table": [
             "events",
             "event_items",
-            "galleries",
-            "pictures",
             "vows"
         ]
     }
