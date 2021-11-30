@@ -118,6 +118,53 @@ API.Plugins.events = {
 								});
 								API.Plugins.events.Events.notes(data,layout);
 							}
+							// Contacts
+							if(API.Helper.isSet(API.Plugins,['contacts']) && API.Auth.validate('custom', 'events_contacts', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-address-book",text:API.Contents.Language["Contacts"]},function(data,layout,tab,content){
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="contacts">'+API.Contents.Language['Contacts']+'</button>');
+									layout.content.contacts = content;
+									layout.tabs.contacts = tab;
+									content.addClass('p-3');
+									var html = '';
+									html += '<div class="row">';
+										html += '<div class="col-md-12 mb-3">';
+											html += '<div class="input-group">';
+												html += '<input type="text" class="form-control">';
+												html += '<div class="input-group-append pointer" data-action="clear">';
+													html += '<span class="input-group-text"><i class="fas fa-times" aria-hidden="true"></i></span>';
+												html += '</div>';
+												html += '<div class="input-group-append">';
+													html += '<span class="input-group-text"><i class="icon icon-search mr-1"></i>'+API.Contents.Language["Search"]+'</span>';
+												html += '</div>';
+											html += '</div>';
+										html += '</div>';
+									html += '</div>';
+									html += '<div class="row"></div>';
+									content.append(html);
+									area = content.find('div.row').last();
+									if(API.Auth.validate('custom', 'events_contacts', 2)){
+										var html = '';
+										html += '<div class="col-sm-12 col-md-6">';
+											html += '<div class="card pointer addContact">';
+												html += '<div class="card-body py-4">';
+													html += '<div class="text-center p-5">';
+														html += '<i class="fas fa-plus-circle fa-10x mt-3 mb-2"></i>';
+													html += '</div>';
+												html += '</div>';
+											html += '</div>';
+										html += '</div>';
+										area.append(html);
+									}
+									if(API.Helper.isSet(data,['relations','contacts'])){
+										for(var [id, relation] of Object.entries(data.relations.contacts)){
+											if(relation.isActive||API.Auth.validate('custom', 'events_contacts_isActive', 1)){
+												API.Plugins.events.GUI.contact(relation,layout);
+											}
+										}
+									}
+								});
+								API.Plugins.events.Events.contacts(data,layout);
+							}
 							// Continue
 						});
 					});
@@ -371,6 +418,105 @@ API.Plugins.events = {
 				  }
 				});
 			}
+		},
+		contacts:function(dataset,layout,options = {},callback = null){
+			if(options instanceof Function){ callback = options; options = {}; }
+			var defaults = {field: "name"};
+			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
+			var contacts = layout.content.contacts.find('div.row').eq(1);
+			var search = layout.content.contacts.find('div.row').eq(0);
+			var skeleton = {};
+			for(var [field, settings] of Object.entries(API.Contents.Settings.Structure.contacts)){ skeleton[field] = ''; }
+			search.find('div[data-action="clear"]').off().click(function(){
+				$(this).parent().find('input').val('');
+				contacts.find('[data-csv]').show();
+			});
+			search.find('input').off().on('input',function(){
+				if($(this).val() != ''){
+					contacts.find('[data-csv]').hide();
+					contacts.find('[data-csv*="'+$(this).val().toLowerCase()+'"]').each(function(){ $(this).show(); });
+				} else { contacts.find('[data-csv]').show(); }
+			});
+			if(API.Auth.validate('custom', 'events_contacts', 2)){
+				contacts.find('.addContact').off().click(function(){
+					API.CRUD.create.show({ plugin:'contacts', keys:skeleton, set:{isActive:'true',relationship:'events',link_to:dataset.this.raw.id} },function(created,user){
+						if(created){
+							user.dom.name = '';
+							if((user.dom.first_name != '')&&(user.dom.first_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.first_name; }
+							if((user.dom.middle_name != '')&&(user.dom.middle_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.middle_name; }
+							if((user.dom.last_name != '')&&(user.dom.last_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.last_name; }
+							API.Helper.set(dataset,['details','contacts','dom',user.dom.id],user.dom);
+							API.Helper.set(dataset,['details','contacts','raw',user.raw.id],user.raw);
+							API.Helper.set(dataset,['relations','contacts',user.dom.id],user.dom);
+							API.Plugins.events.GUI.contact(user.dom,layout);
+							API.Plugins.events.Events.contacts(dataset,layout);
+							API.Builder.Timeline.add.contact(layout.timeline,user.dom,'address-card','secondary',function(item){
+								item.find('i').first().addClass('pointer');
+								item.find('i').first().off().click(function(){
+									value = item.attr('data-name').toLowerCase();
+									layout.content.contacts.find('input').val(value);
+									layout.tabs.contacts.find('a').tab('show');
+									layout.content.contacts.find('[data-csv]').hide();
+									layout.content.contacts.find('[data-csv*="'+value+'"]').each(function(){ $(this).show(); });
+								});
+							});
+						}
+					});
+				});
+			}
+			contacts.find('button').off().click(function(){
+				var contact = dataset.relations.contacts[$(this).attr('data-id')];
+				switch($(this).attr('data-action')){
+					case"call":
+						var now = new Date();
+						var call = {
+							date:now,
+							time:now,
+							contact:contact.id,
+							status:3,
+							assigned_to:API.Contents.Auth.User.id,
+							relationship:'events',
+							link_to:dataset.this.raw.id,
+						};
+						API.request('calls','create',{data:call},function(result){
+							var record = JSON.parse(result);
+							if(typeof record.success !== 'undefined'){
+								API.Helper.set(dataset,['details','calls','dom',record.output.dom.id],record.output.dom);
+								API.Helper.set(dataset,['details','calls','raw',record.output.raw.id],record.output.raw);
+								API.Helper.set(dataset,['relations','calls',record.output.dom.id],record.output.dom);
+								API.Plugins.calls.Events.create(dataset,record.output.raw);
+							}
+						});
+						break;
+					case"edit":
+						API.CRUD.update.show({ keys:contact, modal:true, plugin:'contacts' },function(user){
+							user.dom.name = '';
+							if((user.dom.first_name != '')&&(user.dom.first_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.first_name; }
+							if((user.dom.middle_name != '')&&(user.dom.middle_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.middle_name; }
+							if((user.dom.last_name != '')&&(user.dom.last_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.last_name; }
+							API.Helper.set(dataset,['relations','contacts',user.dom.id],user.dom);
+							contacts.find('[data-id="'+user.raw.id+'"]').remove();
+							API.Plugins.events.GUI.contact(user.dom,layout);
+							API.Plugins.events.Events.contacts(dataset,layout);
+						});
+						break;
+					case"delete":
+						contact.link_to = dataset.this.raw.id;
+						API.CRUD.delete.show({ keys:contact,key:'name', modal:true, plugin:'contacts' },function(user){
+							if(contacts.find('[data-id="'+contact.id+'"]').find('.ribbon-wrapper').length > 0 || !API.Auth.validate('custom', 'events_contacts_isActive', 1)){
+								contacts.find('[data-id="'+contact.id+'"]').remove();
+								layout.timeline.find('[data-type="address-card"][data-id="'+contact.id+'"]').remove();
+							}
+							if(contact.isActive && API.Auth.validate('custom', 'events_contacts_isActive', 1)){
+								contact.isActive = user.isActive;
+								API.Helper.set(dataset,['relations','contacts',contact.id,'isActive'],contact.isActive);
+								contacts.find('[data-id="'+contact.id+'"] .card').prepend('<div class="ribbon-wrapper ribbon-xl"><div class="ribbon bg-danger text-xl">'+API.Contents.Language['Inactive']+'</div></div>');
+							}
+						});
+						break;
+				}
+			});
+			if(callback != null){ callback(dataset,layout); }
 		},
 	},
 }
