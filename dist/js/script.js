@@ -48,7 +48,42 @@ API.Plugins.events = {
 								modal.find('.modal-header').find('.btn-group').find('[data-control="update"]').remove();
 							}
 						}
-						// Continue
+						// History
+						API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-history",text:API.Contents.Language["History"]},function(data,layout,tab,content){
+							API.Helper.set(API.Contents,['layouts','events',data.this.raw.id,layout.main.attr('id')],layout);
+							content.addClass('p-3');
+							content.append('<div class="timeline" data-plugin="events"></div>');
+							layout.timeline = content.find('div.timeline');
+							var today = new Date();
+							API.Builder.Timeline.add.date(layout.timeline,today);
+							layout.timeline.find('.time-label').first().html('<div class="btn-group"></div>');
+							layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-primary" data-table="all">'+API.Contents.Language['All']+'</button>');
+							var options = {plugin:"events"}
+							// Debug
+							if(API.debug){
+								API.GUI.Layouts.details.button(data,layout,{icon:"fas fa-stethoscope"},function(data,layout,button){
+									button.off().click(function(){
+										console.log(data);
+										console.log(layout);
+									});
+								});
+							}
+							// Clear
+							if(API.Auth.validate('custom', 'events_clear', 1)){
+								API.GUI.Layouts.details.control(data,layout,{color:"danger",icon:"fas fa-snowplow",text:API.Contents.Language["Clear"]},function(data,layout,button){
+									button.off().click(function(){
+										API.request('events','clear',{ data:data.this.raw },function(){
+											API.Plugins.events.load.details();
+										});
+									});
+								});
+							}
+							// Name
+							options.field = "name";
+							if(API.Helper.isSet(options,['td'])){ delete options.td; }
+							API.GUI.Layouts.details.data(data,layout,options);
+							// Continue
+						});
 					});
 				}
 			});
