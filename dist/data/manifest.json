@@ -1,0 +1,28 @@
+{
+    "build": 1,
+    "version": "21.11-dev",
+    "name": "events",
+    "repository": {
+        "name": "appmaker-events",
+        "branch": "dev",
+        "host": {
+            "git": "https:\/\/github.com\/LouisOuellet\/",
+            "raw": "https:\/\/raw.githubusercontent.com\/LouisOuellet\/"
+        },
+        "manifest": "\/dist\/data\/manifest.json",
+        "branches": [
+            "main",
+            "beta",
+            "dev"
+        ]
+    },
+    "requirements": {
+        "table": [
+            "events",
+            "event_items",
+            "galleries",
+            "pictures",
+            "vows"
+        ]
+    }
+}
