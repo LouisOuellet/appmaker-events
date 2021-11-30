@@ -167,7 +167,7 @@ API.Plugins.events = {
 										html += '<div>';
 											html += '<div data-field="menuAdult"><textarea name="menuAdult" class="form-control"></textarea><div>';
 											html += '<div data-field="menuKid"><textarea name="menuKid" class="form-control"></textarea><div>';
-										html += '<div>';
+										html += '</div>';
 										content.append(html);
 										content.find('div[data-field]').hide();
 										content.find('div[data-field="'+content.find('button[data-field].btn-info').attr('data-field')+'"]').show();
