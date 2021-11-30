@@ -27,7 +27,8 @@ API.Plugins.events = {
 				});
 			});
 		},
-		details:function(){
+		details:function(){},
+		page:function(){
 			$('div.wrapper').hide();
 			var url = new URL(window.location.href);
 			var id = url.searchParams.get("id");
