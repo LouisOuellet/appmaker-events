@@ -174,6 +174,40 @@ API.Plugins.events = {
 								});
 								API.Plugins.events.Events.contacts(data,layout);
 							}
+							// Hosts
+							if(API.Helper.isSet(API.Plugins,['users']) && API.Auth.validate('custom', 'events_hosts', 1)){
+								layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Hosts']+'</button>');
+								options.field = "setHosts";
+								options.td = '<td data-plugin="events" data-key="'+options.field+'"></td>';
+								API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
+									var td = tr.find('td[data-plugin="events"][data-key="setHosts"]');
+									if(API.Helper.isSet(data.details,['users'])){
+										if(data.this.raw.setHosts == null){ data.this.raw.setHosts = ''; }
+										for(var [subKey, subDetails] of Object.entries(API.Helper.trim(data.this.raw.setHosts,';').split(';'))){
+											if(subDetails != ''){
+												var user = data.details.users.dom[subDetails];
+												td.append(
+													API.Plugins.events.GUI.buttons.details(user,{
+														remove:API.Auth.validate('custom', 'events_users', 4),
+														key: "username",
+														icon:{
+															details:"fas fa-user",
+															remove:"fas fa-user-minus",
+														},
+														action:{
+															remove:"unassign",
+														},
+													})
+												);
+											}
+										}
+									}
+									if(API.Auth.validate('custom', 'events_users', 2)){
+										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="assign"><i class="fas fa-user-plus"></i></button>');
+									}
+									API.Plugins.events.Events.users(data,layout);
+								});
+							}
 							// Continue
 							// Created
 							options.field = "created";
@@ -557,6 +591,99 @@ API.Plugins.events = {
 		},
 	},
 	Events:{
+		users:function(dataset,layout,options = {},callback = null){
+			if(options instanceof Function){ callback = options; options = {}; }
+			var defaults = {field: "name"};
+			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
+			var td = layout.details.find('td[data-plugin="events"][data-key="setHosts"]');
+			td.find('button').off().click(function(){
+				var button = $(this);
+				if(button.attr('data-action') != "assign"){
+					if(API.Helper.isSet(API.Contents,['data','raw','users',button.attr('data-id')])){
+						var user = {raw:API.Contents.data.raw.users[button.attr('data-id')],dom:{}};
+						user.dom = API.Contents.data.dom.users[user.raw.username];
+					} else {
+						var user = {
+							dom:dataset.details.users.dom[button.attr('data-id')],
+							raw:dataset.details.users.raw[button.attr('data-id')],
+						};
+					}
+				}
+				switch(button.attr('data-action')){
+					case"details":
+						API.CRUD.read.show({ key:'username',keys:user.dom, href:"?p=users&v=details&id="+user.raw.username, modal:true });
+						break;
+					case"unassign":
+						API.request('events','unassign',{data:{id:dataset.this.raw.id,user:button.attr('data-id')}},function(result){
+							var sub_dataset = JSON.parse(result);
+							if(sub_dataset.success != undefined){
+								td.find('.btn-group[data-id="'+sub_dataset.output.user+'"]').remove();
+							}
+						});
+						break;
+					case"assign":
+						API.Builder.modal($('body'), {
+							title:'Assign a user',
+							icon:'user',
+							zindex:'top',
+							css:{ header: "bg-gray", body: "p-3"},
+						}, function(modal){
+							modal.on('hide.bs.modal',function(){ modal.remove(); });
+							var dialog = modal.find('.modal-dialog');
+							var header = modal.find('.modal-header');
+							var body = modal.find('.modal-body');
+							var footer = modal.find('.modal-footer');
+							header.find('button[data-control="hide"]').remove();
+							header.find('button[data-control="update"]').remove();
+							API.Builder.input(body, 'user', null, function(input){});
+							footer.append('<button class="btn btn-secondary" data-action="assign"><i class="fas fa-user-plus mr-1"></i>'+API.Contents.Language['Assign']+'</button>');
+							footer.find('button[data-action="assign"]').click(function(){
+								if((typeof body.find('select').select2('val') !== "undefined")&&(body.find('select').select2('val') != '')){
+									API.request('events','assign',{data:{id:dataset.this.dom.id,user:body.find('select').select2('val')}},function(result){
+										var sub_dataset = JSON.parse(result);
+										if(sub_dataset.success != undefined){
+											for(var [key, user] of Object.entries(sub_dataset.output.organization.raw.setHosts.split(';'))){
+												if(user != '' && td.find('div.btn-group[data-id="'+user+'"]').length <= 0){
+													user = {
+														dom:sub_dataset.output.users.dom[user],
+														raw:sub_dataset.output.users.raw[user],
+													};
+													API.Helper.set(API.Contents,['data','dom','users',user.dom.username],user.dom);
+													API.Helper.set(API.Contents,['data','raw','users',user.raw.id],user.raw);
+													API.Helper.set(dataset.details,['users','dom',user.dom.id],user.dom);
+													API.Helper.set(dataset.details,['users','dom',user.raw.id],user.raw);
+													var html = API.Plugins.events.GUI.buttons.details(user.dom,{
+														remove:API.Auth.validate('custom', 'events_users', 4),
+													  key: "username",
+													  icon:{
+													    details:"fas fa-user",
+													    remove:"fas fa-user-minus",
+													  },
+													  action:{
+													    remove:"unassign",
+													  },
+													});
+													if(td.find('button[data-action="assign"]').length > 0){
+														td.find('button[data-action="assign"]').before(html);
+													} else { td.append(html); }
+												}
+											}
+											API.Plugins.events.Events.users(dataset,layout);
+										}
+									});
+									modal.modal('hide');
+								} else {
+									body.find('.input-group').addClass('is-invalid');
+									alert('No organization were selected!');
+								}
+							});
+							modal.modal('show');
+						});
+						break;
+				}
+			});
+			if(callback != null){ callback(dataset,layout); }
+		},
 		notes:function(dataset,layout,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
@@ -671,7 +798,7 @@ API.Plugins.events = {
 							time:now,
 							contact:contact.id,
 							status:3,
-							assigned_to:API.Contents.Auth.User.id,
+							setHosts:API.Contents.Auth.User.id,
 							relationship:'events',
 							link_to:dataset.this.raw.id,
 						};
