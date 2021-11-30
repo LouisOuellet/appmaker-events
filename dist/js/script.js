@@ -13,11 +13,10 @@ API.Plugins.events = {
 						for(var [key, value] of Object.entries(dataset.output.dom)){ API.Helper.set(API.Contents,['data','dom','events',value.id],value); }
 						for(var [key, value] of Object.entries(dataset.output.raw)){ API.Helper.set(API.Contents,['data','raw','events',value.id],value); }
 						API.Builder.table(card.children('.card-body'), dataset.output.dom, {
-							headers:dataset.output.headers,
+							headers:['id','name','type','date','time','address','city','zipcode','state','country'],
 							id:'EventsIndex',
 							modal:true,
 							key:'id',
-							hide:['created','modified'],
 							clickable:{ enable:true, view:'details'},
 							set:{isActive:"true"},
 							controls:{ toolbar:true},
