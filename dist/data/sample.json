@@ -23,8 +23,8 @@
             "hasMenu": "true",
             "setHosts": "2;3;4",
             "setHostType": "users",
-            "setPlanners": null,
-            "setStaffs": null,
+            "setPlanners": "2",
+            "setStaffs": "3",
             "setMinInvites": "40",
             "setMaxInvites": "90",
             "setToken": null

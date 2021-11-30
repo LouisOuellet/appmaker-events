@@ -176,19 +176,21 @@ API.Plugins.events = {
 							}
 							// Hosts
 							if(API.Helper.isSet(API.Plugins,['users']) && API.Auth.validate('custom', 'events_hosts', 1)){
-								layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Hosts']+'</button>');
+								if(layout.timeline.find('.time-label').first().find('div.btn-group button[data-table="users"]').length <= 0){
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Hosts']+'</button>');
+								}
 								options.field = "setHosts";
 								options.td = '<td data-plugin="events" data-key="'+options.field+'"></td>';
 								API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
-									var td = tr.find('td[data-plugin="events"][data-key="setHosts"]');
+									var td = tr.find('td[data-plugin="events"][data-key="'+options.field+'"]');
 									if(API.Helper.isSet(data.details,['users'])){
 										if(data.this.raw.setHosts == null){ data.this.raw.setHosts = ''; }
-										for(var [subKey, subDetails] of Object.entries(API.Helper.trim(data.this.raw.setHosts,';').split(';'))){
+										for(var [subKey, subDetails] of Object.entries(API.Helper.trim(data.this.raw[options.field],';').split(';'))){
 											if(subDetails != ''){
 												var user = data.details.users.dom[subDetails];
 												td.append(
 													API.Plugins.events.GUI.buttons.details(user,{
-														remove:API.Auth.validate('custom', 'events_users', 4),
+														remove:API.Auth.validate('custom', 'events_hosts', 4),
 														key: "username",
 														icon:{
 															details:"fas fa-user",
@@ -202,7 +204,79 @@ API.Plugins.events = {
 											}
 										}
 									}
-									if(API.Auth.validate('custom', 'events_users', 2)){
+									if(API.Auth.validate('custom', 'events_hosts', 2)){
+										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="assign"><i class="fas fa-user-plus"></i></button>');
+									}
+									API.Plugins.events.Events.users(data,layout);
+								});
+							}
+							// Planners
+							if(API.Helper.isSet(API.Plugins,['users']) && API.Auth.validate('custom', 'events_planners', 1)){
+								if(layout.timeline.find('.time-label').first().find('div.btn-group button[data-table="users"]').length <= 0){
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Hosts']+'</button>');
+								}
+								options.field = "setHosts";
+								options.td = '<td data-plugin="events" data-key="'+options.field+'"></td>';
+								API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
+									var td = tr.find('td[data-plugin="events"][data-key="'+options.field+'"]');
+									if(API.Helper.isSet(data.details,['users'])){
+										if(data.this.raw.setHosts == null){ data.this.raw.setHosts = ''; }
+										for(var [subKey, subDetails] of Object.entries(API.Helper.trim(data.this.raw[options.field],';').split(';'))){
+											if(subDetails != ''){
+												var user = data.details.users.dom[subDetails];
+												td.append(
+													API.Plugins.events.GUI.buttons.details(user,{
+														remove:API.Auth.validate('custom', 'events_planners', 4),
+														key: "username",
+														icon:{
+															details:"fas fa-user",
+															remove:"fas fa-user-minus",
+														},
+														action:{
+															remove:"unassign",
+														},
+													})
+												);
+											}
+										}
+									}
+									if(API.Auth.validate('custom', 'events_planners', 2)){
+										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="assign"><i class="fas fa-user-plus"></i></button>');
+									}
+									API.Plugins.events.Events.users(data,layout);
+								});
+							}
+							// Staffs
+							if(API.Helper.isSet(API.Plugins,['users']) && API.Auth.validate('custom', 'events_staffs', 1)){
+								if(layout.timeline.find('.time-label').first().find('div.btn-group button[data-table="users"]').length <= 0){
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Hosts']+'</button>');
+								}
+								options.field = "setStaffs";
+								options.td = '<td data-plugin="events" data-key="'+options.field+'"></td>';
+								API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
+									var td = tr.find('td[data-plugin="events"][data-key="'+options.field+'"]');
+									if(API.Helper.isSet(data.details,['users'])){
+										if(data.this.raw.setHosts == null){ data.this.raw.setHosts = ''; }
+										for(var [subKey, subDetails] of Object.entries(API.Helper.trim(data.this.raw[options.field],';').split(';'))){
+											if(subDetails != ''){
+												var user = data.details.users.dom[subDetails];
+												td.append(
+													API.Plugins.events.GUI.buttons.details(user,{
+														remove:API.Auth.validate('custom', 'events_staffs', 4),
+														key: "username",
+														icon:{
+															details:"fas fa-user",
+															remove:"fas fa-user-minus",
+														},
+														action:{
+															remove:"unassign",
+														},
+													})
+												);
+											}
+										}
+									}
+									if(API.Auth.validate('custom', 'events_staffs', 2)){
 										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="assign"><i class="fas fa-user-plus"></i></button>');
 									}
 									API.Plugins.events.Events.users(data,layout);
