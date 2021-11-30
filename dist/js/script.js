@@ -27,7 +27,32 @@ API.Plugins.events = {
 				});
 			});
 		},
-		details:function(){},
+		details:function(){
+			var container = $('div[data-plugin="events"][data-id]').last();
+			var url = new URL(window.location.href);
+			var id = url.searchParams.get("id");
+			API.request(url.searchParams.get("p"),'get',{data:{id:id,key:'id'}},function(result){
+				var dataset = JSON.parse(result);
+				if(dataset.success != undefined){
+					container.attr('data-id',dataset.output.this.raw.id);
+					// GUI
+					// Adding Layout
+					API.GUI.Layouts.details.build(dataset.output,container,{title:"Event Details",image:"/dist/img/building.png"},function(data,layout){
+						if(layout.main.parents().eq(2).parent('.modal-body').length > 0){
+							var modal = layout.main.parents().eq(2).parent('.modal-body').parents().eq(2);
+							if(API.Auth.validate('plugin', 'events', 3)){
+								modal.find('.modal-header').find('.btn-group').find('[data-control="update"]').off().click(function(){
+									API.CRUD.update.show({ container:layout.main.parents().eq(2), keys:data.this.raw });
+								});
+							} else {
+								modal.find('.modal-header').find('.btn-group').find('[data-control="update"]').remove();
+							}
+						}
+						// Continue
+					});
+				}
+			});
+		},
 		page:function(){
 			$('div.wrapper').hide();
 			var url = new URL(window.location.href);
