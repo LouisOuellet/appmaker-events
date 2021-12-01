@@ -575,6 +575,18 @@ API.Plugins.events = {
 							API.Helper.set(hosts,[host],data.relations[data.this.raw.setHostType][host]);
 						}
 					}
+					var planners = {};
+					for(var [key, planner] of Object.entries(API.Helper.trim(data.this.raw.setPlanners,';').split(';'))){
+						if(API.Helper.isSet(data,['relations','users',planner])){
+							API.Helper.set(planners,[planner],data.relations.users[planner]);
+						}
+					}
+					var staffs = {};
+					for(var [key, staff] of Object.entries(API.Helper.trim(data.this.raw.setStaffs,';').split(';'))){
+						if(API.Helper.isSet(data,['relations','users',staff])){
+							API.Helper.set(staffs,[staff],data.relations.users[staff]);
+						}
+					}
 					var items = {};
 					if(API.Helper.isSet(data,['relations','event_items'])){
 						for(var [key, item] of Object.entries(data.relations.event_items)){
@@ -584,12 +596,11 @@ API.Plugins.events = {
 						  (obj, key) => { obj[key] = items[key];return obj; },{}
 						);
 					}
-					console.log(data,hosts,items);
 					var html = '';
 					var count = 0;
 					$('div.events-content-wrapper').remove();
 					html += '<div class="events-content-wrapper events-background row m-0 align-items-center text-center justify-content-center">';
-						if(API.Helper.isSet(hosts,[API.Contents.Auth.User.id])){
+						if(API.Helper.isSet(hosts,[API.Contents.Auth.User.id])||API.Helper.isSet(planners,[API.Contents.Auth.User.id])){
 							html += '<button class="btn btn-warning btn-flat btn-ControlPanel" data-action="ControlPanel"><i class="fas fa-bars"></i></button>';
 						}
 					  html += '<div class="w-auto events-box bg-black noselect" id="events-1">';

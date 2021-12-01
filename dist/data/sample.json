@@ -3,7 +3,7 @@
         {
             "id": 1,
             "created": "2021-11-24 21:11:37",
-            "modified": "2021-12-01 13:44:32",
+            "modified": "2021-12-01 14:18:11",
             "owner": "2",
             "updated_by": "2",
             "name": "Mariage de Louis et Christelle",
@@ -22,10 +22,10 @@
             "hasVows": "true",
             "hasSeatingPlan": null,
             "hasMenu": "true",
-            "setHosts": "2;3;4",
+            "setHosts": "3;4",
             "setHostType": "users",
-            "setPlanners": "4;3",
-            "setStaffs": "3;4",
+            "setPlanners": "2",
+            "setStaffs": "",
             "setMinInvites": "40",
             "setMaxInvites": "90",
             "setToken": null
