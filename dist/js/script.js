@@ -1034,34 +1034,19 @@ API.Plugins.events = {
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
 			if(API.Auth.validate('custom', 'events_about', 2)){
 				layout.content.notes.find('button').off().click(function(){
-				  if(!layout.content.notes.find('textarea').summernote('isEmpty')){
-						dataset.this.raw.about = layout.content.notes.find('textarea').summernote('code');
-				    layout.content.notes.find('textarea').summernote('destroy');
-				    layout.content.notes.find('textarea').summernote({
-				      toolbar: [
-				        ['font', ['fontname', 'fontsize']],
-				        ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-				        ['color', ['color']],
-				        ['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
-				      ],
-				      height: 500,
-				    });
-						layout.content.notes.find('textarea').summernote('code',dataset.this.raw.about);
-				    API.request('events','update',{data:dataset.this.raw});
-				  } else {
-				    layout.content.notes.find('textarea').summernote('destroy');
-				    layout.content.notes.find('textarea').summernote({
-				      toolbar: [
-				        ['font', ['fontname', 'fontsize']],
-				        ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-				        ['color', ['color']],
-				        ['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
-				      ],
-				      height: 500,
-				    });
-						layout.content.notes.find('textarea').summernote('code',dataset.this.raw.about);
-				    alert(API.Contents.Language['About is empty']);
-				  }
+					dataset.this.raw.about = layout.content.notes.find('textarea').summernote('code');
+					layout.content.notes.find('textarea').summernote('destroy');
+					layout.content.notes.find('textarea').summernote({
+						toolbar: [
+							['font', ['fontname', 'fontsize']],
+							['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+							['color', ['color']],
+							['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+						],
+						height: 500,
+					});
+					layout.content.notes.find('textarea').summernote('code',dataset.this.raw.about);
+					API.request('events','update',{data:dataset.this.raw});
 				});
 			}
 		},
