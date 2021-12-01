@@ -112,9 +112,9 @@ class eventsAPI extends CRUDAPI {
 			$event = $this->Auth->read('events',$data['id']);
 			if($event != null){
 				$event = $event->all()[0];
-				$event['setHosts'] = explode(",",trim($event['setHosts'],","));
-				$event['setPlanners'] = explode(",",trim($event['setPlanners'],","));
-				$event['setStaffs'] = explode(",",trim($event['setStaffs'],","));
+				$event['setHosts'] = explode(",",trim($event['setHosts'],";"));
+				$event['setPlanners'] = explode(",",trim($event['setPlanners'],";"));
+				$event['setStaffs'] = explode(",",trim($event['setStaffs'],";"));
 				$count = 0;
 				if(in_array($data['relationship']['link_to'], $event['setHosts'])){ $count++; }
 				if(in_array($data['relationship']['link_to'], $event['setPlanners'])){ $count++; }
@@ -125,6 +125,7 @@ class eventsAPI extends CRUDAPI {
 					case"setStaffs": if(in_array($data['relationship']['link_to'], $event['setStaffs'])){ unset($event['setStaffs'][array_search($data['relationship']['link_to'], $event['setStaffs'])]); } break;
 				}
 				if($count >= 1){
+					$this->Auth->update('events',$event,$event['id']);
 					if($count <= 1){
 						$relationships = $this->getRelationships($request,$data['id']);
 						foreach($relationships as $id => $relationship){
@@ -178,18 +179,17 @@ class eventsAPI extends CRUDAPI {
 			$event = $this->Auth->read('events',$data['id']);
 			if($event != null){
 				$event = $event->all()[0];
-				$event['setHosts'] = explode(",",trim($event['setHosts'],","));
-				$event['setPlanners'] = explode(",",trim($event['setPlanners'],","));
-				$event['setStaffs'] = explode(",",trim($event['setStaffs'],","));
+				$event['setHosts'] = explode(";",trim($event['setHosts'],";"));
+				$event['setPlanners'] = explode(";",trim($event['setPlanners'],";"));
+				$event['setStaffs'] = explode(";",trim($event['setStaffs'],";"));
 				switch($data['relationship']['relationship']){
 					case"setHosts": if(!in_array($data['relationship']['link_to'], $event['setHosts'])){ array_push($event['setHosts'],$data['relationship']['link_to']); } break;
 					case"setPlanners": if(!in_array($data['relationship']['link_to'], $event['setPlanners'])){ array_push($event['setPlanners'],$data['relationship']['link_to']); } break;
 					case"setStaffs": if(!in_array($data['relationship']['link_to'], $event['setStaffs'])){ array_push($event['setStaffs'],$data['relationship']['link_to']); } break;
 				}
-				$event['setHosts'] = implode(",",$event['setHosts']);
-				$event['setPlanners'] = implode(",",$event['setPlanners']);
-				$event['setStaffs'] = implode(",",$event['setStaffs']);
-				var_dump($event);
+				$event['setHosts'] = implode(";",$event['setHosts']);
+				$event['setPlanners'] = implode(";",$event['setPlanners']);
+				$event['setStaffs'] = implode(";",$event['setStaffs']);
 				$this->Auth->update('events',$event,$event['id']);
 				$relationship = [
 					'relationship_1' => 'events',
