@@ -1035,6 +1035,16 @@ API.Plugins.events = {
 			if(API.Auth.validate('custom', 'events_about', 2)){
 				layout.content.about.find('button').off().click(function(){
 					dataset.this.raw.about = layout.content.about.find('textarea').summernote('code');
+					layout.content.about.find('textarea').summernote('destroy');
+					layout.content.about.find('textarea').summernote({
+						toolbar: [
+							['font', ['fontname', 'fontsize']],
+							['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+							['color', ['color']],
+							['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+						],
+						height: 500,
+					});
 					API.request('events','update',{data:dataset.this.raw},function(result){
 						var data = JSON.parse(result);
 						if(data.success != undefined){
