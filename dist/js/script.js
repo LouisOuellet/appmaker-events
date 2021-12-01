@@ -243,7 +243,7 @@ API.Plugins.events = {
 											API.Plugins.events.GUI.items(data,layout,relation);
 										}
 									}
-									API.Plugins.events.Events.items(data,layout);
+									// API.Plugins.events.Events.items(data,layout);
 								});
 							}
 							// Contacts
