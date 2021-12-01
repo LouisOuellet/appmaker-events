@@ -190,7 +190,8 @@ class eventsAPI extends CRUDAPI {
 				$event['setHosts'] = implode(";",$event['setHosts']);
 				$event['setPlanners'] = implode(";",$event['setPlanners']);
 				$event['setStaffs'] = implode(";",$event['setStaffs']);
-				$this->Auth->update('events',$event,$event['id']);
+				var_dump($event);
+				var_dump($this->Auth->update('events',$event,$event['id']));
 				$relationship = [
 					'relationship_1' => 'events',
 					'link_to_1' => $event['id'],

@@ -879,7 +879,8 @@ API.Plugins.events = {
 	Events:{
 		users:function(dataset,layout,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
-			var defaults = {key: "setHosts"};
+			var defaults = {key: "setHosts",remove:false};
+			if(API.Helper.isSet(options,['remove'])){ defaults.remove = options.remove; }
 			if(API.Helper.isSet(options,['key'])){ defaults.key = options.key; }
 			var td = layout.details.find('td[data-plugin="events"][data-key="'+defaults.key+'"]');
 			td.find('button').off().click(function(){
