@@ -198,7 +198,7 @@ class eventsAPI extends CRUDAPI {
 				if($data['relationship']['relationship'] == 'host'){ $relationship['relationship_2'] = $event['setHostType']; }
 				else { $relationship['relationship_2'] = 'users'; }
 				$this->createRelationship($relationship);
-				$relation['raw'] = $this->Auth->read($data['relationship']['relationship'],$data['relationship']['link_to'])->all()[0];
+				$relation['raw'] = $this->Auth->read($relationship['relationship_2'],$relationship['link_to_2'])->all()[0];
 				$relation['dom'] = $this->convertToDOM($relation);
 				// Return
 				return [
