@@ -1059,7 +1059,7 @@ API.Plugins.events = {
 				layout.content.menus.find('button[data-action]').off().click(function(){
 					dataset.this.raw.menuAdult = layout.content.menus.find('textarea[name="menuAdult"]').summernote('code');
 					dataset.this.raw.menuKid = layout.content.menus.find('textarea[name="menuKid"]').summernote('code');
-					layout.content.menus.find('textarea').summernote('destroy');
+					layout.content.menus.find('textarea[name="menuAdult"]').summernote('destroy');
 					layout.content.menus.find('textarea[name="menuAdult"]').summernote({
 						toolbar: [
 							['font', ['fontname', 'fontsize']],
@@ -1070,6 +1070,7 @@ API.Plugins.events = {
 						height: 500,
 						code: dataset.this.raw.menuAdult,
 					});
+					layout.content.menus.find('textarea[name="menuKid"]').summernote('destroy');
 					layout.content.menus.find('textarea[name="menuKid"]').summernote({
 						toolbar: [
 							['font', ['fontname', 'fontsize']],
