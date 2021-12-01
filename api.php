@@ -199,7 +199,7 @@ class eventsAPI extends CRUDAPI {
 				else { $relationship['relationship_2'] = 'users'; }
 				$this->createRelationship($relationship);
 				$relation['raw'] = $this->Auth->read($relationship['relationship_2'],$relationship['link_to_2'])->all()[0];
-				$relation['dom'] = $this->convertToDOM($relation);
+				$relation['dom'] = $this->convertToDOM($relation['raw']);
 				// Return
 				return [
 					"success" => $this->Language->Field["Record successfully updated"],
