@@ -923,7 +923,7 @@ API.Plugins.events = {
 							header.find('button[data-control="update"]').remove();
 							API.Builder.input(body, 'user', null, function(input){});
 							footer.append('<button class="btn btn-secondary" data-action="add"><i class="fas fa-user-plus mr-1"></i>'+API.Contents.Language['Add']+'</button>');
-							footer.find('button[data-action="assign"]').click(function(){
+							footer.find('button[data-action="add"]').off().click(function(){
 								if((typeof body.find('select').select2('val') !== "undefined")&&(body.find('select').select2('val') != '')){
 									API.request('events','link',{data:{id:dataset.this.dom.id,relationship:{relationship:defaults.key,link_to:body.find('select').select2('val')}}},function(result){
 										var sub_dataset = JSON.parse(result);
