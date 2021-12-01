@@ -761,7 +761,7 @@ API.Plugins.events = {
 					csv += API.Helper.html2text(value);
 				}
 			}
-			var body = layout.content.planning.find('tbody');
+			var body = layout.content.event_items.find('tbody');
 			var html = '';
 			html += '<tr data-csv="'+csv+'" data-id="'+item.id+'">';
 				html += '<td class="pointer">'+item.date+'</td>';
