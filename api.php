@@ -109,103 +109,125 @@ class eventsAPI extends CRUDAPI {
 	public function unlink($request = null, $data = null){
 		if(isset($data)){
 			if(!is_array($data)){ $data = json_decode($data, true); }
-			// Return
-			$return = [
-				"error" => $this->Language->Field["Unable to complete the request"],
-				"request" => $request,
-				"data" => $data,
-				"output" => [
-					'relationship' => $data['relationship']['relationship'],
-					'id' => $data['relationship']['link_to'],
-				],
-			];
-			$relationships = $this->getRelationships($request,$data['id']);
-			foreach($relationships as $id => $relationship){
-				foreach($relationship as $relation){
-					if(($relation['relationship'] == $data['relationship']['relationship'])&&($relation['link_to'] == $data['relationship']['link_to'])){
-						$this->Auth->delete('relationships',$id);
-						// Return
-						$return = [
-							"success" => $this->Language->Field["Record successfully updated"],
-							"request" => $request,
-							"data" => $data,
-							"output" => [
-								'relationship' => $data['relationship']['relationship'],
-								'id' => $data['relationship']['link_to'],
-							],
-						];
-					}
+			$event = $this->Auth->read('events',$data['id']);
+			if($event != null){
+				$event = $event->all()[0];
+				$event['setHosts'] = explode(",",trim($event['setHosts'],","));
+				$event['setPlanners'] = explode(",",trim($event['setPlanners'],","));
+				$event['setStaffs'] = explode(",",trim($event['setStaffs'],","));
+				$count = 0;
+				if(in_array($data['relationship']['link_to'], $event['setHosts'])){ $count++; }
+				if(in_array($data['relationship']['link_to'], $event['setPlanners'])){ $count++; }
+				if(in_array($data['relationship']['link_to'], $event['setStaffs'])){ $count++; }
+				switch($data['relationship']['relationship']){
+					case"setHosts": if(in_array($data['relationship']['link_to'], $event['setHosts'])){ unset($event['setHosts'][array_search($data['relationship']['link_to'], $event['setHosts'])]); } break;
+					case"setPlanners": if(in_array($data['relationship']['link_to'], $event['setPlanners'])){ unset($event['setPlanners'][array_search($data['relationship']['link_to'], $event['setPlanners'])]); } break;
+					case"setStaffs": if(in_array($data['relationship']['link_to'], $event['setStaffs'])){ unset($event['setStaffs'][array_search($data['relationship']['link_to'], $event['setStaffs'])]); } break;
 				}
-			}
-			return $return;
-		}
-	}
-
-	public function link($request = null, $data = null){
-		if(isset($data)){
-			if(!is_array($data)){ $data = json_decode($data, true); }
-			// Return
-			$return = [
-				"error" => $this->Language->Field["Unable to complete the request"],
-				"request" => $request,
-				"data" => $data,
-				"output" => [
-					'relationship' => $data['relationship']['relationship'],
-					'id' => $data['relationship']['link_to'],
-				],
-			];
-			$found = true;
-			$relationships = $this->getRelationships($request,$data['id']);
-			foreach($relationships as $id => $relationship){
-				foreach($relationship as $relation){
-					if(($relation['relationship'] == $data['relationship']['relationship'])&&($relation['link_to'] == $data['relationship']['link_to'])){ $found = false; }
-				}
-			}
-			if(($request == $data['relationship']['relationship'])&&($data['id'] == $data['relationship']['link_to'])){ $found = false; }
-			if($found){
-				$new = [
-					'relationship_1' => $request,
-					'link_to_1' => $data['id'],
-					'relationship_2' => $data['relationship']['relationship'],
-					'link_to_2' => $data['relationship']['link_to'],
-				];
-				if($data['relationship']['relationship'] == "issues"){
-					$status = $this->Auth->query('SELECT * FROM `statuses` WHERE `relationship` = ? AND `order` = ?',$data['relationship']['relationship'],1);
-					if($status != null){
-						$status = $status->fetchAll()->all();
-						if(!empty($status)){
-							$new['relationship_3'] = 'statuses';
-							$new['link_to_3'] = $status[0]['id'];
+				if($count >= 1){
+					if($count <= 1){
+						$relationships = $this->getRelationships($request,$data['id']);
+						foreach($relationships as $id => $relationship){
+							foreach($relationship as $relation){
+								if(($relation['relationship'] == $data['relationship']['relationship'])&&($relation['link_to'] == $data['relationship']['link_to'])){
+									$this->Auth->delete('relationships',$id);
+								}
+							}
 						}
 					}
-				}
-				$rel = $this->createRelationship($new);
-				$relation = $this->Auth->read($data['relationship']['relationship'],$data['relationship']['link_to']);
-				if($relation != null){
-					$relation = $relation->all()[0];
-					$rel = $this->convertToDOM($rel);
 					// Return
-					$return = [
+					return [
 						"success" => $this->Language->Field["Record successfully updated"],
 						"request" => $request,
 						"data" => $data,
 						"output" => [
 							'relationship' => $data['relationship']['relationship'],
 							'id' => $data['relationship']['link_to'],
-							'dom' => $this->convertToDOM($relation),
-							'raw' => $relation,
-							'timeline' => [
-								'relationship' => $data['relationship']['relationship'],
-								'link_to' => $data['relationship']['link_to'],
-								'created' => $rel['created'],
-								'owner' => $rel['owner'],
-							],
 						],
 					];
-					if(isset($new['relationship_3'],$new['link_to_3'])){ $return['output']['timeline'][$new['relationship_3']] = $new['link_to_3']; }
+				} else {
+					// Return
+					return [
+						"error" => $this->Language->Field["Unable to complete the request"],
+						"request" => $request,
+						"data" => $data,
+						"output" => [
+							'relationship' => $data['relationship']['relationship'],
+							'id' => $data['relationship']['link_to'],
+						],
+					];
 				}
+			} else {
+				// Return
+				return [
+					"error" => $this->Language->Field["Unable to complete the request"],
+					"request" => $request,
+					"data" => $data,
+					"output" => [
+						'relationship' => $data['relationship']['relationship'],
+						'id' => $data['relationship']['link_to'],
+					],
+				];
 			}
-			return $return;
+		}
+	}
+
+	public function link($request = null, $data = null){
+		if(isset($data)){
+			if(!is_array($data)){ $data = json_decode($data, true); }
+			$event = $this->Auth->read('events',$data['id']);
+			if($event != null){
+				$event = $event->all()[0];
+				$event['setHosts'] = explode(",",trim($event['setHosts'],","));
+				$event['setPlanners'] = explode(",",trim($event['setPlanners'],","));
+				$event['setStaffs'] = explode(",",trim($event['setStaffs'],","));
+				switch($data['relationship']['relationship']){
+					case"setHosts": if(!in_array($data['relationship']['link_to'], $event['setHosts'])){ array_push($event['setHosts'],$data['relationship']['link_to']); } break;
+					case"setPlanners": if(!in_array($data['relationship']['link_to'], $event['setPlanners'])){ array_push($event['setPlanners'],$data['relationship']['link_to']); } break;
+					case"setStaffs": if(!in_array($data['relationship']['link_to'], $event['setStaffs'])){ array_push($event['setStaffs'],$data['relationship']['link_to']); } break;
+				}
+				$event['setHosts'] = implode(",",$event['setHosts']);
+				$event['setPlanners'] = implode(",",$event['setPlanners']);
+				$event['setStaffs'] = implode(",",$event['setStaffs']);
+				$this->Auth->update('events',$event,$event['id']);
+				$relationship = [
+					'relationship_1' => 'events',
+					'link_to_1' => $event['id'],
+					'link_to_2' => $data['relationship']['link_to'],
+				];
+				if($data['relationship']['relationship'] == 'host'){ $relationship['relationship_2'] = $event['setHostType']; }
+				else { $relationship['relationship_2'] = 'users'; }
+				$this->createRelationship($relationship);
+				// Return
+				return [
+					"success" => $this->Language->Field["Record successfully updated"],
+					"request" => $request,
+					"data" => $data,
+					"output" => [
+						'relationship' => $data['relationship']['relationship'],
+						'id' => $data['relationship']['link_to'],
+						'dom' => $this->convertToDOM($relation),
+						'raw' => $relation,
+						'timeline' => [
+							'relationship' => $data['relationship']['relationship'],
+							'link_to' => $data['relationship']['link_to'],
+							'created' => $rel['created'],
+							'owner' => $rel['owner'],
+						],
+					],
+				];
+			} else {
+				// Return
+				return [
+					"error" => $this->Language->Field["Unable to complete the request"],
+					"request" => $request,
+					"data" => $data,
+					"output" => [
+						'relationship' => $data['relationship']['relationship'],
+						'id' => $data['relationship']['link_to'],
+					],
+				];
+			}
 		}
 	}
 

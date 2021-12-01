@@ -331,7 +331,7 @@ API.Plugins.events = {
 								API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
 									var td = tr.find('td[data-plugin="events"][data-key="'+options.field+'"]');
 									if(API.Helper.isSet(data.details,['users'])){
-										if(data.this.raw.setHosts == null){ data.this.raw.setHosts = ''; }
+										if(data.this.raw[options.field] == null){ data.this.raw[options.field] = ''; }
 										for(var [subKey, subDetails] of Object.entries(API.Helper.trim(data.this.raw[options.field],';').split(';'))){
 											if(subDetails != ''){
 												var user = data.details.users.dom[subDetails];
@@ -344,7 +344,7 @@ API.Plugins.events = {
 															remove:"fas fa-user-minus",
 														},
 														action:{
-															remove:"unassign",
+															remove:"remove",
 														},
 													})
 												);
@@ -352,9 +352,9 @@ API.Plugins.events = {
 										}
 									}
 									if(API.Auth.validate('custom', 'events_hosts', 2)){
-										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="assign"><i class="fas fa-user-plus"></i></button>');
+										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="add"><i class="fas fa-user-plus"></i></button>');
 									}
-									API.Plugins.events.Events.users(data,layout);
+									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_hosts', 4),icon:"fas fa-user"});
 								});
 							}
 							// Planners
@@ -380,7 +380,7 @@ API.Plugins.events = {
 															remove:"fas fa-user-minus",
 														},
 														action:{
-															remove:"unassign",
+															remove:"remove",
 														},
 													})
 												);
@@ -390,7 +390,7 @@ API.Plugins.events = {
 									if(API.Auth.validate('custom', 'events_planners', 2)){
 										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="assign"><i class="fas fa-user-plus"></i></button>');
 									}
-									API.Plugins.events.Events.users(data,layout);
+									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_planners', 4),icon:"fas fa-user"});
 								});
 							}
 							// Staffs
@@ -416,7 +416,7 @@ API.Plugins.events = {
 															remove:"fas fa-user-minus",
 														},
 														action:{
-															remove:"unassign",
+															remove:"remove",
 														},
 													})
 												);
@@ -426,7 +426,7 @@ API.Plugins.events = {
 									if(API.Auth.validate('custom', 'events_staffs', 2)){
 										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="assign"><i class="fas fa-user-plus"></i></button>');
 									}
-									API.Plugins.events.Events.users(data,layout);
+									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_staffs', 4),icon:"fas fa-user"});
 								});
 							}
 							// Continue
@@ -879,12 +879,12 @@ API.Plugins.events = {
 	Events:{
 		users:function(dataset,layout,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
-			var defaults = {field: "name"};
-			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
-			var td = layout.details.find('td[data-plugin="events"][data-key="setHosts"]');
+			var defaults = {key: "setHosts"};
+			if(API.Helper.isSet(options,['key'])){ defaults.key = options.key; }
+			var td = layout.details.find('td[data-plugin="events"][data-key="'+defaults.key+'"]');
 			td.find('button').off().click(function(){
 				var button = $(this);
-				if(button.attr('data-action') != "assign"){
+				if(button.attr('data-action') != "add"){
 					if(API.Helper.isSet(API.Contents,['data','raw','users',button.attr('data-id')])){
 						var user = {raw:API.Contents.data.raw.users[button.attr('data-id')],dom:{}};
 						user.dom = API.Contents.data.dom.users[user.raw.username];
@@ -899,17 +899,17 @@ API.Plugins.events = {
 					case"details":
 						API.CRUD.read.show({ key:'username',keys:user.dom, href:"?p=users&v=details&id="+user.raw.username, modal:true });
 						break;
-					case"unassign":
-						API.request('events','unassign',{data:{id:dataset.this.raw.id,user:button.attr('data-id')}},function(result){
+					case"remove":
+						API.request('events','unlink',{data:{id:dataset.this.raw.id,relationship:{relationship:defaults.key,link_to:button.attr('data-id')}}},function(result){
 							var sub_dataset = JSON.parse(result);
 							if(sub_dataset.success != undefined){
-								td.find('.btn-group[data-id="'+sub_dataset.output.user+'"]').remove();
+								td.find('.btn-group[data-id="'+sub_dataset.output.id+'"]').remove();
 							}
 						});
 						break;
-					case"assign":
+					case"add":
 						API.Builder.modal($('body'), {
-							title:'Assign a user',
+							title:'Add a user',
 							icon:'user',
 							zindex:'top',
 							css:{ header: "bg-gray", body: "p-3"},
@@ -922,39 +922,24 @@ API.Plugins.events = {
 							header.find('button[data-control="hide"]').remove();
 							header.find('button[data-control="update"]').remove();
 							API.Builder.input(body, 'user', null, function(input){});
-							footer.append('<button class="btn btn-secondary" data-action="assign"><i class="fas fa-user-plus mr-1"></i>'+API.Contents.Language['Assign']+'</button>');
+							footer.append('<button class="btn btn-secondary" data-action="add"><i class="fas fa-user-plus mr-1"></i>'+API.Contents.Language['Add']+'</button>');
 							footer.find('button[data-action="assign"]').click(function(){
 								if((typeof body.find('select').select2('val') !== "undefined")&&(body.find('select').select2('val') != '')){
-									API.request('events','assign',{data:{id:dataset.this.dom.id,user:body.find('select').select2('val')}},function(result){
+									API.request('events','link',{data:{id:dataset.this.dom.id,relationship:{relationship:defaults.key,link_to:body.find('select').select2('val')}}},function(result){
 										var sub_dataset = JSON.parse(result);
 										if(sub_dataset.success != undefined){
-											for(var [key, user] of Object.entries(sub_dataset.output.organization.raw.setHosts.split(';'))){
-												if(user != '' && td.find('div.btn-group[data-id="'+user+'"]').length <= 0){
-													user = {
-														dom:sub_dataset.output.users.dom[user],
-														raw:sub_dataset.output.users.raw[user],
-													};
-													API.Helper.set(API.Contents,['data','dom','users',user.dom.username],user.dom);
-													API.Helper.set(API.Contents,['data','raw','users',user.raw.id],user.raw);
-													API.Helper.set(dataset.details,['users','dom',user.dom.id],user.dom);
-													API.Helper.set(dataset.details,['users','dom',user.raw.id],user.raw);
-													var html = API.Plugins.events.GUI.buttons.details(user.dom,{
-														remove:API.Auth.validate('custom', 'events_users', 4),
-													  key: "username",
-													  icon:{
-													    details:"fas fa-user",
-													    remove:"fas fa-user-minus",
-													  },
-													  action:{
-													    remove:"unassign",
-													  },
-													});
-													if(td.find('button[data-action="assign"]').length > 0){
-														td.find('button[data-action="assign"]').before(html);
-													} else { td.append(html); }
-												}
-											}
-											API.Plugins.events.Events.users(dataset,layout);
+											API.Helper.set(API.Contents,['data','dom','users',sub_dataset.output.dom.id],sub_dataset.output.dom);
+											API.Helper.set(API.Contents,['data','raw','users',sub_dataset.output.raw.id],sub_dataset.output.raw);
+											API.Helper.set(dataset.details,['users','dom',sub_dataset.output.dom.id],sub_dataset.output.dom);
+											API.Helper.set(dataset.details,['users','raw',sub_dataset.output.raw.id],sub_dataset.output.raw);
+											API.Helper.set(dataset,['relations','users',sub_dataset.output.dom.id],sub_dataset.output.dom);
+											var html = API.Plugins.events.GUI.buttons.details(sub_dataset.output.dom,{remove:defaults.remove,icon:{details:defaults.icon}});
+											if(td.find('button[data-action="add"]').length > 0){
+												td.find('button[data-action="add"]').before(html);
+											} else { td.append(html); }
+											sub_dataset.output.dom.owner = sub_dataset.output.timeline.owner;
+											sub_dataset.output.dom.created = sub_dataset.output.timeline.created;
+											API.Plugins.events.Events.users(dataset,layout,defaults);
 										}
 									});
 									modal.modal('hide');
