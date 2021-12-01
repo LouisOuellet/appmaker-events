@@ -354,7 +354,7 @@ API.Plugins.events = {
 									if(API.Auth.validate('custom', 'events_hosts', 2)){
 										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="add"><i class="fas fa-user-plus"></i></button>');
 									}
-									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_hosts', 4),icon:"fas fa-user"});
+									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_hosts', 4)});
 								});
 							}
 							// Planners
@@ -390,7 +390,7 @@ API.Plugins.events = {
 									if(API.Auth.validate('custom', 'events_planners', 2)){
 										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="add"><i class="fas fa-user-plus"></i></button>');
 									}
-									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_planners', 4),icon:"fas fa-user"});
+									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_planners', 4)});
 								});
 							}
 							// Staffs
@@ -426,7 +426,7 @@ API.Plugins.events = {
 									if(API.Auth.validate('custom', 'events_staffs', 2)){
 										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="add"><i class="fas fa-user-plus"></i></button>');
 									}
-									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_staffs', 4),icon:"fas fa-user"});
+									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_staffs', 4)});
 								});
 							}
 							// Continue
@@ -933,7 +933,12 @@ API.Plugins.events = {
 											API.Helper.set(dataset.details,['users','dom',sub_dataset.output.dom.id],sub_dataset.output.dom);
 											API.Helper.set(dataset.details,['users','raw',sub_dataset.output.raw.id],sub_dataset.output.raw);
 											API.Helper.set(dataset,['relations','users',sub_dataset.output.dom.id],sub_dataset.output.dom);
-											var html = API.Plugins.events.GUI.buttons.details(sub_dataset.output.dom,{remove:defaults.remove,icon:{details:defaults.icon}});
+											var html = API.Plugins.events.GUI.buttons.details(sub_dataset.output.dom,{
+												remove:defaults.remove,
+												key: "username",
+												icon:{details:"fas fa-user",remove:"fas fa-user-minus"},
+												action:{remove:"remove"},
+											})
 											if(td.find('button[data-action="add"]').length > 0){
 												td.find('button[data-action="add"]').before(html);
 											} else { td.append(html); }
