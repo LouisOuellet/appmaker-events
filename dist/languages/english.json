@@ -21,9 +21,14 @@
 		"Planning": "Planning",
 		"Galleries": "Galleries",
 		"Menus": "Menus",
+		"Menu": "Menu",
 		"Description": "Description",
 		"Vows": "Vows",
 		"Add a user": "Add a user",
 		"Seating Plan": "Seating Plan",
-		"About is empty": "About is empty"
+		"Welcome to the wedding of": "Welcome to the wedding of",
+		"Enter": "Enter",
+		"About": "About",
+		"Gallery": "Gallery",
+		"Attendances": "Attendances"
 }

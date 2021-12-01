@@ -18,12 +18,17 @@
 		"SetMaxInvites": "Max Attendees",
 		"SetToken": "Token",
 		"Page": "Page",
-		"Planning": "Planning",
+		"Planning": "Programme",
 		"Galleries": "Galleries",
 		"Menus": "Menus",
+		"Menu": "Menu",
 		"Description": "Description",
-		"Vows": "Vows",
+		"Vows": "Voeux",
 		"Add a user": "Add a user",
-		"Seating Plan": "Seating Plan",
-		"About is empty": "About is empty"
+		"Seating Plan": "Plan de salle",
+		"Welcome to the wedding of": "Bienvenue au mariage de",
+		"Enter": "Entrer",
+		"About": "A Propos",
+		"Gallery": "Gallerie",
+		"Attendances": "Invitations"
 }

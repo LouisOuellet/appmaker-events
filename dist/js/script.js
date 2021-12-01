@@ -593,13 +593,13 @@ API.Plugins.events = {
 							html += '<button class="btn btn-warning btn-flat btn-ControlPanel" data-action="ControlPanel"><i class="fas fa-bars"></i></button>';
 						}
 					  html += '<div class="w-auto events-box bg-black noselect" id="events-1">';
-					    html += '<p><h2>Bienvenue au mariage de</h2></p>';
+					    html += '<p><h2>'+API.Contents.Language["Welcome to the wedding of"]+'</h2></p>';
 							for(var [id, host] of Object.entries(hosts)){
 								if(count > 0){ html += '<p><h1>&</h1></p>'; }
 								html += '<p><h1 class="mt-3">'+host.name+'</h1></p>';
 								count++;
 							}
-					    html += '<p class="mt-4"><button class="btn btn-warning btn-lg mt-4">Entrer</button></p>';
+					    html += '<p class="mt-4"><button class="btn btn-warning btn-lg mt-4">'+API.Contents.Language["Entrer"]+'</button></p>';
 					  html += '</div>';
 					  html += '<div class="events-box pt-0 bg-black noselect hide" id="events-2">';
 							html += '<nav class="navbar navbar-expand-lg navbar-dark bg-transparent">';
@@ -608,22 +608,23 @@ API.Plugins.events = {
 							  html += '</button>';
 							  html += '<div class="collapse navbar-collapse justify-content-center" id="navbarevents">';
 							    html += '<div class="navbar-nav">';
-							      html += '<a class="nav-item nav-link active" data-page="about">A Propos</a>';
-							      html += '<a class="nav-item nav-link" data-page="gallery">Gallerie</a>';
-							      html += '<a class="nav-item nav-link" data-page="attendance">Invitations</a>';
-							      html += '<a class="nav-item nav-link" data-page="vows">Voeux</a>';
-							      html += '<a class="nav-item nav-link" data-page="planning">Programme</a>';
-							      html += '<a class="nav-item nav-link" data-page="menu">Menu</a>';
+							      html += '<a class="nav-item nav-link active" data-page="about">'+API.Contents.Language["About"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="gallery">'+API.Contents.Language["Gallery"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="attendance">'+API.Contents.Language["Attendances"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="vows">'+API.Contents.Language["Vows"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="planning">'+API.Contents.Language["Planning"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="menu">'+API.Contents.Language["Menu"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="seating_plan">'+API.Contents.Language["Seating Plan"]+'</a>';
 							    html += '</div>';
 							  html += '</div>';
 							html += '</nav>';
 							html += '<div class="events-pages">';
 								html += '<div class="events-page active" data-page="about">';
-									html += '<p><h2>A Propos</h2></p>';
+									html += '<p><h2>'+API.Contents.Language["About"]+'</h2></p>';
 									html += data.this.raw.about;
 								html += '</div>';
 								html += '<div class="events-page hide" data-page="gallery">';
-									html += '<p><h2>Gallerie</h2></p>';
+									html += '<p><h2>'+API.Contents.Language["Gallery"]+'</h2></p>';
 									html += '<div class="row justify-content-center">';
 										if(API.Helper.isSet(data,['relations','galleries']) && Object.keys(data.relations.galleries).length > 0){
 											for(var [key, picture] of Object.entries(data.relations.galleries[Object.keys(data.relations.galleries)[0]].pictures)){
@@ -662,17 +663,17 @@ API.Plugins.events = {
 									html += '</div>';
 								html += '</div>';
 								html += '<div class="events-page hide" data-page="attendance">';
-									html += '<p><h2>Invitations</h2></p>';
+									html += '<p><h2>'+API.Contents.Language["Attendances"]+'</h2></p>';
 									html += '<p class="text-justify">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>';
 									html += '<p class="text-justify">The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>';
 								html += '</div>';
 								html += '<div class="events-page hide" data-page="vows">';
-									html += '<p><h2>Voeux</h2></p>';
+									html += '<p><h2>'+API.Contents.Language["Vows"]+'</h2></p>';
 									html += '<p class="text-justify">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>';
 									html += '<p class="text-justify">The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>';
 								html += '</div>';
 								html += '<div class="events-page hide" data-page="planning">';
-									html += '<p><h2>Programme</h2></p>';
+									html += '<p><h2>'+API.Contents.Language["Planning"]+'</h2></p>';
 		              html += '<ul class="timeline">';
 										var inverted = ' class="timeline-inverted"';
 										for(var [stamp, item] of Object.entries(items)){
@@ -690,7 +691,7 @@ API.Plugins.events = {
 		              html += '</ul>';
 								html += '</div>';
 								html += '<div class="events-page hide" data-page="menu">';
-									html += '<p><h2>Menu</h2></p>';
+									html += '<p><h2>'+API.Contents.Language["Menu"]+'</h2></p>';
 									if(data.this.raw.menuKid != '' && data.this.raw.menuKid != null){
 										html += '<div class="btn-group btn-block">';
 											html += '<button class="btn btn-outline-warning btn-lg active" data-menu="adult">Adulte</button>';
@@ -705,6 +706,11 @@ API.Plugins.events = {
 											html += data.this.raw.menuKid;
 										html += '</div>';
 									html += '</div>';
+								html += '</div>';
+								html += '<div class="events-page hide" data-page="seating_plan">';
+									html += '<p><h2>'+API.Contents.Language["Seating Plan"]+'</h2></p>';
+									html += '<p class="text-justify">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>';
+									html += '<p class="text-justify">The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>';
 								html += '</div>';
 							html += '</div>';
 					  html += '</div>';
