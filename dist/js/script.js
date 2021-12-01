@@ -770,8 +770,8 @@ API.Plugins.events = {
 				html += '<td class="pointer">'+item.description+'</td>';
 				html += '<td>';
 					html += '<div class="btn-group btn-block m-0">';
-						html += '<button class="btn btn-xs btn-warning" data-action="edit"><i class="fas fa-edit mr-1"></i>'+API.Contents.Language['Edit']+'</button>';
-						html += '<button class="btn btn-xs btn-danger" data-action="delete"><i class="fas fa-trash-alt"></i></button>';
+						html += '<button class="btn btn-sm btn-warning" data-action="edit"><i class="fas fa-edit mr-1"></i>'+API.Contents.Language['Edit']+'</button>';
+						html += '<button class="btn btn-sm btn-danger" data-action="delete"><i class="fas fa-trash-alt"></i></button>';
 					html += '</div>';
 				html += '</td>';
 			html += '</tr>';
