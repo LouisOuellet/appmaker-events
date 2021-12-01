@@ -179,12 +179,6 @@ API.Plugins.events = {
 										content.append(html);
 										content.find('div[data-field]').hide();
 										content.find('div[data-field="'+content.find('button[data-field].btn-info').attr('data-field')+'"]').show();
-										content.find('button[data-field]').off().click(function(){
-											content.find('button[data-field].btn-info').removeClass('btn-info').addClass('btn-secondary');
-											$(this).removeClass('btn-secondary').addClass('btn-info');
-											content.find('div[data-field]').hide();
-											content.find('div[data-field="'+$(this).attr('data-field')+'"]').show();
-										});
 										content.find('textarea[name="menuAdult"]').html(data.this.raw.menuAdult).summernote({
 											toolbar: [
 												['font', ['fontname', 'fontsize']],
@@ -212,6 +206,7 @@ API.Plugins.events = {
 										content.append(html);
 									}
 								});
+								API.Plugins.events.Events.menus(data,layout);
 							}
 							// Planning
 							if(API.Auth.validate('custom', 'events_planning', 1)){
@@ -1032,7 +1027,7 @@ API.Plugins.events = {
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
-			if(API.Auth.validate('custom', 'events_about', 2)){
+			if(API.Auth.validate('custom', 'events_about', 3)){
 				layout.content.about.find('button').off().click(function(){
 					dataset.this.raw.about = layout.content.about.find('textarea').summernote('code');
 					layout.content.about.find('textarea').summernote('destroy');
@@ -1045,6 +1040,45 @@ API.Plugins.events = {
 						],
 						height: 500,
 						code: dataset.this.raw.about,
+					});
+					API.request('events','update',{data:dataset.this.raw});
+				});
+			}
+		},
+		menus:function(dataset,layout,options = {},callback = null){
+			if(options instanceof Function){ callback = options; options = {}; }
+			var defaults = {field: "name"};
+			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
+			layout.content.menus('button[data-field]').off().click(function(){
+				layout.content.menus('button[data-field].btn-info').removeClass('btn-info').addClass('btn-secondary');
+				$(this).removeClass('btn-secondary').addClass('btn-info');
+				layout.content.menus('div[data-field]').hide();
+				layout.content.menus('div[data-field="'+$(this).attr('data-field')+'"]').show();
+			});
+			if(API.Auth.validate('custom', 'events_menus', 3)){
+				layout.content.menus.find('button').off().click(function(){
+					dataset.this.raw.menuAdult = layout.content.menus.find('textarea[name="menuAdult"]').summernote('code');
+					dataset.this.raw.menuKid = layout.content.menus.find('textarea[name="menuKid"]').summernote('code');
+					layout.content.menus.find('textarea').summernote('destroy');
+					layout.content.menus.find('textarea[name="menuAdult"]').summernote({
+						toolbar: [
+							['font', ['fontname', 'fontsize']],
+							['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+							['color', ['color']],
+							['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+						],
+						height: 500,
+						code: dataset.this.raw.menuAdult,
+					});
+					layout.content.menus.find('textarea[name="menuKid"]').summernote({
+						toolbar: [
+							['font', ['fontname', 'fontsize']],
+							['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+							['color', ['color']],
+							['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+						],
+						height: 500,
+						code: dataset.this.raw.menuKid,
 					});
 					API.request('events','update',{data:dataset.this.raw});
 				});
