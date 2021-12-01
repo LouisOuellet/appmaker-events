@@ -152,6 +152,14 @@ API.Plugins.events = {
 										content.append(html);
 									}
 								});
+								API.Plugins.events.Events.about(data,layout);
+							}
+							// Seating Plan
+							if(API.Auth.validate('custom', 'events_seating_plan', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-chair",text:API.Contents.Language["Seating Plan"]},function(data,layout,tab,content){
+									layout.content.seating_plan = content;
+									layout.tabs.seating_plan = tab;
+								});
 							}
 							// Menus
 							if(API.Auth.validate('custom', 'events_menus', 1)){
@@ -1016,6 +1024,43 @@ API.Plugins.events = {
 				      height: 250,
 				    });
 				    alert(API.Contents.Language['Note is empty']);
+				  }
+				});
+			}
+		},
+		about:function(dataset,layout,options = {},callback = null){
+			if(options instanceof Function){ callback = options; options = {}; }
+			var defaults = {field: "name"};
+			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
+			if(API.Auth.validate('custom', 'events_about', 2)){
+				layout.content.notes.find('button').off().click(function(){
+				  if(!layout.content.notes.find('textarea').summernote('isEmpty')){
+						dataset.this.raw.about = layout.content.notes.find('textarea').summernote('code');
+				    layout.content.notes.find('textarea').summernote('destroy');
+				    layout.content.notes.find('textarea').summernote({
+				      toolbar: [
+				        ['font', ['fontname', 'fontsize']],
+				        ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+				        ['color', ['color']],
+				        ['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+				      ],
+				      height: 500,
+				    });
+						layout.content.notes.find('textarea').summernote('code',dataset.this.raw.about);
+				    API.request('events','update',{data:dataset.this.raw});
+				  } else {
+				    layout.content.notes.find('textarea').summernote('destroy');
+				    layout.content.notes.find('textarea').summernote({
+				      toolbar: [
+				        ['font', ['fontname', 'fontsize']],
+				        ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+				        ['color', ['color']],
+				        ['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+				      ],
+				      height: 500,
+				    });
+						layout.content.notes.find('textarea').summernote('code',dataset.this.raw.about);
+				    alert(API.Contents.Language['About is empty']);
 				  }
 				});
 			}
