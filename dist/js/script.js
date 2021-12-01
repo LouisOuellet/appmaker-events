@@ -227,11 +227,11 @@ API.Plugins.events = {
 										html += '<table class="table table-sm table-striped table-hover mb-0">';
 											html += '<thead>';
 												html += '<tr>';
-													html += '<th data-header="date">'+API.Contents.Language['Date']+'</th>';
-													html += '<th data-header="time">'+API.Contents.Language['Time']+'</th>';
+													html += '<th data-header="date" style="width:120px;">'+API.Contents.Language['Date']+'</th>';
+													html += '<th data-header="time" style="width:120px;">'+API.Contents.Language['Time']+'</th>';
 													html += '<th data-header="title">'+API.Contents.Language['Title']+'</th>';
 													html += '<th data-header="description">'+API.Contents.Language['Description']+'</th>';
-													html += '<th data-header="action" style="width:100px;">'+API.Contents.Language['Action']+'</th>';
+													html += '<th data-header="action" style="width:120px;">'+API.Contents.Language['Action']+'</th>';
 												html += '</tr>';
 											html += '</thead>';
 											html += '<tbody></tbody>';
