@@ -360,7 +360,7 @@ API.Plugins.events = {
 							// Planners
 							if(API.Helper.isSet(API.Plugins,['users']) && API.Auth.validate('custom', 'events_planners', 1)){
 								if(layout.timeline.find('.time-label').first().find('div.btn-group button[data-table="users"]').length <= 0){
-									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Hosts']+'</button>');
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Planners']+'</button>');
 								}
 								options.field = "setPlanners";
 								options.td = '<td data-plugin="events" data-key="'+options.field+'"></td>';
@@ -388,7 +388,7 @@ API.Plugins.events = {
 										}
 									}
 									if(API.Auth.validate('custom', 'events_planners', 2)){
-										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="assign"><i class="fas fa-user-plus"></i></button>');
+										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="add"><i class="fas fa-user-plus"></i></button>');
 									}
 									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_planners', 4),icon:"fas fa-user"});
 								});
@@ -396,7 +396,7 @@ API.Plugins.events = {
 							// Staffs
 							if(API.Helper.isSet(API.Plugins,['users']) && API.Auth.validate('custom', 'events_staffs', 1)){
 								if(layout.timeline.find('.time-label').first().find('div.btn-group button[data-table="users"]').length <= 0){
-									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Hosts']+'</button>');
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Staffs']+'</button>');
 								}
 								options.field = "setStaffs";
 								options.td = '<td data-plugin="events" data-key="'+options.field+'"></td>';
@@ -424,7 +424,7 @@ API.Plugins.events = {
 										}
 									}
 									if(API.Auth.validate('custom', 'events_staffs', 2)){
-										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="assign"><i class="fas fa-user-plus"></i></button>');
+										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="add"><i class="fas fa-user-plus"></i></button>');
 									}
 									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_staffs', 4),icon:"fas fa-user"});
 								});
