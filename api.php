@@ -198,6 +198,8 @@ class eventsAPI extends CRUDAPI {
 				if($data['relationship']['relationship'] == 'host'){ $relationship['relationship_2'] = $event['setHostType']; }
 				else { $relationship['relationship_2'] = 'users'; }
 				$this->createRelationship($relationship);
+				$relation['raw'] = $this->Auth->read($data['relationship']['relationship'],$data['relationship']['link_to'])->all()[0];
+				$relation['dom'] = $this->convertToDOM($relation)
 				// Return
 				return [
 					"success" => $this->Language->Field["Record successfully updated"],
@@ -206,13 +208,13 @@ class eventsAPI extends CRUDAPI {
 					"output" => [
 						'relationship' => $data['relationship']['relationship'],
 						'id' => $data['relationship']['link_to'],
-						'dom' => $this->convertToDOM($relation),
-						'raw' => $relation,
+						'dom' => $relation['dom'],
+						'raw' => $relation['raw'],
 						'timeline' => [
 							'relationship' => $data['relationship']['relationship'],
 							'link_to' => $data['relationship']['link_to'],
-							'created' => $rel['created'],
-							'owner' => $rel['owner'],
+							'created' => $relation['dom']['created'],
+							'owner' => $relation['dom']['owner'],
 						],
 					],
 				];
