@@ -1049,11 +1049,11 @@ API.Plugins.events = {
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
-			layout.content.menus('button[data-field]').off().click(function(){
-				layout.content.menus('button[data-field].btn-info').removeClass('btn-info').addClass('btn-secondary');
+			layout.content.menus.find('button[data-field]').off().click(function(){
+				layout.content.menus.find('button[data-field].btn-info').removeClass('btn-info').addClass('btn-secondary');
 				$(this).removeClass('btn-secondary').addClass('btn-info');
-				layout.content.menus('div[data-field]').hide();
-				layout.content.menus('div[data-field="'+$(this).attr('data-field')+'"]').show();
+				layout.content.menus.find('div[data-field]').hide();
+				layout.content.menus.find('div[data-field="'+$(this).attr('data-field')+'"]').show();
 			});
 			if(API.Auth.validate('custom', 'events_menus', 3)){
 				layout.content.menus.find('button').off().click(function(){
