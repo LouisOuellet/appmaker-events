@@ -599,7 +599,7 @@ API.Plugins.events = {
 								html += '<p><h1 class="mt-3">'+host.name+'</h1></p>';
 								count++;
 							}
-					    html += '<p class="mt-4"><button class="btn btn-warning btn-lg mt-4">'+API.Contents.Language["Entrer"]+'</button></p>';
+					    html += '<p class="mt-4"><button class="btn btn-warning btn-lg mt-4">'+API.Contents.Language["Enter"]+'</button></p>';
 					  html += '</div>';
 					  html += '<div class="events-box pt-0 bg-black noselect hide" id="events-2">';
 							html += '<nav class="navbar navbar-expand-lg navbar-dark bg-transparent">';
