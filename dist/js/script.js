@@ -1033,10 +1033,10 @@ API.Plugins.events = {
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
 			if(API.Auth.validate('custom', 'events_about', 2)){
-				layout.content.notes.find('button').off().click(function(){
-					dataset.this.raw.about = layout.content.notes.find('textarea').summernote('code');
-					layout.content.notes.find('textarea').summernote('destroy');
-					layout.content.notes.find('textarea').summernote({
+				layout.content.about.find('button').off().click(function(){
+					dataset.this.raw.about = layout.content.about.find('textarea').summernote('code');
+					layout.content.about.find('textarea').summernote('destroy');
+					layout.content.about.find('textarea').summernote({
 						toolbar: [
 							['font', ['fontname', 'fontsize']],
 							['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
@@ -1045,7 +1045,7 @@ API.Plugins.events = {
 						],
 						height: 500,
 					});
-					layout.content.notes.find('textarea').summernote('code',dataset.this.raw.about);
+					layout.content.about.find('textarea').summernote('code',dataset.this.raw.about);
 					API.request('events','update',{data:dataset.this.raw});
 				});
 			}
