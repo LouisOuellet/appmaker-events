@@ -161,6 +161,13 @@ API.Plugins.events = {
 									layout.tabs.seating_plan = tab;
 								});
 							}
+							// Vows
+							if(API.Auth.validate('custom', 'events_vows', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-hand-sparkles",text:API.Contents.Language["Vows"]},function(data,layout,tab,content){
+									layout.content.vows = content;
+									layout.tabs.vows = tab;
+								});
+							}
 							// Menus
 							if(API.Auth.validate('custom', 'events_menus', 1)){
 								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-open",text:API.Contents.Language["Menus"]},function(data,layout,tab,content){
