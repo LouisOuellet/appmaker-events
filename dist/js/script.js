@@ -154,106 +154,32 @@ API.Plugins.events = {
 								});
 								API.Plugins.events.Events.about(data,layout);
 							}
-							// Seating Plan
-							if(API.Auth.validate('custom', 'events_seating_plan', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-chair",text:API.Contents.Language["Seating Plan"]},function(data,layout,tab,content){
-									layout.content.seating_plan = content;
-									layout.tabs.seating_plan = tab;
-								});
-							}
-							// Vows
-							if(API.Auth.validate('custom', 'events_vows', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-hand-sparkles",text:API.Contents.Language["Vows"]},function(data,layout,tab,content){
-									layout.content.vows = content;
-									layout.tabs.vows = tab;
-								});
-							}
-							// Menus
-							if(API.Auth.validate('custom', 'events_menus', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-open",text:API.Contents.Language["Menus"]},function(data,layout,tab,content){
-									layout.content.menus = content;
-									layout.tabs.menus = tab;
-									if(API.Auth.validate('custom', 'events_menus', 3)){
+							// Galleries
+							if(API.Helper.isSet(API.Plugins,['galleries']) && API.Auth.validate('custom', 'events_galleries', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-images",text:API.Contents.Language["Galleries"]},function(data,layout,tab,content){
+									layout.content.galleries = content;
+									layout.tabs.galleries = tab;
+									content.addClass('p-3');
+									content.append('<div class="row"></div>');
+									area = content.find('div.row').last();
+									if(API.Auth.validate('custom', 'events_galleries', 2)){
 										var html = '';
-										html += '<div class="btn-group btn-block">';
-										  html += '<button type="button" class="btn btn-flat btn-info" data-field="menuAdult">Adult</button>';
-										  html += '<button type="button" class="btn btn-flat btn-secondary" data-field="menuKid">Kid</button>';
-										html += '</div>';
-										html += '<div>';
-											html += '<div data-field="menuAdult"><textarea name="menuAdult" class="form-control"></textarea></div>';
-											html += '<div data-field="menuKid"><textarea name="menuKid" class="form-control"></textarea></div>';
-										html += '</div>';
-										content.append(html);
-										content.find('div[data-field]').hide();
-										content.find('div[data-field="'+content.find('button[data-field].btn-info').attr('data-field')+'"]').show();
-										content.find('textarea[name="menuAdult"]').html(data.this.raw.menuAdult).summernote({
-											toolbar: [
-												['font', ['fontname', 'fontsize']],
-												['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-												['color', ['color']],
-												['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
-											],
-											height: 500,
-										});
-										content.find('textarea[name="menuKid"]').html(data.this.raw.menuKid).summernote({
-											toolbar: [
-												['font', ['fontname', 'fontsize']],
-												['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-												['color', ['color']],
-												['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
-											],
-											height: 500,
-										});
-										var html = '';
-										html += '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">';
-											html += '<form class="form-inline my-2 my-lg-0 ml-auto">';
-												html += '<button class="btn btn-success my-2 my-sm-0" type="button" data-action="save"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>';
-											html += '</form>';
-										html += '</nav>';
-										content.append(html);
-									}
-								});
-								API.Plugins.events.Events.menus(data,layout);
-							}
-							// Planning
-							if(API.Auth.validate('custom', 'events_planning', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-calendar-day",text:API.Contents.Language["Planning"]},function(data,layout,tab,content){
-									layout.content.event_items = content;
-									layout.tabs.event_items = tab;
-									var html = '';
-									html += '<div class="row p-3">';
-										html += '<div class="col-md-12">';
-											html += '<div class="input-group">';
-												html += '<div class="btn-group mr-3">';
-													html += '<button data-action="create" class="btn btn-success"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>';
+										html += '<div class="col-sm-12 col-md-6">';
+											html += '<div class="card pointer addContact">';
+												html += '<div class="card-body py-4">';
+													html += '<div class="text-center p-5">';
+														html += '<i class="fas fa-plus-circle fa-10x mt-3 mb-2"></i>';
+													html += '</div>';
 												html += '</div>';
-												html += '<input type="text" class="form-control">';
-												html += '<div class="input-group-append pointer" data-action="clear"><span class="input-group-text"><i class="fas fa-times"></i></span></div>';
-												html += '<div class="input-group-append"><span class="input-group-text"><i class="icon icon-search mr-1"></i>'+API.Contents.Language['Search']+'</span></div>';
 											html += '</div>';
 										html += '</div>';
-									html += '</div>';
-									html += '<div class="row px-2 py-0">';
-										html += '<table class="table table-sm table-striped table-hover mb-0">';
-											html += '<thead>';
-												html += '<tr>';
-													html += '<th data-header="date" style="min-width:110px;">'+API.Contents.Language['Date']+'</th>';
-													html += '<th data-header="time" style="min-width:80px;">'+API.Contents.Language['Time']+'</th>';
-													html += '<th data-header="title" style="min-width:150px;">'+API.Contents.Language['Title']+'</th>';
-													html += '<th data-header="description">'+API.Contents.Language['Description']+'</th>';
-													html += '<th data-header="action" style="min-width:120px;">'+API.Contents.Language['Action']+'</th>';
-												html += '</tr>';
-											html += '</thead>';
-											html += '<tbody></tbody>';
-										html += '</table>';
-									html += '</div>';
-									content.append(html);
-									if(API.Helper.isSet(data,['relations','event_items'])){
-										for(var [id, relation] of Object.entries(data.relations.event_items)){
-											API.Plugins.events.GUI.items(data,layout,relation);
+										area.append(html);
+									}
+									if(API.Helper.isSet(data,['relations','galleries','pictures'])){
+										for(var [id, relation] of Object.entries(data.relations.galleries.pictures)){
+											// API.Plugins.events.GUI.contact(relation,layout);
 										}
 									}
-									// API.Plugins.events.Events.items(data,layout);
 								});
 							}
 							// Contacts
@@ -303,32 +229,106 @@ API.Plugins.events = {
 								});
 								API.Plugins.events.Events.contacts(data,layout);
 							}
-							// Galleries
-							if(API.Helper.isSet(API.Plugins,['galleries']) && API.Auth.validate('custom', 'events_galleries', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-images",text:API.Contents.Language["Galleries"]},function(data,layout,tab,content){
-									layout.content.galleries = content;
-									layout.tabs.galleries = tab;
-									content.addClass('p-3');
-									content.append('<div class="row"></div>');
-									area = content.find('div.row').last();
-									if(API.Auth.validate('custom', 'events_galleries', 2)){
-										var html = '';
-										html += '<div class="col-sm-12 col-md-6">';
-											html += '<div class="card pointer addContact">';
-												html += '<div class="card-body py-4">';
-													html += '<div class="text-center p-5">';
-														html += '<i class="fas fa-plus-circle fa-10x mt-3 mb-2"></i>';
-													html += '</div>';
+							// Vows
+							if(API.Auth.validate('custom', 'events_vows', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-hand-sparkles",text:API.Contents.Language["Vows"]},function(data,layout,tab,content){
+									layout.content.vows = content;
+									layout.tabs.vows = tab;
+								});
+							}
+							// Planning
+							if(API.Auth.validate('custom', 'events_planning', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-calendar-day",text:API.Contents.Language["Planning"]},function(data,layout,tab,content){
+									layout.content.event_items = content;
+									layout.tabs.event_items = tab;
+									var html = '';
+									html += '<div class="row p-3">';
+										html += '<div class="col-md-12">';
+											html += '<div class="input-group">';
+												html += '<div class="btn-group mr-3">';
+													html += '<button data-action="create" class="btn btn-success"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>';
 												html += '</div>';
+												html += '<input type="text" class="form-control">';
+												html += '<div class="input-group-append pointer" data-action="clear"><span class="input-group-text"><i class="fas fa-times"></i></span></div>';
+												html += '<div class="input-group-append"><span class="input-group-text"><i class="icon icon-search mr-1"></i>'+API.Contents.Language['Search']+'</span></div>';
 											html += '</div>';
 										html += '</div>';
-										area.append(html);
-									}
-									if(API.Helper.isSet(data,['relations','galleries','pictures'])){
-										for(var [id, relation] of Object.entries(data.relations.galleries.pictures)){
-											// API.Plugins.events.GUI.contact(relation,layout);
+									html += '</div>';
+									html += '<div class="row px-2 py-0">';
+										html += '<table class="table table-sm table-striped table-hover mb-0">';
+											html += '<thead>';
+												html += '<tr>';
+													html += '<th data-header="date" style="min-width:110px;">'+API.Contents.Language['Date']+'</th>';
+													html += '<th data-header="time" style="min-width:80px;">'+API.Contents.Language['Time']+'</th>';
+													html += '<th data-header="title" style="min-width:150px;">'+API.Contents.Language['Title']+'</th>';
+													html += '<th data-header="description">'+API.Contents.Language['Description']+'</th>';
+													html += '<th data-header="action" style="min-width:120px;">'+API.Contents.Language['Action']+'</th>';
+												html += '</tr>';
+											html += '</thead>';
+											html += '<tbody></tbody>';
+										html += '</table>';
+									html += '</div>';
+									content.append(html);
+									if(API.Helper.isSet(data,['relations','event_items'])){
+										for(var [id, relation] of Object.entries(data.relations.event_items)){
+											API.Plugins.events.GUI.items(data,layout,relation);
 										}
 									}
+									// API.Plugins.events.Events.items(data,layout);
+								});
+							}
+							// Menus
+							if(API.Auth.validate('custom', 'events_menus', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-open",text:API.Contents.Language["Menus"]},function(data,layout,tab,content){
+									layout.content.menus = content;
+									layout.tabs.menus = tab;
+									if(API.Auth.validate('custom', 'events_menus', 3)){
+										var html = '';
+										html += '<div class="btn-group btn-block">';
+										  html += '<button type="button" class="btn btn-flat btn-info" data-field="menuAdult">Adult</button>';
+										  html += '<button type="button" class="btn btn-flat btn-secondary" data-field="menuKid">Kid</button>';
+										html += '</div>';
+										html += '<div>';
+											html += '<div data-field="menuAdult"><textarea name="menuAdult" class="form-control"></textarea></div>';
+											html += '<div data-field="menuKid"><textarea name="menuKid" class="form-control"></textarea></div>';
+										html += '</div>';
+										content.append(html);
+										content.find('div[data-field]').hide();
+										content.find('div[data-field="'+content.find('button[data-field].btn-info').attr('data-field')+'"]').show();
+										content.find('textarea[name="menuAdult"]').html(data.this.raw.menuAdult).summernote({
+											toolbar: [
+												['font', ['fontname', 'fontsize']],
+												['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+												['color', ['color']],
+												['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+											],
+											height: 500,
+										});
+										content.find('textarea[name="menuKid"]').html(data.this.raw.menuKid).summernote({
+											toolbar: [
+												['font', ['fontname', 'fontsize']],
+												['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+												['color', ['color']],
+												['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+											],
+											height: 500,
+										});
+										var html = '';
+										html += '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">';
+											html += '<form class="form-inline my-2 my-lg-0 ml-auto">';
+												html += '<button class="btn btn-success my-2 my-sm-0" type="button" data-action="save"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>';
+											html += '</form>';
+										html += '</nav>';
+										content.append(html);
+									}
+								});
+								API.Plugins.events.Events.menus(data,layout);
+							}
+							// Seating Plan
+							if(API.Auth.validate('custom', 'events_seating_plan', 1)){
+								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-chair",text:API.Contents.Language["Seating Plan"]},function(data,layout,tab,content){
+									layout.content.seating_plan = content;
+									layout.tabs.seating_plan = tab;
 								});
 							}
 							// Hosts
