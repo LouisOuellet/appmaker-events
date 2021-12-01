@@ -657,7 +657,7 @@ API.Plugins.events = {
 										}
 										if(API.Helper.isSet(hosts,[API.Contents.Auth.User.id])){
 											html += '<div class="col-12">';
-												html += '<button class="btn btn-warning btn-lg btn-block" data-action="Upload"><i class="fas fa-plus"></i></button>';
+												html += '<button class="btn btn-warning btn-lg btn-block" data-action="Download"><i class="fas fa-angle-down mr-1"></i>'+API.Contents.Language["Download All"]+'</button>';
 											html += '</div>';
 										}
 									html += '</div>';
