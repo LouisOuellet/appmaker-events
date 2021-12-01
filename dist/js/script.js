@@ -1056,7 +1056,7 @@ API.Plugins.events = {
 				layout.content.menus.find('div[data-field="'+$(this).attr('data-field')+'"]').show();
 			});
 			if(API.Auth.validate('custom', 'events_menus', 3)){
-				layout.content.menus.find('button').off().click(function(){
+				layout.content.menus.find('button[data-action]').off().click(function(){
 					dataset.this.raw.menuAdult = layout.content.menus.find('textarea[name="menuAdult"]').summernote('code');
 					dataset.this.raw.menuKid = layout.content.menus.find('textarea[name="menuKid"]').summernote('code');
 					layout.content.menus.find('textarea').summernote('destroy');
