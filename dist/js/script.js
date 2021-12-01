@@ -752,7 +752,7 @@ API.Plugins.events = {
 			if(defaults.content != ''){ defaults.icon += ' mr-1'; }
 			return '<button type="button" class="btn btn-sm bg-'+defaults.color+'" data-id="'+dataset[defaults.id]+'" data-action="'+defaults.action+'"><i class="'+defaults.icon+'"></i>'+defaults.content+'</button>';
 		},
-		items:function(dataset,layout,item,options = {},itemback = null){
+		items:function(dataset,layout,item,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
 			var csv = '';
 			for(var [key, value] of Object.entries(item)){
@@ -858,7 +858,7 @@ API.Plugins.events = {
 	},
 	Events:{
 		users:function(dataset,layout,options = {},callback = null){
-			if(options instanceof Function){ itemback = options; options = {}; }
+			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
 			var td = layout.details.find('td[data-plugin="events"][data-key="setHosts"]');
@@ -948,10 +948,10 @@ API.Plugins.events = {
 						break;
 				}
 			});
-			if(itemback != null){ itemback(dataset,layout); }
+			if(callback != null){ callback(dataset,layout); }
 		},
-		notes:function(dataset,layout,options = {},itemback = null){
-			if(options instanceof Function){ itemback = options; options = {}; }
+		notes:function(dataset,layout,options = {},callback = null){
+			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
 			if(API.Auth.validate('custom', 'events_notes', 2)){
@@ -1009,8 +1009,8 @@ API.Plugins.events = {
 				});
 			}
 		},
-		contacts:function(dataset,layout,options = {},itemback = null){
-			if(options instanceof Function){ itemback = options; options = {}; }
+		contacts:function(dataset,layout,options = {},callback = null){
+			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
 			var contacts = layout.content.contacts.find('div.row').eq(1);
@@ -1106,7 +1106,7 @@ API.Plugins.events = {
 						break;
 				}
 			});
-			if(itemback != null){ itemback(dataset,layout); }
+			if(callback != null){ callback(dataset,layout); }
 		},
 	},
 }
