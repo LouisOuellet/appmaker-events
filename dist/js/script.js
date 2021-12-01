@@ -298,6 +298,27 @@ API.Plugins.events = {
 								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-images",text:API.Contents.Language["Galleries"]},function(data,layout,tab,content){
 									layout.content.galleries = content;
 									layout.tabs.galleries = tab;
+									content.addClass('p-3');
+									content.append('<div class="row"></div>');
+									area = content.find('div.row').last();
+									if(API.Auth.validate('custom', 'events_galleries', 2)){
+										var html = '';
+										html += '<div class="col-sm-12 col-md-6">';
+											html += '<div class="card pointer addContact">';
+												html += '<div class="card-body py-4">';
+													html += '<div class="text-center p-5">';
+														html += '<i class="fas fa-plus-circle fa-10x mt-3 mb-2"></i>';
+													html += '</div>';
+												html += '</div>';
+											html += '</div>';
+										html += '</div>';
+										area.append(html);
+									}
+									if(API.Helper.isSet(data,['relations','galleries','pictures'])){
+										for(var [id, relation] of Object.entries(data.relations.galleries.pictures)){
+											// API.Plugins.events.GUI.contact(relation,layout);
+										}
+									}
 								});
 							}
 							// Hosts

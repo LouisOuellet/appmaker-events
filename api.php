@@ -70,7 +70,7 @@ class eventsAPI extends CRUDAPI {
 					}
 				}
 			}
-			// Load Users
+			// Load Planners
 			if(isset($get['success'],$get['output']['this']['raw']['setPlanners'])){
 				if(!isset($get['output']['details']['users'])){ $get['output']['details']['users'] = ['dom' => [],'raw' => []]; }
 				foreach(explode(";",trim($get['output']['this']['raw']['setPlanners'],";")) as $userID){
@@ -80,6 +80,7 @@ class eventsAPI extends CRUDAPI {
 					}
 				}
 			}
+			// Load Staffs
 			if(isset($get['success'],$get['output']['this']['raw']['setStaffs'])){
 				if(!isset($get['output']['details']['users'])){ $get['output']['details']['users'] = ['dom' => [],'raw' => []]; }
 				foreach(explode(";",trim($get['output']['this']['raw']['setStaffs'],";")) as $userID){
