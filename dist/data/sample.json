@@ -20,6 +20,7 @@
             "menuKid": "<p><h3>Entrees<\/h3><\/p>\r\n<p>Soupe, Cr\u00e8me de courgettes, sumac et herbes fra\u00eeches<\/p>\r\n<p><h3>R\u00e9sistance<\/h3><\/p>\r\n<p>Pates<br>ou<br>Pizza du chef<\/p>\r\n<p><h3>Dessert<\/h3><\/p>\r\n<p>Feuillet\u00e9 d\u2019\u00e9t\u00e9 fraises au sirop de m\u00e9lilot, cr\u00e8me chiboust et fleurs<\/p>",
             "hasGallery": "true",
             "hasVows": "true",
+            "hasSeatingPlan": null,
             "hasMenu": "true",
             "setHosts": "2;3;4",
             "setHostType": "users",

@@ -210,6 +210,40 @@ API.Plugins.events = {
 								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-calendar-day",text:API.Contents.Language["Planning"]},function(data,layout,tab,content){
 									layout.content.event_items = content;
 									layout.tabs.event_items = tab;
+									var html = '';
+									html += '<div class="row p-3">';
+										html += '<div class="col-md-12">';
+											html += '<div class="input-group">';
+												html += '<div class="btn-group mr-3">';
+													html += '<button data-action="create" class="btn btn-success"><i class="fas fa-plus-circle" aria-hidden="true"></i></button>';
+												html += '</div>';
+												html += '<input type="text" class="form-control">';
+												html += '<div class="input-group-append pointer" data-action="clear"><span class="input-group-text"><i class="fas fa-times"></i></span></div>';
+												html += '<div class="input-group-append"><span class="input-group-text"><i class="icon icon-search mr-1"></i>'+API.Contents.Language['Search']+'</span></div>';
+											html += '</div>';
+										html += '</div>';
+									html += '</div>';
+									html += '<div class="row px-2 py-0">';
+										html += '<table class="table table-sm table-striped table-hover mb-0">';
+											html += '<thead>';
+												html += '<tr>';
+													html += '<th data-header="date">'+API.Contents.Language['Date']+'</th>';
+													html += '<th data-header="time">'+API.Contents.Language['Time']+'</th>';
+													html += '<th data-header="title">'+API.Contents.Language['Title']+'</th>';
+													html += '<th data-header="description">'+API.Contents.Language['Description']+'</th>';
+													html += '<th data-header="action">'+API.Contents.Language['Action']+'</th>';
+												html += '</tr>';
+											html += '</thead>';
+											html += '<tbody></tbody>';
+										html += '</table>';
+									html += '</div>';
+									content.append(html);
+									if(API.Helper.isSet(data,['relations','event_items'])){
+										for(var [id, relation] of Object.entries(data.relations.event_items)){
+											API.Plugins.events.GUI.items(data,layout,relation);
+										}
+									}
+									API.Plugins.events.Events.items(data,layout);
 								});
 							}
 							// Contacts
@@ -718,6 +752,34 @@ API.Plugins.events = {
 			if(defaults.content != ''){ defaults.icon += ' mr-1'; }
 			return '<button type="button" class="btn btn-sm bg-'+defaults.color+'" data-id="'+dataset[defaults.id]+'" data-action="'+defaults.action+'"><i class="'+defaults.icon+'"></i>'+defaults.content+'</button>';
 		},
+		items:function(dataset,layout,item,options = {},itemback = null){
+			if(options instanceof Function){ callback = options; options = {}; }
+			var csv = '';
+			for(var [key, value] of Object.entries(item)){
+				if(value == null){ value = '';item[key] = value; };
+				if(jQuery.inArray(key,['date','time','title','description']) != -1){
+					csv += API.Helper.html2text(value);
+				}
+			}
+			var body = layout.content.planning.find('tbody');
+			var html = '';
+			html += '<tr data-csv="'+csv+'" data-id="'+item.id+'">';
+				html += '<td class="pointer">'+item.date+'</td>';
+				html += '<td class="pointer">'+item.time+'</td>';
+				html += '<td class="pointer">'+item.title+'</td>';
+				html += '<td class="pointer">'+item.description+'</td>';
+				html += '<td>';
+					html += '<div class="btn-group btn-block m-0">';
+						html += '<button class="btn btn-xs btn-success" data-action="start"><i class="fas fa-phone mr-1"></i>'+API.Contents.Language['Start']+'</button>';
+						html += '<button class="btn btn-xs btn-danger" data-action="cancel"><i class="fas fa-phone-slash mr-1"></i>'+API.Contents.Language['Cancel']+'</button>';
+						html += '<button class="btn btn-xs btn-primary" data-action="reschedule"><i class="fas fa-calendar-day mr-1"></i>'+API.Contents.Language['Re-Schedule']+'</button>';
+					html += '</div>';
+				html += '</td>';
+			html += '</tr>';
+			body.append(html);
+			var tr = body.find('tr').last();
+			if(callback != null){ callback(dataset,layout,item,tr); }
+		},
 		buttons:{
 			details:function(dataset,options = {}){
 				var defaults = {
@@ -796,7 +858,7 @@ API.Plugins.events = {
 	},
 	Events:{
 		users:function(dataset,layout,options = {},callback = null){
-			if(options instanceof Function){ callback = options; options = {}; }
+			if(options instanceof Function){ itemback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
 			var td = layout.details.find('td[data-plugin="events"][data-key="setHosts"]');
@@ -886,10 +948,10 @@ API.Plugins.events = {
 						break;
 				}
 			});
-			if(callback != null){ callback(dataset,layout); }
+			if(itemback != null){ itemback(dataset,layout); }
 		},
-		notes:function(dataset,layout,options = {},callback = null){
-			if(options instanceof Function){ callback = options; options = {}; }
+		notes:function(dataset,layout,options = {},itemback = null){
+			if(options instanceof Function){ itemback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
 			if(API.Auth.validate('custom', 'events_notes', 2)){
@@ -947,8 +1009,8 @@ API.Plugins.events = {
 				});
 			}
 		},
-		contacts:function(dataset,layout,options = {},callback = null){
-			if(options instanceof Function){ callback = options; options = {}; }
+		contacts:function(dataset,layout,options = {},itemback = null){
+			if(options instanceof Function){ itemback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
 			var contacts = layout.content.contacts.find('div.row').eq(1);
@@ -995,9 +1057,9 @@ API.Plugins.events = {
 			contacts.find('button').off().click(function(){
 				var contact = dataset.relations.contacts[$(this).attr('data-id')];
 				switch($(this).attr('data-action')){
-					case"call":
+					case"item":
 						var now = new Date();
-						var call = {
+						var item = {
 							date:now,
 							time:now,
 							contact:contact.id,
@@ -1006,13 +1068,13 @@ API.Plugins.events = {
 							relationship:'events',
 							link_to:dataset.this.raw.id,
 						};
-						API.request('calls','create',{data:call},function(result){
+						API.request('items','create',{data:item},function(result){
 							var record = JSON.parse(result);
 							if(typeof record.success !== 'undefined'){
-								API.Helper.set(dataset,['details','calls','dom',record.output.dom.id],record.output.dom);
-								API.Helper.set(dataset,['details','calls','raw',record.output.raw.id],record.output.raw);
-								API.Helper.set(dataset,['relations','calls',record.output.dom.id],record.output.dom);
-								API.Plugins.calls.Events.create(dataset,record.output.raw);
+								API.Helper.set(dataset,['details','items','dom',record.output.dom.id],record.output.dom);
+								API.Helper.set(dataset,['details','items','raw',record.output.raw.id],record.output.raw);
+								API.Helper.set(dataset,['relations','items',record.output.dom.id],record.output.dom);
+								API.Plugins.items.Events.create(dataset,record.output.raw);
 							}
 						});
 						break;
@@ -1044,7 +1106,7 @@ API.Plugins.events = {
 						break;
 				}
 			});
-			if(callback != null){ callback(dataset,layout); }
+			if(itemback != null){ itemback(dataset,layout); }
 		},
 	},
 }
