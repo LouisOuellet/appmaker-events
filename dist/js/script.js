@@ -37,7 +37,9 @@ API.Plugins.events = {
 					container.attr('data-id',dataset.output.this.raw.id);
 					// GUI
 					// Adding Layout
-					API.GUI.Layouts.details.build(dataset.output,container,{title:"Event Details",image:"/dist/img/building.png"},function(data,layout){
+					if(dataset.output.this.raw.type == 'wedding'){ bgImage = '/plugins/events/dist/img/wedding.png'; }
+					else{ bgImage = '/plugins/events/dist/img/event.png'; }
+					API.GUI.Layouts.details.build(dataset.output,container,{title:"Event Details",image:bgImage},function(data,layout){
 						if(layout.main.parents().eq(2).parent('.modal-body').length > 0){
 							var modal = layout.main.parents().eq(2).parent('.modal-body').parents().eq(2);
 							if(API.Auth.validate('plugin', 'events', 3)){
