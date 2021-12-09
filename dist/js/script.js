@@ -1213,20 +1213,22 @@ API.Plugins.events = {
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
-			layout.content.galleries;
-			API.Builder.modal($('body'), {
-			  title:'Upload',
-			  icon:'picture',
-			  zindex:'top',
-			  css:{ header: "bg-purple", body: "p-3"},
-			}, function(modal){
-				modal.on('hide.bs.modal',function(){ modal.remove(); });
-				var dialog = modal.find('.modal-dialog');
-				var header = modal.find('.modal-header');
-				var body = modal.find('.modal-body');
-				var footer = modal.find('.modal-footer');
-				header.find('button[data-control="hide"]').remove();
-				header.find('button[data-control="update"]').remove();
+			layout.content.galleries.find('div.addContact').off().click(function(){
+				API.Builder.modal($('body'), {
+				  title:'Upload',
+				  icon:'picture',
+				  zindex:'top',
+				  css:{ header: "bg-purple", body: "p-3"},
+				}, function(modal){
+					modal.on('hide.bs.modal',function(){ modal.remove(); });
+					var dialog = modal.find('.modal-dialog');
+					var header = modal.find('.modal-header');
+					var body = modal.find('.modal-body');
+					var footer = modal.find('.modal-footer');
+					header.find('button[data-control="hide"]').remove();
+					header.find('button[data-control="update"]').remove();
+					modal.modal('show');
+				});
 			});
 		},
 	},
