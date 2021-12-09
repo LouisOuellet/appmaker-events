@@ -1218,7 +1218,7 @@ API.Plugins.events = {
 				  title:'Upload',
 				  icon:'picture',
 				  zindex:'top',
-				  css:{ header: "bg-purple", body: "p-3"},
+				  css:{ dialog: "modal-lg", header: "bg-purple", body: "p-3"},
 				}, function(modal){
 					modal.on('hide.bs.modal',function(){ modal.remove(); });
 					var dialog = modal.find('.modal-dialog');
@@ -1227,6 +1227,7 @@ API.Plugins.events = {
 					var footer = modal.find('.modal-footer');
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
+					API.Builder.dropzone(body);
 					modal.modal('show');
 				});
 			});
