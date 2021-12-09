@@ -179,9 +179,10 @@ API.Plugins.events = {
 									}
 									if(API.Helper.isSet(data,['relations','galleries','pictures'])){
 										for(var [id, relation] of Object.entries(data.relations.galleries.pictures)){
-											// API.Plugins.events.GUI.contact(relation,layout);
+											// API.Plugins.events.GUI.galleries(relation,layout);
 										}
 									}
+									API.Plugins.events.Events.galleries(data,layout);
 								});
 							}
 							// Contacts
@@ -1207,6 +1208,26 @@ API.Plugins.events = {
 				}
 			});
 			if(callback != null){ callback(dataset,layout); }
+		},
+		galleries:function(dataset,layout,options = {},callback = null){
+			if(options instanceof Function){ callback = options; options = {}; }
+			var defaults = {field: "name"};
+			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
+			layout.content.galleries;
+			API.Builder.modal($('body'), {
+			  title:'Upload',
+			  icon:'picture',
+			  zindex:'top',
+			  css:{ header: "bg-purple", body: "p-3"},
+			}, function(modal){
+				modal.on('hide.bs.modal',function(){ modal.remove(); });
+				var dialog = modal.find('.modal-dialog');
+				var header = modal.find('.modal-header');
+				var body = modal.find('.modal-body');
+				var footer = modal.find('.modal-footer');
+				header.find('button[data-control="hide"]').remove();
+				header.find('button[data-control="update"]').remove();
+			});
 		},
 	},
 }
