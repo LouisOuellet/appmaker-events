@@ -2,6 +2,7 @@
 class eventsAPI extends CRUDAPI {
 
 	public function upload($request = null, $data = null){
+		var_dump($data);
 		if(isset($data)){
 			if(!is_array($data)){ $data = json_decode($data, true); }
 			$data['dirname'] = $this->scan($data['event'])['dirname'];
