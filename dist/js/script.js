@@ -169,8 +169,8 @@ API.Plugins.events = {
 										html += '<div class="col-sm-12 col-md-6 col-lg-4">';
 											html += '<div class="card pointer addContact">';
 												html += '<div class="card-body py-4">';
-													html += '<div class="text-center p-5">';
-														html += '<i class="fas fa-plus-circle fa-10x mt-3 mb-2"></i>';
+													html += '<div class="text-center p-2">';
+														html += '<i class="fas fa-plus-circle fa-5x mt-3 mb-2"></i>';
 													html += '</div>';
 												html += '</div>';
 											html += '</div>';
