@@ -1227,7 +1227,6 @@ API.Plugins.events = {
 					var footer = modal.find('.modal-footer');
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
-					modal.on('hidden.bs.modal',function(){ modal.remove(); });
 					API.Builder.dropzone(body,function(action,data){
 						switch(action){
 							default: console.log(action,data); break;
