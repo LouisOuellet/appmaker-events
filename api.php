@@ -1,6 +1,12 @@
 <?php
 class eventsAPI extends CRUDAPI {
 
+	public function upload($request = null, $data = null){
+		if(isset($data)){
+			if(!is_array($data)){ $data = json_decode($data, true); }
+		}
+	}
+
 	protected function scan($id){
 		// Scan Gallery
 		$gallery = dirname(__FILE__,3).'/data/events/'.$id.'/gallery';

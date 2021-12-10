@@ -1229,6 +1229,21 @@ API.Plugins.events = {
 					header.find('button[data-control="update"]').remove();
 					API.Builder.dropzone(body,{acceptedFiles:"image/*"},function(action,zone,data){
 						switch(action){
+							case"sending":
+								if(data.status == "success"){
+									var picture = {
+										dirname:"",
+										basename:"",
+										extension:"",
+										filename:data.name,
+										size:data.size,
+										dataURL:data.dataURL,
+										event:dataset.this.raw.id,
+										gallery:dataset.relations.galleries[0].id,
+									};
+									console.log(picture);
+								}
+								break;
 							default: console.log(action,zone,data); break;
 						}
 					});
