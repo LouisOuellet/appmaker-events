@@ -8,7 +8,6 @@ class eventsAPI extends CRUDAPI {
 			$data['encoding'] = trim(explode(",",$data['dataURL'])[0],' ');
 			if(strpos($data['encoding'],'base64') !== false){ $data['content'] = base64_decode(trim(explode(",",$data['dataURL'])[1],' ')); }
 			else { $data['content'] = trim(explode(",",$data['dataURL'])[1],' '); }
-			var_dump("does picture exist");
 			if(!is_file($data['dirname'].'/'.$data['filename'])){
 				$picture = fopen($data['dirname'].'/'.$data['filename'], "w");
 				fwrite($picture, $data['content']);
