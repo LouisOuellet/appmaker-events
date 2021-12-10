@@ -1228,7 +1228,9 @@ API.Plugins.events = {
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
 					API.Builder.dropzone(body,function(action,data){
-						console.log(action,data);
+						switch(action){
+							default: console.log(action,data); break;
+						}
 					});
 					modal.modal('show');
 				});
