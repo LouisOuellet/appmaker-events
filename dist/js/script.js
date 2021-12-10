@@ -1237,9 +1237,6 @@ API.Plugins.events = {
 									}
 									if(data.status == "success"){
 										clearInterval(checkStatus);
-										console.log(dataset.relations.galleries)
-										console.log(dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]])
-										console.log(dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].id)
 										var picture = {
 											dirname:"",
 											basename:"",

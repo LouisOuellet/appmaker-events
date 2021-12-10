@@ -31,5 +31,8 @@
 		"About": "About",
 		"Gallery": "Gallery",
 		"Attendances": "Attendances",
-		"Download All": "Download All"
+		"Download All": "Download All",
+		"Picture saved!": "Picture saved!",
+		"Unable to upload this picture": "Unable to upload this picture",
+		"Picture already exist": "Picture already exist"
 }

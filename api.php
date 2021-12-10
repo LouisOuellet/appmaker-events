@@ -4,6 +4,43 @@ class eventsAPI extends CRUDAPI {
 	public function upload($request = null, $data = null){
 		if(isset($data)){
 			if(!is_array($data)){ $data = json_decode($data, true); }
+			$data['dirname'] = $this->scan($data['event'])['dirname'];
+			$data['encoding'] = trim(explode(",",$data['dataURL'])[0],' ');
+			if(strpos($data['encoding'],'base64') !== false){ $data['content'] = base64_decode(trim(explode(",",$data['dataURL'])[1],' ')); }
+			else { $data['content'] = trim(explode(",",$data['dataURL'])[1],' '); }
+			if(!is_file($data['dirname'].$data['filename'])){
+				$picture = fopen($data['dirname'].$data['filename'], "w");
+				fwrite($picture, $data['content']);
+				fclose($picture);
+				$pictures = $this->scan($data['event'])['pictures'];
+				foreach($pictures as $basename => $picture){
+					if($picture['filename'] == $data['filename']){ $found = $picture; }
+				}
+				// Return
+				if(isset($found) && !empty($found)){
+					return [
+						"success" => $this->Language->Field["Picture saved!"],
+						"request" => $request,
+						"data" => $data,
+						"output" => [
+							'picture' => $found,
+						],
+					];
+				} else {
+					return [
+						"error" => $this->Language->Field["Unable to upload this picture"],
+						"request" => $request,
+						"data" => $data,
+					];
+				}
+			} else {
+				// Return
+				return [
+					"error" => $this->Language->Field["Picture already exist"],
+					"request" => $request,
+					"data" => $data,
+				];
+			}
 		}
 	}
 
@@ -48,6 +85,10 @@ class eventsAPI extends CRUDAPI {
 				}
 			}
 		} else { $this->mkdir('/data/events/'.$id.'/gallery'); }
+		return [
+			'dirname' => $gallery['dirname'],
+			'pictures' => $pictures,
+		];
 	}
 
 	public function get($request = null, $data = null){
