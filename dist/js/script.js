@@ -1256,16 +1256,20 @@ API.Plugins.events = {
 											event:dataset.this.raw.id,
 										};
 										API.request('events','upload',{data:picture},function(result){
+											console.log(result);
 											var response = JSON.parse(result);
 											console.log(response);
 											if(response.success != undefined){
+												// API.Plugins.events.GUI.picture(response.output.picture,layout);
 												console.log(response);
 											}
 										});
 									}
 								}, 100);
 								break;
-							default: console.log(action,zone,data); break;
+							default:
+								// console.log(action,zone,data);
+								break;
 						}
 					});
 					modal.modal('show');
