@@ -175,7 +175,7 @@ API.Plugins.events = {
 												html += '</div>';
 											html += '</div>';
 										html += '</div>';
-										area.append(html);
+										layout.content.galleries.area.append(html);
 									}
 									if(API.Helper.isSet(data,['relations','galleries']) && Object.keys(data.relations.galleries).length > 0){
 										for(var [id, relation] of Object.entries(data.relations.galleries[Object.keys(data.relations.galleries)[0]].pictures)){
