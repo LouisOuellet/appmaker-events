@@ -1231,7 +1231,7 @@ API.Plugins.events = {
 						switch(action){
 							case"sending":
 								var checkStatus = setInterval(function(){
-									if(data.status != "success" || data.status != "uploading"){
+									if(data.status != "success" && data.status != "uploading"){
 										console.log(data.status);
 										clearInterval(checkStatus);
 									}
