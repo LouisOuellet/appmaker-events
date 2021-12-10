@@ -163,7 +163,7 @@ API.Plugins.events = {
 									layout.tabs.galleries = tab;
 									content.addClass('p-3');
 									content.append('<div class="row"></div>');
-									area = content.find('div.row').last();
+									layout.content.galleries.area = content.find('div.row').last();
 									if(API.Auth.validate('custom', 'events_galleries', 2)){
 										var html = '';
 										html += '<div class="col-sm-12 col-md-6">';
@@ -177,9 +177,9 @@ API.Plugins.events = {
 										html += '</div>';
 										area.append(html);
 									}
-									if(API.Helper.isSet(data,['relations','galleries','pictures'])){
-										for(var [id, relation] of Object.entries(data.relations.galleries.pictures)){
-											// API.Plugins.events.GUI.galleries(relation,layout);
+									if(API.Helper.isSet(data,['relations','galleries']) && Object.keys(data.relations.galleries).length > 0){
+										for(var [id, relation] of Object.entries(data.relations.galleries[Object.keys(data.relations.galleries)[0]].pictures)){
+											// API.Plugins.events.GUI.picture(relation,layout);
 										}
 									}
 									API.Plugins.events.Events.galleries(data,layout);
@@ -768,6 +768,19 @@ API.Plugins.events = {
 		},
 	},
 	GUI:{
+		picture:function(dataset,layout){
+			var html = '';
+			html += '<div class="col-sm-12 col-md-6">';
+				html += '<div class="card pointer addContact">';
+					html += '<div class="card-body py-4">';
+						html += '<div class="text-center p-5">';
+							html += '<img class="img-fluid" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
+						html += '</div>';
+					html += '</div>';
+				html += '</div>';
+			html += '</div>';
+			layout.content.galleries.area.prepend(html);
+		},
 		contact:function(dataset,layout,plugin = 'contacts'){
 			var area = layout.content[plugin].find('div.row').eq(1);
 			area.prepend(API.Plugins.events.GUI.card(dataset));
