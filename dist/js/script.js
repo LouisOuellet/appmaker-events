@@ -1238,8 +1238,8 @@ API.Plugins.events = {
 									if(data.status == "success"){
 										clearInterval(checkStatus);
 										console.log(dataset.relations.galleries)
-										console.log(dataset.relations.galleries[0])
-										console.log(dataset.relations.galleries[0].id)
+										console.log(dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]])
+										console.log(dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].id)
 										var picture = {
 											dirname:"",
 											basename:"",
@@ -1248,7 +1248,7 @@ API.Plugins.events = {
 											size:data.size,
 											dataURL:data.dataURL,
 											event:dataset.this.raw.id,
-											gallery:dataset.relations.galleries[0].id,
+											gallery:dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].id,
 										};
 										console.log(picture);
 									}
