@@ -1230,7 +1230,8 @@ API.Plugins.events = {
 					API.Builder.dropzone(body,{acceptedFiles:"image/*"},function(action,zone,data){
 						switch(action){
 							case"sending":
-								console.log(action,zone,data);
+								console.log(data);
+								console.log(data.status);
 								if(data.status == "success"){
 									var picture = {
 										dirname:"",
