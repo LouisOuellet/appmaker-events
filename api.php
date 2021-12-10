@@ -2,7 +2,6 @@
 class eventsAPI extends CRUDAPI {
 
 	public function upload($request = null, $data = null){
-		var_dump("start");
 		if(isset($data)){
 			if(!is_array($data)){ $data = json_decode($data, true); }
 			$data['dirname'] = $this->scan($data['event'])['dirname'];
@@ -16,11 +15,9 @@ class eventsAPI extends CRUDAPI {
 				fclose($picture);
 				$pictures = $this->scan($data['event'])['pictures'];
 				foreach($pictures as $basename => $picture){
-					var_dump($picture['filename'],$data['filename']);
-					if($picture['filename'] == $data['filename']){ $found = $picture; }
+					if($picture['filename'].'.'.$picture['extension'] == $data['filename']){ $found = $picture; }
 				}
 				// Return
-				var_dump("was picture created");
 				if(isset($found) && !empty($found)){
 					$return = [
 						"success" => $this->Language->Field["Picture saved!"],
@@ -49,7 +46,6 @@ class eventsAPI extends CRUDAPI {
 		// Return
 		unset($return['data']['dataURL']);
 		unset($return['data']['content']);
-		var_dump(["return" => $return]);
 		return $return;
 	}
 
