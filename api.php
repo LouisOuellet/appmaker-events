@@ -2,12 +2,14 @@
 class eventsAPI extends CRUDAPI {
 
 	public function upload($request = null, $data = null){
+		var_dump("start");
 		if(isset($data)){
 			if(!is_array($data)){ $data = json_decode($data, true); }
 			$data['dirname'] = $this->scan($data['event'])['dirname'];
 			$data['encoding'] = trim(explode(",",$data['dataURL'])[0],' ');
 			if(strpos($data['encoding'],'base64') !== false){ $data['content'] = base64_decode(trim(explode(",",$data['dataURL'])[1],' ')); }
 			else { $data['content'] = trim(explode(",",$data['dataURL'])[1],' '); }
+			var_dump("does picture exist");
 			if(!is_file($data['dirname'].'/'.$data['filename'])){
 				$picture = fopen($data['dirname'].'/'.$data['filename'], "w");
 				fwrite($picture, $data['content']);
@@ -17,9 +19,9 @@ class eventsAPI extends CRUDAPI {
 					if($picture['filename'] == $data['filename']){ $found = $picture; }
 				}
 				// Return
-				unset($data['dataURL']);
+				var_dump("was picture created");
 				if(isset($found) && !empty($found)){
-					return [
+					$return = [
 						"success" => $this->Language->Field["Picture saved!"],
 						"request" => $request,
 						"data" => $data,
@@ -28,7 +30,7 @@ class eventsAPI extends CRUDAPI {
 						],
 					];
 				} else {
-					return [
+					$return = [
 						"error" => $this->Language->Field["Unable to upload this picture"],
 						"request" => $request,
 						"data" => $data,
@@ -36,14 +38,17 @@ class eventsAPI extends CRUDAPI {
 				}
 			} else {
 				// Return
-				unset($data['dataURL']);
-				return [
+				$return = [
 					"error" => $this->Language->Field["Picture already exist"],
 					"request" => $request,
 					"data" => $data,
 				];
 			}
 		}
+		// Return
+		unset($return['data']['dataURL']);
+		var_dump(["return" => $return]);
+		return $return;
 	}
 
 	protected function scan($id){
