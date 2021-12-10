@@ -75,6 +75,7 @@ class eventsAPI extends CRUDAPI {
 					$picture = pathinfo($gallery['dirname'].'/'.$picture);
 					$picture['size'] = filesize($gallery['dirname'].'/'.$picture['basename']);
 					$picture['id'] = $this->Auth->create('pictures',$picture);
+					var_dump($picture['id']);
 					$pictures[$picture['basename']] = $this->Auth->read('pictures',$picture['id'])->all()[0];
 					$this->createRelationship([
 						'relationship_1' => 'galleries',
