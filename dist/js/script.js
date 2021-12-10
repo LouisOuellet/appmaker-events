@@ -1265,7 +1265,7 @@ API.Plugins.events = {
 								}, 100);
 								break;
 							default:
-								// console.log(action,zone,data);
+								console.log(action,zone,data);
 								break;
 						}
 					});
