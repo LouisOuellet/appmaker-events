@@ -8,8 +8,8 @@ class eventsAPI extends CRUDAPI {
 			$data['encoding'] = trim(explode(",",$data['dataURL'])[0],' ');
 			if(strpos($data['encoding'],'base64') !== false){ $data['content'] = base64_decode(trim(explode(",",$data['dataURL'])[1],' ')); }
 			else { $data['content'] = trim(explode(",",$data['dataURL'])[1],' '); }
-			if(!is_file($data['dirname'].$data['filename'])){
-				$picture = fopen($data['dirname'].$data['filename'], "w");
+			if(!is_file($data['dirname'].'/'.$data['filename'])){
+				$picture = fopen($data['dirname'].'/'.$data['filename'], "w");
 				fwrite($picture, $data['content']);
 				fclose($picture);
 				$pictures = $this->scan($data['event'])['pictures'];
@@ -46,12 +46,12 @@ class eventsAPI extends CRUDAPI {
 
 	protected function scan($id){
 		// Scan Gallery
-		$gallery = dirname(__FILE__,3).'/data/events/'.$id.'/gallery';
+		$gallery = 'data/events/'.$id.'/gallery';
 		$gallery = $this->Auth->query('SELECT * FROM `galleries` WHERE `dirname` = ?',$gallery);
 		if($gallery->numRows() > 0){
 			$gallery = $gallery->fetchAll()->All()[0];
 		} else {
-			$gallery = dirname(__FILE__,3).'/data/events/'.$id.'/gallery';
+			$gallery = 'data/events/'.$id.'/gallery';
 			$gallery = $this->Auth->create('galleries',['dirname' => $gallery]);
 			$gallery = $this->Auth->read('galleries',$gallery)->all()[0];
 			$this->createRelationship([

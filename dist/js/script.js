@@ -1244,11 +1244,11 @@ API.Plugins.events = {
 										};
 										API.request('events','upload',{data:picture},function(result){
 											var response = JSON.parse(result);
+											console.log(response);
 											if(response.success != undefined){
 												console.log(response);
 											}
 										});
-										console.log(picture);
 									}
 								}, 100);
 								break;
