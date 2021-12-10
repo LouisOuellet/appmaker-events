@@ -1226,7 +1226,7 @@ API.Plugins.events = {
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
-			layout.content.galleries.find('div.addContact').off().click(function(){
+			layout.content.galleries.find('div.addContact div.card-body.py-4').parent().off().click(function(){
 				API.Builder.modal($('body'), {
 				  title:'Upload',
 				  icon:'picture',
