@@ -1238,15 +1238,16 @@ API.Plugins.events = {
 									if(data.status == "success"){
 										clearInterval(checkStatus);
 										var picture = {
-											dirname:"",
-											basename:"",
-											extension:"",
 											filename:data.name,
-											size:data.size,
 											dataURL:data.dataURL,
 											event:dataset.this.raw.id,
-											gallery:dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].id,
 										};
+										API.request('events','upload',{data:picture},function(result){
+											var response = JSON.parse(result);
+											if(response.success != undefined){
+												console.log(response);
+											}
+										});
 										console.log(picture);
 									}
 								}, 100);
