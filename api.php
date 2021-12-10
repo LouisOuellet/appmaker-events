@@ -18,6 +18,7 @@ class eventsAPI extends CRUDAPI {
 					if($picture['filename'] == $data['filename']){ $found = $picture; }
 				}
 				// Return
+				unset($data['dataURL']);
 				if(isset($found) && !empty($found)){
 					return [
 						"success" => $this->Language->Field["Picture saved!"],
@@ -36,6 +37,7 @@ class eventsAPI extends CRUDAPI {
 				}
 			} else {
 				// Return
+				unset($data['dataURL']);
 				return [
 					"error" => $this->Language->Field["Picture already exist"],
 					"request" => $request,
