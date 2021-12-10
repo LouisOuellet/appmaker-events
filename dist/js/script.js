@@ -166,7 +166,7 @@ API.Plugins.events = {
 									layout.content.galleries.area = content.find('div.row').last();
 									if(API.Auth.validate('custom', 'events_galleries', 2)){
 										var html = '';
-										html += '<div class="col-sm-12 col-md-6">';
+										html += '<div class="col-sm-12 col-md-6 col-lg-4">';
 											html += '<div class="card pointer addContact">';
 												html += '<div class="card-body py-4">';
 													html += '<div class="text-center p-5">';
@@ -770,10 +770,10 @@ API.Plugins.events = {
 	GUI:{
 		picture:function(dataset,layout){
 			var html = '';
-			html += '<div class="col-sm-12 col-md-6">';
+			html += '<div class="col-sm-12 col-md-6 col-lg-4">';
 				html += '<div class="card pointer addContact">';
-					html += '<div class="card-body py-4">';
-						html += '<div class="text-center p-5">';
+					html += '<div class="card-body">';
+						html += '<div class="text-center">';
 							html += '<img class="img-fluid" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
 						html += '</div>';
 					html += '</div>';
