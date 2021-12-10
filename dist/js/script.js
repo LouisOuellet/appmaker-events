@@ -1251,17 +1251,14 @@ API.Plugins.events = {
 									if(data.status == "success"){
 										clearInterval(checkStatus);
 										var picture = {
-											filename:data.name,
+											basename:data.name,
 											dataURL:data.dataURL,
 											event:dataset.this.raw.id,
 										};
 										API.request('events','upload',{data:picture},function(result){
-											console.log(result);
 											var response = JSON.parse(result);
-											console.log(response);
 											if(response.success != undefined){
-												// API.Plugins.events.GUI.picture(response.output.picture,layout);
-												console.log(response);
+												API.Plugins.events.GUI.picture(response.output.picture,layout);
 											}
 										});
 									}

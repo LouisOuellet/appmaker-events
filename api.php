@@ -8,13 +8,13 @@ class eventsAPI extends CRUDAPI {
 			$data['encoding'] = trim(explode(",",$data['dataURL'])[0],' ');
 			if(strpos($data['encoding'],'base64') !== false){ $data['content'] = base64_decode(trim(explode(",",$data['dataURL'])[1],' ')); }
 			else { $data['content'] = trim(explode(",",$data['dataURL'])[1],' '); }
-			if(!is_file($data['dirname'].'/'.$data['filename'])){
-				$picture = fopen($data['dirname'].'/'.$data['filename'], "w");
+			if(!is_file($data['dirname'].'/'.$data['basename'])){
+				$picture = fopen($data['dirname'].'/'.$data['basename'], "w");
 				fwrite($picture, $data['content']);
 				fclose($picture);
 				$pictures = $this->scan($data['event'])['pictures'];
 				foreach($pictures as $basename => $picture){
-					if($picture['filename'].'.'.$picture['extension'] == $data['filename']){ $found = $picture; }
+					if($picture['basename'] == $data['basename']){ $found = $picture; }
 				}
 				// Return
 				if(isset($found) && !empty($found)){
