@@ -16,6 +16,7 @@ class eventsAPI extends CRUDAPI {
 				fclose($picture);
 				$pictures = $this->scan($data['event'])['pictures'];
 				foreach($pictures as $basename => $picture){
+					var_dump($picture['filename'],$data['filename']);
 					if($picture['filename'] == $data['filename']){ $found = $picture; }
 				}
 				// Return
@@ -47,6 +48,7 @@ class eventsAPI extends CRUDAPI {
 		}
 		// Return
 		unset($return['data']['dataURL']);
+		unset($return['data']['content']);
 		var_dump(["return" => $return]);
 		return $return;
 	}
