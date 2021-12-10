@@ -772,9 +772,9 @@ API.Plugins.events = {
 			var html = '';
 			html += '<div class="col-sm-12 col-md-6 col-lg-4">';
 				html += '<div class="card pointer addContact">';
-					html += '<div class="card-body">';
+					html += '<div class="card-body p-0">';
 						html += '<div class="text-center">';
-							html += '<img class="img-fluid" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
+							html += '<img class="img-fluid" style="border-radius:4px;" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
 						html += '</div>';
 					html += '</div>';
 				html += '</div>';
