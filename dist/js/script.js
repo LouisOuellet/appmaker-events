@@ -179,7 +179,7 @@ API.Plugins.events = {
 									}
 									if(API.Helper.isSet(data,['relations','galleries']) && Object.keys(data.relations.galleries).length > 0){
 										for(var [id, relation] of Object.entries(data.relations.galleries[Object.keys(data.relations.galleries)[0]].pictures)){
-											// API.Plugins.events.GUI.picture(relation,layout);
+											API.Plugins.events.GUI.picture(relation,layout);
 										}
 									}
 									API.Plugins.events.Events.galleries(data,layout);
