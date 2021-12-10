@@ -97,6 +97,8 @@ class eventsAPI extends CRUDAPI {
 		if(isset($data)){
 			if(!is_array($data)){ $data = json_decode($data, true); }
 			$this->Auth->setLimit(0);
+			// Scan for pictures
+			$this->scan($data['id']);
 			// Load Event
 			$get = parent::get('events', $data);
 			// Load Items
