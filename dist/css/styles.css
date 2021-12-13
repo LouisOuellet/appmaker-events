@@ -116,7 +116,7 @@
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity ease-in-out 0.4s;
+  transition: opacity ease-in-out 0.2s;
   border-radius:25px;
 }
 .events-page .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content {
