@@ -791,8 +791,14 @@ API.Plugins.events = {
 			var area = layout.content[plugin].find('div.row').eq(1);
 			area.prepend(API.Plugins.events.GUI.card(dataset));
 			var card = area.find('div.col-sm-12.col-md-6').first();
-			if(API.Auth.validate('custom', 'events_'+plugin+'_btn_share', 1)){
-				card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'navy',icon:'fas fa-share-alt',action:'share',content:API.Contents.Language['Share']}));
+			if(API.Helper.isSet(dataset,['users'])){
+				if(API.Auth.validate('custom', 'events_'+plugin+'_btn_details', 1)){
+					card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'primary',icon:'fas fa-user',action:'details',content:API.Contents.Language['Details']}));
+				}
+			} else {
+				if(API.Auth.validate('custom', 'events_'+plugin+'_btn_link', 1)){
+					card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'navy',icon:'fas fa-link',action:'link',content:API.Contents.Language['Add User']}));
+				}
 			}
 			if(API.Auth.validate('custom', 'events_'+plugin+'_btn_edit', 1)){
 				card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'warning',icon:'fas fa-edit',action:'edit',content:API.Contents.Language['Edit']}));
