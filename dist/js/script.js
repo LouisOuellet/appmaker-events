@@ -1283,7 +1283,7 @@ API.Plugins.events = {
 				  title:'View',
 				  icon:'picture',
 				  zindex:'top',
-				  css:{ dialog: "modal-lg", header: "bg-info", body: "p-3"},
+				  css:{ dialog: "modal-full", header: "bg-info", body: "p-3"},
 				}, function(modal){
 					modal.on('hide.bs.modal',function(){ modal.remove(); });
 					var dialog = modal.find('.modal-dialog');
@@ -1300,7 +1300,7 @@ API.Plugins.events = {
 				  title:'Are you sure?',
 				  icon:'picture',
 				  zindex:'top',
-				  css:{ dialog: "modal-lg", header: "bg-danger", body: "p-3"},
+				  css:{ header: "bg-danger", body: "p-3"},
 				}, function(modal){
 					modal.on('hide.bs.modal',function(){ modal.remove(); });
 					var dialog = modal.find('.modal-dialog');
