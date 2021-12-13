@@ -1292,13 +1292,14 @@ API.Plugins.events = {
 					var footer = modal.find('.modal-footer');
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
+					body.addClass('p-0');
 					modal.modal('show');
 				});
 			});
 			layout.content.galleries.area.find('div[data-picture] button').off().click(function(){
 				API.Builder.modal($('body'), {
 				  title:'Are you sure?',
-				  icon:'picture',
+				  icon:'delete',
 				  zindex:'top',
 				  css:{ header: "bg-danger", body: "p-3"},
 				}, function(modal){
@@ -1309,6 +1310,7 @@ API.Plugins.events = {
 					var footer = modal.find('.modal-footer');
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
+					body.addClass('p-0');
 					modal.modal('show');
 				});
 			});
