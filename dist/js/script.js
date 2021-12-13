@@ -775,7 +775,7 @@ API.Plugins.events = {
 					html += '<div class="card-body p-0">';
 						html += '<div class="text-center">';
 							html += '<img class="img-fluid" data-picture="'+dataset.id+'" style="border-radius:4px;" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
-							html += '<button class="btn btn-danger collapse align-middle" data-picture="'+dataset.basename+'"><i class="fas fa-trash-alt my-4"></i></button>';
+							html += '<button class="btn btn-danger collapse align-middle" data-picture="'+dataset.id+'"><i class="fas fa-trash-alt my-4"></i></button>';
 						html += '</div>';
 					html += '</div>';
 				html += '</div>';
@@ -1318,8 +1318,6 @@ API.Plugins.events = {
 					body.html(API.Contents.Language['Are you sure you want to delete this picture?']);
 					footer.append('<button class="btn btn-danger" data-action="delete"><i class="fas fa-trash-alt mr-1"></i>'+API.Contents.Language['Delete']+'</button>');
 					footer.find('button[data-action="delete"]').off().click(function(){
-						console.log(pictureID);
-						console.log(picture);
 						API.request('events','deletePicture',{data:picture},function(result){
 							var response = JSON.parse(result);
 							if(response.success != undefined){
