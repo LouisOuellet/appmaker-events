@@ -783,12 +783,8 @@ API.Plugins.events = {
 			layout.content.galleries.area.prepend(html);
 			var picture = layout.content.galleries.area.find('div[data-picture="'+dataset.basename+'"]').first();
 			picture.find('div.card').off().on({
-		    mouseenter:function(){
-					picture.find('button').collapse('show');
-		    },
-		    mouseleave:function(){
-					picture.find('button').collapse('hide');
-		    }
+		    mouseenter:function(){ picture.find('button').collapse('show'); },
+		    mouseleave:function(){ picture.find('button').collapse('hide'); }
 			});
 		},
 		contact:function(dataset,layout,plugin = 'contacts'){
