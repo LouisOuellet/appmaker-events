@@ -775,8 +775,8 @@ API.Plugins.events = {
 					html += '<div class="card-body p-0">';
 						html += '<div class="text-center">';
 							html += '<img class="img-fluid" style="border-radius:4px;" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
+							html += '<button class="btn btn-block btn-danger"><i class="fas fa-trash-alt"></i></button>';
 						html += '</div>';
-						html += '<button class="btn btn-block btn-danger"><i class="fas fa-trash-alt"></i></button>';
 					html += '</div>';
 				html += '</div>';
 			html += '</div>';
