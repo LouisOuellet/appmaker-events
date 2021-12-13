@@ -775,7 +775,7 @@ API.Plugins.events = {
 					html += '<div class="card-body p-0">';
 						html += '<div class="text-center">';
 							html += '<img class="img-fluid" style="border-radius:4px;" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
-							html += '<button class="btn btn-danger collapse align-middle"><i class="fas fa-trash-alt my-4"></i></button>';
+							html += '<button class="btn btn-danger collapse align-middle" data-picture="'+dataset.basename+'"><i class="fas fa-trash-alt my-4"></i></button>';
 						html += '</div>';
 					html += '</div>';
 				html += '</div>';
@@ -1232,7 +1232,7 @@ API.Plugins.events = {
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
-			layout.content.galleries.find('div.addContact div.card-body.py-4').parent().off().click(function(){
+			layout.content.galleries.area.find('div.addContact div.card-body.py-4').parent().off().click(function(){
 				API.Builder.modal($('body'), {
 				  title:'Upload',
 				  icon:'picture',
@@ -1275,6 +1275,40 @@ API.Plugins.events = {
 								break;
 						}
 					});
+					modal.modal('show');
+				});
+			});
+			layout.content.galleries.area.find('div[data-picture] img').off().click(function(){
+				API.Builder.modal($('body'), {
+				  title:'View',
+				  icon:'picture',
+				  zindex:'top',
+				  css:{ dialog: "modal-lg", header: "bg-info", body: "p-3"},
+				}, function(modal){
+					modal.on('hide.bs.modal',function(){ modal.remove(); });
+					var dialog = modal.find('.modal-dialog');
+					var header = modal.find('.modal-header');
+					var body = modal.find('.modal-body');
+					var footer = modal.find('.modal-footer');
+					header.find('button[data-control="hide"]').remove();
+					header.find('button[data-control="update"]').remove();
+					modal.modal('show');
+				});
+			});
+			layout.content.galleries.area.find('div[data-picture] button').off().click(function(){
+				API.Builder.modal($('body'), {
+				  title:'Are you sure?',
+				  icon:'picture',
+				  zindex:'top',
+				  css:{ dialog: "modal-lg", header: "bg-danger", body: "p-3"},
+				}, function(modal){
+					modal.on('hide.bs.modal',function(){ modal.remove(); });
+					var dialog = modal.find('.modal-dialog');
+					var header = modal.find('.modal-header');
+					var body = modal.find('.modal-body');
+					var footer = modal.find('.modal-footer');
+					header.find('button[data-control="hide"]').remove();
+					header.find('button[data-control="update"]').remove();
 					modal.modal('show');
 				});
 			});
