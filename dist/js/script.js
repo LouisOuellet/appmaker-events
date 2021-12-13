@@ -1294,7 +1294,7 @@ API.Plugins.events = {
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
 					body.addClass('p-0');
-					body.html('<img src="'+dataset.relations.galleries)[0]].pictures[pictureID].dirname+'/'+dataset.relations.galleries)[0]].pictures[pictureID].basename+'" alt="'+dataset.relations.galleries)[0]].pictures[pictureID].basename+'" />');
+					body.html('<img src="'+dataset.relations.galleries[0].pictures[pictureID].dirname+'/'+dataset.relations.galleries[0].pictures[pictureID].basename+'" alt="'+dataset.relations.galleries[0].pictures[pictureID].basename+'" />');
 					modal.modal('show');
 				});
 			});
