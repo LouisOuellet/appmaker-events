@@ -770,16 +770,18 @@ API.Plugins.events = {
 	GUI:{
 		picture:function(dataset,layout){
 			var html = '';
-			html += '<div class="col-sm-12 col-md-6 col-lg-4">';
+			html += '<div class="col-sm-12 col-md-6 col-lg-4" data-picture="'+dataset.basename+'">';
 				html += '<div class="card pointer addContact">';
-					html += '<div class="card-body p-0">';
+					html += '<div class="card-body p-0 picture">';
 						html += '<div class="text-center">';
 							html += '<img class="img-fluid" style="border-radius:4px;" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
 						html += '</div>';
+						html += '<button class="btn btn-block btn-danger"><i class="fas fa-trash-alt"></i></button>';
 					html += '</div>';
 				html += '</div>';
 			html += '</div>';
 			layout.content.galleries.area.prepend(html);
+			layout.content.galleries.area.find('div[data-picture="'+dataset.basename+'"]').first()
 		},
 		contact:function(dataset,layout,plugin = 'contacts'){
 			var area = layout.content[plugin].find('div.row').eq(1);
