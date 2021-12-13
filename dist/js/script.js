@@ -1293,7 +1293,7 @@ API.Plugins.events = {
 					var footer = modal.find('.modal-footer');
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
-					body.addClass('p-0');
+					body.removeClass('p-3').addClass('p-0');
 					console.log(pictureID);
 					console.log(dataset.relations);
 					console.log(dataset.relations.galleries);
