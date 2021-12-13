@@ -1294,13 +1294,7 @@ API.Plugins.events = {
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
 					body.removeClass('p-3').addClass('p-0');
-					console.log(pictureID);
-					console.log(dataset.relations);
-					console.log(dataset.relations.galleries);
-					console.log(dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]]);
-					console.log(dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures);
-					console.log(dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID]);
-					body.html('<img src="'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].dirname+'/'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].basename+'" alt="'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].basename+'" />');
+					body.html('<img style="max-width:100%;max-width:100%;" src="'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].dirname+'/'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].basename+'" alt="'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].basename+'" />');
 					modal.modal('show');
 				});
 			});
