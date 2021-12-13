@@ -1,6 +1,36 @@
 <?php
 class eventsAPI extends CRUDAPI {
 
+	public function deletePicture($request = null, $data = null){
+		if(isset($data)){
+			if(!is_array($data)){ $data = json_decode($data, true); }
+			$picture = $this->Auth->read('pictures',$data['id']);
+			if($picture != null){
+				$picture = $picture->all()[0];
+				// Delete Record
+				$this->delete('pictures',$data['id']);
+				// Return
+				$return = [
+					"success" => $this->Language->Field["Picture removed!"],
+					"request" => $request,
+					"data" => $data,
+					"output" => [
+						'picture' => $picture,
+					],
+				];
+			} else {
+				// Return
+				$return = [
+					"error" => $this->Language->Field["Picture not found"],
+					"request" => $request,
+					"data" => $data,
+				];
+			}
+			// Return
+			return $return;
+		}
+	}
+
 	public function upload($request = null, $data = null){
 		if(isset($data)){
 			if(!is_array($data)){ $data = json_decode($data, true); }

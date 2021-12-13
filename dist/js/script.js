@@ -1315,6 +1315,16 @@ API.Plugins.events = {
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
 					body.html(API.Contents.Language['Are you sure you want to delete this picture?']);
+					footer.append('<button class="btn btn-danger" data-action="delete"><i class="fas fa-trash-alt mr-1"></i>'+API.Contents.Language['Delete']+'</button>');
+					footer.find('button[data-action="delete"]').off().click(function(){
+						API.request('events','deletePicture',{data:dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID]},function(result){
+							var response = JSON.parse(result);
+							if(response.success != undefined){
+								layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
+							}
+							modal.modal('hide');
+						});
+					});
 					modal.modal('show');
 				});
 			});
