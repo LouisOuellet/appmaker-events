@@ -1293,6 +1293,7 @@ API.Plugins.events = {
 					var footer = modal.find('.modal-footer');
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
+					footer.remove();
 					body.removeClass('p-3').addClass('p-0');
 					body.html('<img style="max-width:100%;max-width:100%;" src="'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].dirname+'/'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].basename+'" alt="'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].basename+'" />');
 					modal.modal('show');
@@ -1313,7 +1314,7 @@ API.Plugins.events = {
 					var footer = modal.find('.modal-footer');
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
-					body.html(API.Content.Language['Are you sure you want to delete this picture?']);
+					body.html(API.Contents.Language['Are you sure you want to delete this picture?']);
 					modal.modal('show');
 				});
 			});
