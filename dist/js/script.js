@@ -770,18 +770,18 @@ API.Plugins.events = {
 	GUI:{
 		picture:function(dataset,layout){
 			var html = '';
-			html += '<div class="col-sm-12 col-md-6 col-lg-4 picture" data-picture="'+dataset.basename+'">';
+			html += '<div class="col-sm-12 col-md-6 col-lg-4 picture" data-picture="'+dataset.id+'">';
 				html += '<div class="card pointer addContact">';
 					html += '<div class="card-body p-0">';
 						html += '<div class="text-center">';
-							html += '<img class="img-fluid" style="border-radius:4px;" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
+							html += '<img class="img-fluid" data-picture="'+dataset.id+'" style="border-radius:4px;" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
 							html += '<button class="btn btn-danger collapse align-middle" data-picture="'+dataset.basename+'"><i class="fas fa-trash-alt my-4"></i></button>';
 						html += '</div>';
 					html += '</div>';
 				html += '</div>';
 			html += '</div>';
 			layout.content.galleries.area.prepend(html);
-			var picture = layout.content.galleries.area.find('div[data-picture="'+dataset.basename+'"]').first();
+			var picture = layout.content.galleries.area.find('div[data-picture="'+dataset.id+'"]').first();
 			picture.find('div.card').off().on({
 		    mouseenter:function(){ picture.find('button').collapse('show'); },
 		    mouseleave:function(){ picture.find('button').collapse('hide'); }
@@ -1279,6 +1279,7 @@ API.Plugins.events = {
 				});
 			});
 			layout.content.galleries.area.find('div[data-picture] img').off().click(function(){
+				var pictureID = $(this).attr('data-picture');
 				API.Builder.modal($('body'), {
 				  title:'View',
 				  icon:'picture',
@@ -1293,10 +1294,12 @@ API.Plugins.events = {
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
 					body.addClass('p-0');
+					body.html('<img src="'+dataset.relations.galleries)[0]].pictures[pictureID].dirname+'/'+dataset.relations.galleries)[0]].pictures[pictureID].basename+'" alt="'+dataset.relations.galleries)[0]].pictures[pictureID].basename+'" />');
 					modal.modal('show');
 				});
 			});
 			layout.content.galleries.area.find('div[data-picture] button').off().click(function(){
+				var pictureID = $(this).attr('data-picture');
 				API.Builder.modal($('body'), {
 				  title:'Are you sure?',
 				  icon:'delete',
@@ -1310,7 +1313,7 @@ API.Plugins.events = {
 					var footer = modal.find('.modal-footer');
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
-					body.addClass('p-0');
+					body.html(API.Content.Language['Are you sure you want to delete this picture?']);
 					modal.modal('show');
 				});
 			});
