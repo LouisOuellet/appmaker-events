@@ -7,8 +7,18 @@ class eventsAPI extends CRUDAPI {
 			$picture = $this->Auth->read('pictures',$data['id']);
 			if($picture != null){
 				$picture = $picture->all()[0];
+				// Fetch Relationships
+				$relationships = $this->getRelationships('pictures',$picture['id']);
+				// Delete Relationships
+				if((isset($relationships))&&(!empty($relationships))){
+					foreach($relationships as $id => $links){
+						$this->Auth->delete('relationships',$id);
+					}
+				}
 				// Delete Record
-				$this->delete('pictures',$data['id']);
+				$this->Auth->delete('pictures',$data['id']);
+				// Delete Picture
+				unlink($picture['dirname'].'/'.$picture['basename']);
 				// Return
 				$return = [
 					"success" => $this->Language->Field["Picture removed!"],
