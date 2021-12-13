@@ -1183,26 +1183,10 @@ API.Plugins.events = {
 			contacts.find('button').off().click(function(){
 				var contact = dataset.relations.contacts[$(this).attr('data-id')];
 				switch($(this).attr('data-action')){
-					case"item":
-						var now = new Date();
-						var item = {
-							date:now,
-							time:now,
-							contact:contact.id,
-							status:3,
-							setHosts:API.Contents.Auth.User.id,
-							relationship:'events',
-							link_to:dataset.this.raw.id,
-						};
-						API.request('items','create',{data:item},function(result){
-							var record = JSON.parse(result);
-							if(typeof record.success !== 'undefined'){
-								API.Helper.set(dataset,['details','items','dom',record.output.dom.id],record.output.dom);
-								API.Helper.set(dataset,['details','items','raw',record.output.raw.id],record.output.raw);
-								API.Helper.set(dataset,['relations','items',record.output.dom.id],record.output.dom);
-								API.Plugins.items.Events.create(dataset,record.output.raw);
-							}
-						});
+					case"details":
+						API.CRUD.read.show({ key:'username',keys:contact.users[Object.keys(contact.users)[0]], href:"?p=users&v=details&id="+contact.users[Object.keys(contact.users)[0]].username, modal:true });
+						break;
+					case"link":
 						break;
 					case"edit":
 						API.CRUD.update.show({ keys:contact, modal:true, plugin:'contacts' },function(user){
