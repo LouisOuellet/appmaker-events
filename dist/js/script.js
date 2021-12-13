@@ -775,13 +775,21 @@ API.Plugins.events = {
 					html += '<div class="card-body p-0">';
 						html += '<div class="text-center">';
 							html += '<img class="img-fluid" style="border-radius:4px;" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
-							html += '<button class="btn btn-block btn-danger"><i class="fas fa-trash-alt"></i></button>';
+							html += '<button class="btn btn-block btn-danger collapse"><i class="fas fa-trash-alt"></i></button>';
 						html += '</div>';
 					html += '</div>';
 				html += '</div>';
 			html += '</div>';
 			layout.content.galleries.area.prepend(html);
-			layout.content.galleries.area.find('div[data-picture="'+dataset.basename+'"]').first()
+			var picture = layout.content.galleries.area.find('div[data-picture="'+dataset.basename+'"]').first();
+			picture.off().on({
+		    mouseenter:function(){
+					picture.find('button').collapse('show');
+		    },
+		    mouseleave:function(){
+					picture.find('button').collapse('hide');
+		    }
+			});
 		},
 		contact:function(dataset,layout,plugin = 'contacts'){
 			var area = layout.content[plugin].find('div.row').eq(1);
