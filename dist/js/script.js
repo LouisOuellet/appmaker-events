@@ -1323,7 +1323,6 @@ API.Plugins.events = {
 							if(response.success != undefined){
 								layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
 							}
-							console.log(picture);
 							modal.modal('hide');
 						});
 					});

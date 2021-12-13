@@ -36,5 +36,6 @@
 		"Unable to upload this picture": "Unable to upload this picture",
 		"Picture already exist": "Picture already exist",
 		"Are you sure you want to delete this picture?": "Are you sure you want to delete this picture?",
-		"Picture not found": "Picture not found"
+		"Picture not found": "Picture not found",
+		"Picture removed!": "Picture removed!"
 }
