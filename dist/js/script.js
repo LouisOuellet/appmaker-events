@@ -1299,8 +1299,8 @@ API.Plugins.events = {
 					console.log(dataset.relations.galleries);
 					console.log(dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]]);
 					console.log(dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures);
-					console.log(dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures);
-					body.html('<img src="'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures.dirname+'/'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures.basename+'" alt="'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures.basename+'" />');
+					console.log(dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID]);
+					body.html('<img src="'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].dirname+'/'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].basename+'" alt="'+dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID].basename+'" />');
 					modal.modal('show');
 				});
 			});
