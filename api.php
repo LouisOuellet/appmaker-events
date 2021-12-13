@@ -28,7 +28,16 @@ class eventsAPI extends CRUDAPI {
 			}
 			// Return
 			return $return;
+		} else {
+			// Return
+			$return = [
+				"error" => $this->Language->Field["Unable to complete the request"],
+				"request" => $request,
+				"data" => $data,
+			];
 		}
+		// Return
+		return $return;
 	}
 
 	public function upload($request = null, $data = null){
