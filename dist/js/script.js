@@ -1299,8 +1299,8 @@ API.Plugins.events = {
 					console.log(dataset.relations.galleries);
 					console.log(dataset.relations.galleries[0]);
 					console.log(dataset.relations.galleries[0].pictures);
-					console.log(dataset.relations.galleries[0].pictures[pictureID]);
-					body.html('<img src="'+dataset.relations.galleries[0].pictures[pictureID].dirname+'/'+dataset.relations.galleries[0].pictures[pictureID].basename+'" alt="'+dataset.relations.galleries[0].pictures[pictureID].basename+'" />');
+					console.log(data.relations.galleries[Object.keys(data.relations.galleries)[0]].pictures);
+					body.html('<img src="'+data.relations.galleries[Object.keys(data.relations.galleries)[0]].pictures.dirname+'/'+data.relations.galleries[Object.keys(data.relations.galleries)[0]].pictures.basename+'" alt="'+data.relations.galleries[Object.keys(data.relations.galleries)[0]].pictures.basename+'" />');
 					modal.modal('show');
 				});
 			});
