@@ -770,9 +770,9 @@ API.Plugins.events = {
 	GUI:{
 		picture:function(dataset,layout){
 			var html = '';
-			html += '<div class="col-sm-12 col-md-6 col-lg-4" data-picture="'+dataset.basename+'">';
+			html += '<div class="col-sm-12 col-md-6 col-lg-4 picture" data-picture="'+dataset.basename+'">';
 				html += '<div class="card pointer addContact">';
-					html += '<div class="card-body p-0 picture">';
+					html += '<div class="card-body p-0">';
 						html += '<div class="text-center">';
 							html += '<img class="img-fluid" style="border-radius:4px;" src="'+dataset.dirname+'/'+dataset.basename+'" alt="'+dataset.basename+'" />';
 						html += '</div>';
