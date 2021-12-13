@@ -1323,8 +1323,8 @@ API.Plugins.events = {
 							if(response.success != undefined){
 								layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
 							}
-							modal.modal('hide');
 						});
+						modal.modal('hide');
 					});
 					modal.modal('show');
 				});
