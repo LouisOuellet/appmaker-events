@@ -782,7 +782,7 @@ API.Plugins.events = {
 			html += '</div>';
 			layout.content.galleries.area.prepend(html);
 			var picture = layout.content.galleries.area.find('div[data-picture="'+dataset.basename+'"]').first();
-			picture.off().on({
+			picture.find('div.card').off().on({
 		    mouseenter:function(){
 					picture.find('button').collapse('show');
 		    },
