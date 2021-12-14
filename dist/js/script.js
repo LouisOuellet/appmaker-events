@@ -1238,19 +1238,20 @@ API.Plugins.events = {
 					API.Builder.input(body.find('div.row'), 'description', null,{plugin:'events',type:'textarea'}, function(input){
 						input.wrap('<div class="col-md-12"></div>');
 					});
+					API.Builder.input(body.find('div.row'), 'setVows', null,{plugin:'events',type:'switch'}, function(input){
+						input.wrap('<div class="col-md-6 py-3"></div>');
+					});
+					API.Builder.input(body.find('div.row'), 'setGallery', null,{plugin:'events',type:'switch'}, function(input){
+						input.wrap('<div class="col-md-6 py-3"></div>');
+					});
 					footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+API.Contents.Language['Create']+'</button>');
 					footer.find('button[data-action="create"]').off().click(function(){
-						// API.request('events','deletePicture',{data:picture},function(result){
-						// 	var response = JSON.parse(result);
-						// 	if(response.success != undefined){
-						// 		layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
-						// 	}
-						// });
 						var form = {
 							date:body.find('input[data-key="date"]').val(),
 							time:body.find('input[data-key="time"]').val(),
 							title:body.find('input[data-key="title"]').val(),
 							description:body.find('textarea[data-key="description"]').summernote('code'),
+							setEvent:dataset.this.raw.id,
 						};
 						body.find('textarea').summernote('destroy');
 						body.find('textarea').summernote({
@@ -1265,6 +1266,12 @@ API.Plugins.events = {
 						});
 						console.log(form);
 						alert('Create');
+						// API.request('events','createItem',{data:form},function(result){
+						// 	var response = JSON.parse(result);
+						// 	if(response.success != undefined){
+						// 		layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
+						// 	}
+						// });
 						modal.modal('hide');
 					});
 					modal.modal('show');
@@ -1306,18 +1313,10 @@ API.Plugins.events = {
 							});
 							footer.append('<button class="btn btn-success" data-action="save"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>');
 							footer.find('button[data-action="save"]').off().click(function(){
-								// API.request('events','deletePicture',{data:picture},function(result){
-								// 	var response = JSON.parse(result);
-								// 	if(response.success != undefined){
-								// 		layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
-								// 	}
-								// });
-								var form = {
-									date:body.find('input[data-key="date"]').val(),
-									time:body.find('input[data-key="time"]').val(),
-									title:body.find('input[data-key="title"]').val(),
-									description:body.find('textarea[data-key="description"]').summernote('code'),
-								};
+								item.date = body.find('input[data-key="date"]').val();
+								item.time = body.find('input[data-key="time"]').val();
+								item.title = body.find('input[data-key="title"]').val();
+								item.description = body.find('textarea[data-key="description"]').summernote('code');
 								body.find('textarea').summernote('destroy');
 								body.find('textarea').summernote({
 									toolbar: [
@@ -1327,10 +1326,16 @@ API.Plugins.events = {
 										['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
 									],
 									height: 500,
-									code: form.description,
+									code: item.description,
 								});
-								console.log(form);
+								console.log(item);
 								alert('Save');
+								// API.request('events','saveItem',{data:item},function(result){
+								// 	var response = JSON.parse(result);
+								// 	if(response.success != undefined){
+								// 		layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
+								// 	}
+								// });
 								modal.modal('hide');
 							});
 							modal.modal('show');
