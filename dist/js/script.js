@@ -1243,6 +1243,12 @@ API.Plugins.events = {
 					API.Builder.input(body.find('div.row'), 'time', null,{plugin:'events'}, function(input){
 						input.wrap('<div class="col-md-6"></div>');
 					});
+					API.Builder.input(body.find('div.row'), 'title', null,{plugin:'events',type:'input'}, function(input){
+						input.wrap('<div class="col-md-12"></div>');
+					});
+					API.Builder.input(body.find('div.row'), 'description', null,{plugin:'events',type:'textarea'}, function(input){
+						input.wrap('<div class="col-md-12"></div>');
+					});
 					modal.modal('show');
 				});
 			});
