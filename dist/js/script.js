@@ -442,7 +442,6 @@ API.Plugins.events = {
 									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_staffs', 4)});
 								});
 							}
-							// Continue
 							// Created
 							options.field = "created";
 							options.td = '<td><time class="timeago" datetime="'+data.this.raw.created.replace(/ /g, "T")+'" title="'+data.this.raw.created+'">'+data.this.raw.created+'</time></td>';

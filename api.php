@@ -165,15 +165,6 @@ class eventsAPI extends CRUDAPI {
 					}
 				}
 			}
-			if(isset($get['success'],$get['output']['this']['raw']['setPlanners'])){
-				if(!isset($get['output']['details']['users'])){ $get['output']['details']['users'] = ['dom' => [],'raw' => []]; }
-				foreach(explode(";",trim($get['output']['this']['raw']['setPlanners'],";")) as $userID){
-					if(!isset($get['output']['details']['users']['raw'][$userID])){
-						$get['output']['details']['users']['raw'][$userID] = $this->Auth->read('users',$userID)->all()[0];
-						$get['output']['details']['users']['dom'][$userID] = $this->convertToDOM($get['output']['details']['users']['raw'][$userID]);
-					}
-				}
-			}
 			// Load Planners
 			if(isset($get['success'],$get['output']['this']['raw']['setPlanners'])){
 				if(!isset($get['output']['details']['users'])){ $get['output']['details']['users'] = ['dom' => [],'raw' => []]; }

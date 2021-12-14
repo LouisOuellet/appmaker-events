@@ -1,2 +1,1 @@
-<div data-plugin="events" data-id="">
-</div>
+<div data-plugin="events" data-id=""></div>
