@@ -22,7 +22,7 @@
   font-style: normal;
   font-display: swap;
 }
-.icon-events::before{
+.icon-events::before,.icon-event::before{
 	content: "\f561";
 }
 .btn-ControlPanel{

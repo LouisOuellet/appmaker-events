@@ -837,10 +837,10 @@ API.Plugins.events = {
 			var body = layout.content.event_items.find('tbody');
 			var html = '';
 			html += '<tr data-csv="'+csv+'" data-id="'+item.id+'">';
-				html += '<td class="pointer">'+item.date+'</td>';
-				html += '<td class="pointer">'+item.time+'</td>';
-				html += '<td class="pointer">'+item.title+'</td>';
-				html += '<td class="pointer">'+item.description+'</td>';
+				html += '<td>'+item.date+'</td>';
+				html += '<td>'+item.time+'</td>';
+				html += '<td>'+item.title+'</td>';
+				html += '<td>'+item.description+'</td>';
 				html += '<td>';
 					html += '<div class="btn-group btn-block m-0">';
 						html += '<button class="btn btn-sm btn-warning" data-action="edit"><i class="fas fa-edit mr-1"></i>'+API.Contents.Language['Edit']+'</button>';
@@ -1215,6 +1215,38 @@ API.Plugins.events = {
 						break;
 				}
 			});
+			if(callback != null){ callback(dataset,layout); }
+		},
+		planning:function(dataset,layout,options = {},callback = null){
+			if(options instanceof Function){ callback = options; options = {}; }
+			var defaults = {key: "setHosts",remove:false};
+			if(API.Helper.isSet(options,['remove'])){ defaults.remove = options.remove; }
+			if(API.Helper.isSet(options,['key'])){ defaults.key = options.key; }
+			layout.content.event_items.find('button[data-action="create"]').off().click(function(){
+				API.Builder.modal($('body'), {
+				  title:'Create a new event',
+				  icon:'event',
+				  zindex:'top',
+				  css:{ header: "bg-success", body: "p-3"},
+				}, function(modal){
+					modal.on('hide.bs.modal',function(){ modal.remove(); });
+					var dialog = modal.find('.modal-dialog');
+					var header = modal.find('.modal-header');
+					var body = modal.find('.modal-body');
+					var footer = modal.find('.modal-footer');
+					header.find('button[data-control="hide"]').remove();
+					header.find('button[data-control="update"]').remove();
+					body.html('<div class="row"></div>');
+					API.Builder.input(body.find('div.row'), 'date', null,{plugin:'events'}, function(input){
+						input.wrap('<div class="col-md-6"></div>');
+					});
+					API.Builder.input(body.find('div.row'), 'time', null,{plugin:'events'}, function(input){
+						input.wrap('<div class="col-md-6"></div>');
+					});
+					modal.modal('show');
+				});
+			});
+			// Code here
 			if(callback != null){ callback(dataset,layout); }
 		},
 		galleries:function(dataset,layout,options = {},callback = null){
