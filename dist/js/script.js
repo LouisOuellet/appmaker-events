@@ -1238,7 +1238,7 @@ API.Plugins.events = {
 					header.find('button[data-control="update"]').remove();
 					body.html('<div class="row"></div>');
 					API.Builder.input(body.find('div.row'), 'date', null,{plugin:'events'}, function(input){
-						input.wrap('<div class="col-md-6 darkmode"></div>');
+						input.wrap('<div class="col-md-6"></div>');
 					});
 					API.Builder.input(body.find('div.row'), 'time', null,{plugin:'events'}, function(input){
 						input.wrap('<div class="col-md-6"></div>');
@@ -1251,6 +1251,18 @@ API.Plugins.events = {
 					});
 					modal.modal('show');
 				});
+			});
+			var table = layout.content.event_items.find('table');
+			table.find('button').off().click(function(){
+				var button = $(this);
+				var action = $(this).attr('data-action');
+				var row = $(this).parents().eq(2);
+				var item = dataset.relations.event_items[row.attr('data-id')];
+				switch(action){
+					default:
+						alert(item.title);
+						break;
+				}
 			});
 			// Code here
 			if(callback != null){ callback(dataset,layout); }
