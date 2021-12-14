@@ -1252,6 +1252,8 @@ API.Plugins.events = {
 							title:body.find('input[data-key="title"]').val(),
 							description:body.find('textarea[data-key="description"]').summernote('code'),
 							setEvent:dataset.this.raw.id,
+							setVows:input.find('input[data-key="setVows"]').bootstrapSwitch('state'),
+							setGallery:input.find('input[data-key="setGallery"]').bootstrapSwitch('state'),
 						};
 						body.find('textarea').summernote('destroy');
 						body.find('textarea').summernote({
@@ -1329,6 +1331,8 @@ API.Plugins.events = {
 								item.time = body.find('input[data-key="time"]').val();
 								item.title = body.find('input[data-key="title"]').val();
 								item.description = body.find('textarea[data-key="description"]').summernote('code');
+								item.setVows = input.find('input[data-key="setVows"]').bootstrapSwitch('state');
+								item.setGallery = input.find('input[data-key="setGallery"]').bootstrapSwitch('state');
 								body.find('textarea').summernote('destroy');
 								body.find('textarea').summernote({
 									toolbar: [
