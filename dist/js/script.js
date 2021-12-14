@@ -1238,13 +1238,13 @@ API.Plugins.events = {
 					header.find('button[data-control="update"]').remove();
 					body.html('<div class="row"></div>');
 					API.Builder.input(body.find('div.row'), 'date', null,{plugin:'events'}, function(input){
-						input.wrap('<div class="col-md-6"></div>');
+						input.wrap('<div class="col-md-6 darkmode"></div>');
 					});
 					API.Builder.input(body.find('div.row'), 'time', null,{plugin:'events'}, function(input){
 						input.wrap('<div class="col-md-6"></div>');
 					});
 					API.Builder.input(body.find('div.row'), 'title', null,{plugin:'events',type:'input'}, function(input){
-						input.wrap('<div class="col-md-12 py-2"></div>');
+						input.wrap('<div class="col-md-12 py-3"></div>');
 					});
 					API.Builder.input(body.find('div.row'), 'description', null,{plugin:'events',type:'textarea'}, function(input){
 						input.wrap('<div class="col-md-12"></div>');
