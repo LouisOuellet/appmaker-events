@@ -831,6 +831,7 @@ API.Plugins.events = {
 			for(var [key, value] of Object.entries(item)){
 				if(value == null){ value = '';item[key] = value; };
 				if(jQuery.inArray(key,['date','time','title','description']) != -1){
+					if(csv != ''){ csv += '|'; }
 					csv += API.Helper.html2text(value);
 				}
 			}
@@ -889,8 +890,9 @@ API.Plugins.events = {
 			for(var [key, value] of Object.entries(dataset)){
 				if(value == null){ value = '';dataset[key] = value; };
 				if(jQuery.inArray(key,['first_name','middle_name','last_name','name','email','phone','mobile','office_num','other_num','about','job_title']) != -1){
-					if(typeof value == 'string'){ csv += value.replace(',','').toLowerCase()+','; }
-					else { csv += value+','; }
+					if(csv != ''){ csv += '|'; }
+					if(typeof value == 'string'){ csv += value.replace(',','').toLowerCase(); }
+					else { csv += value; }
 				}
 			}
 			var html = '';
@@ -1211,19 +1213,19 @@ API.Plugins.events = {
 			var defaults = {key: "setHosts",remove:false};
 			if(API.Helper.isSet(options,['remove'])){ defaults.remove = options.remove; }
 			if(API.Helper.isSet(options,['key'])){ defaults.key = options.key; }
-			var items = layout.content.event_items.find('div.row').eq(1);
 			var search = layout.content.event_items.find('div.row').eq(0);
+			var table = layout.content.event_items.find('table');
 			search.find('div[data-action="clear"]').off().click(function(){
 				$(this).parent().find('input').val('');
-				items.find('[data-csv]').show();
+				table.find('[data-csv]').show();
 			});
 			search.find('input').off().on('input',function(){
 				if($(this).val() != ''){
-					items.find('[data-csv]').hide();
-					items.find('[data-csv*="'+$(this).val().toLowerCase()+'"]').each(function(){ $(this).show(); });
-				} else { items.find('[data-csv]').show(); }
+					table.find('[data-csv]').hide();
+					table.find('[data-csv*="'+$(this).val().toLowerCase()+'"]').each(function(){ $(this).show(); });
+				} else { table.find('[data-csv]').show(); }
 			});
-			items.find('button[data-action="create"]').off().click(function(){
+			search.find('button[data-action="create"]').off().click(function(){
 				API.Builder.modal($('body'), {
 				  title:'Create a new event',
 				  icon:'event',
@@ -1289,7 +1291,6 @@ API.Plugins.events = {
 					modal.modal('show');
 				});
 			});
-			var table = layout.content.event_items.find('table');
 			table.find('button').off().click(function(){
 				var button = $(this);
 				var action = $(this).attr('data-action');
