@@ -1259,6 +1259,36 @@ API.Plugins.events = {
 				var row = $(this).parents().eq(2);
 				var item = dataset.relations.event_items[row.attr('data-id')];
 				switch(action){
+					case"edit":
+						API.Builder.modal($('body'), {
+						  title:'edit event',
+						  icon:'event',
+						  zindex:'top',
+						  css:{ dialog: "modal-lg", header: "bg-warning", body: "p-3"},
+						}, function(modal){
+							modal.on('hide.bs.modal',function(){ modal.remove(); });
+							var dialog = modal.find('.modal-dialog');
+							var header = modal.find('.modal-header');
+							var body = modal.find('.modal-body');
+							var footer = modal.find('.modal-footer');
+							header.find('button[data-control="hide"]').remove();
+							header.find('button[data-control="update"]').remove();
+							body.html('<div class="row"></div>');
+							API.Builder.input(body.find('div.row'), 'date', item.date,{plugin:'events'}, function(input){
+								input.wrap('<div class="col-md-6"></div>');
+							});
+							API.Builder.input(body.find('div.row'), 'time', item.time,{plugin:'events'}, function(input){
+								input.wrap('<div class="col-md-6"></div>');
+							});
+							API.Builder.input(body.find('div.row'), 'title', item.title,{plugin:'events',type:'input'}, function(input){
+								input.wrap('<div class="col-md-12 py-3"></div>');
+							});
+							API.Builder.input(body.find('div.row'), 'description', item.description,{plugin:'events',type:'textarea'}, function(input){
+								input.wrap('<div class="col-md-12"></div>');
+							});
+							modal.modal('show');
+						});
+						break;
 					default:
 						alert(item.title);
 						break;
