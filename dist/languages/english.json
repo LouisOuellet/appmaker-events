@@ -46,5 +46,6 @@
 		"Item not found": "Item not found",
 		"Item has been updated": "Item has been updated",
 		"Item removed!": "Item removed!",
-		"Item has been created": "Item has been created"
+		"Item has been created": "Item has been created",
+		"Are you sure you want to delete this envent item?": "Are you sure you want to delete this envent item?"
 }

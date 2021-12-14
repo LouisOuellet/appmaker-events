@@ -1284,6 +1284,7 @@ API.Plugins.events = {
 							var response = JSON.parse(result);
 							if(response.success != undefined){
 								API.Plugins.events.GUI.items(dataset,layout,response.output.item);
+								API.Plugins.events.Events.planning(data,layout);
 							}
 						});
 						modal.modal('hide');
@@ -1297,6 +1298,34 @@ API.Plugins.events = {
 				var row = $(this).parents().eq(2);
 				var item = dataset.relations.event_items[row.attr('data-id')];
 				switch(action){
+					case"delete":
+						API.Builder.modal($('body'), {
+							title:'Are you sure?',
+							icon:'delete',
+							zindex:'top',
+							css:{ header: "bg-danger", body: "p-3"},
+						}, function(modal){
+							modal.on('hide.bs.modal',function(){ modal.remove(); });
+							var dialog = modal.find('.modal-dialog');
+							var header = modal.find('.modal-header');
+							var body = modal.find('.modal-body');
+							var footer = modal.find('.modal-footer');
+							header.find('button[data-control="hide"]').remove();
+							header.find('button[data-control="update"]').remove();
+							body.html(API.Contents.Language['Are you sure you want to delete this envent item?']);
+							footer.append('<button class="btn btn-danger" data-action="delete"><i class="fas fa-trash-alt mr-1"></i>'+API.Contents.Language['Delete']+'</button>');
+							footer.find('button[data-action="delete"]').off().click(function(){
+								API.request('events','deleteItem',{data:item},function(result){
+									var response = JSON.parse(result);
+									if(response.success != undefined){
+										table.find('tr[data-id="'+response.output.item.id+'"]').remove();
+									}
+								});
+								modal.modal('hide');
+							});
+							modal.modal('show');
+						});
+						break;
 					case"edit":
 						API.Builder.modal($('body'), {
 						  title:'Edit event',
@@ -1360,6 +1389,7 @@ API.Plugins.events = {
 									if(response.success != undefined){
 										table.find('tr[data-id="'+response.output.item.id+'"]').remove();
 										API.Plugins.events.GUI.items(dataset,layout,response.output.item);
+										API.Plugins.events.Events.planning(data,layout);
 									}
 								});
 								modal.modal('hide');
