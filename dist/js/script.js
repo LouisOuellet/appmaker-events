@@ -1223,7 +1223,7 @@ API.Plugins.events = {
 					items.find('[data-csv*="'+$(this).val().toLowerCase()+'"]').each(function(){ $(this).show(); });
 				} else { items.find('[data-csv]').show(); }
 			});
-			layout.content.event_items.find('button[data-action="create"]').off().click(function(){
+			items.find('button[data-action="create"]').off().click(function(){
 				API.Builder.modal($('body'), {
 				  title:'Create a new event',
 				  icon:'event',
