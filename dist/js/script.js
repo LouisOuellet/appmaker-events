@@ -1266,14 +1266,12 @@ API.Plugins.events = {
 							height: 500,
 							code: form.description,
 						});
-						console.log(form);
-						alert('Create');
-						// API.request('events','createItem',{data:form},function(result){
-						// 	var response = JSON.parse(result);
-						// 	if(response.success != undefined){
-						// 		layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
-						// 	}
-						// });
+						API.request('events','createItem',{data:form},function(result){
+							var response = JSON.parse(result);
+							if(response.success != undefined){
+								console.log(response.output);
+							}
+						});
 						modal.modal('hide');
 					});
 					modal.modal('show');
@@ -1344,14 +1342,12 @@ API.Plugins.events = {
 									height: 500,
 									code: item.description,
 								});
-								console.log(item);
-								alert('Save');
-								// API.request('events','saveItem',{data:item},function(result){
-								// 	var response = JSON.parse(result);
-								// 	if(response.success != undefined){
-								// 		layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
-								// 	}
-								// });
+								API.request('events','saveItem',{data:item},function(result){
+									var response = JSON.parse(result);
+									if(response.success != undefined){
+										console.log(response.output);
+									}
+								});
 								modal.modal('hide');
 							});
 							modal.modal('show');
