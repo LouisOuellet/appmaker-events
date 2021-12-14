@@ -42,5 +42,8 @@
 		"Create a new event": "Create a new event",
 		"Edit event": "Edit event",
 		"SetVows": "SetVows",
-		"SetGallery": "SetGallery"
+		"SetGallery": "SetGallery",
+		"Item not found": "Item not found",
+		"Item has been updated": "Item has been updated",
+		"Item removed!": "Item removed!"
 }

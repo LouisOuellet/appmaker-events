@@ -1,6 +1,121 @@
 <?php
 class eventsAPI extends CRUDAPI {
 
+	public function createItem($request = null, $data = null){
+		if(isset($data)){
+			if(!is_array($data)){ $data = json_decode($data, true); }
+			$id = $this->Auth->create('event_items',$data);
+			// Fetch Item
+			$item = $this->Auth->read('event_items',$id)->all()[0];
+			$this->createRelationship([
+				'relationship_1' => 'events',
+				'link_to_1' => $item['setEvent'],
+				'relationship_2' => 'event_items',
+				'link_to_2' => $item['id'],
+			]);
+			// Return
+			$return = [
+				"success" => $this->Language->Field["Item has been created"],
+				"request" => $request,
+				"data" => $data,
+				"output" => [
+					'item' => $item,
+				],
+			];
+		} else {
+			// Return
+			$return = [
+				"error" => $this->Language->Field["Unable to complete the request"],
+				"request" => $request,
+				"data" => $data,
+			];
+		}
+		// Return
+		return $return;
+	}
+
+	public function saveItem($request = null, $data = null){
+		if(isset($data)){
+			if(!is_array($data)){ $data = json_decode($data, true); }
+			$item = $this->Auth->read('event_items',$data['id']);
+			if($item != null){
+				$item = $item->all()[0];
+				foreach($data as $key => $value){ if(isset($item[$key])){ $item[$key] = $value; }}
+				$this->Auth->update('event_items',$item,$item['id']);
+				// Return
+				$return = [
+					"success" => $this->Language->Field["Item has been updated"],
+					"request" => $request,
+					"data" => $data,
+					"output" => [
+						'item' => $item,
+					],
+				];
+			} else {
+				// Return
+				$return = [
+					"error" => $this->Language->Field["Item not found"],
+					"request" => $request,
+					"data" => $data,
+				];
+			}
+		} else {
+			// Return
+			$return = [
+				"error" => $this->Language->Field["Unable to complete the request"],
+				"request" => $request,
+				"data" => $data,
+			];
+		}
+		// Return
+		return $return;
+	}
+
+	public function deleteItem($request = null, $data = null){
+		if(isset($data)){
+			if(!is_array($data)){ $data = json_decode($data, true); }
+			$item = $this->Auth->read('event_items',$data['id']);
+			if($item != null){
+				$item = $item->all()[0];
+				// Fetch Relationships
+				$relationships = $this->getRelationships('event_items',$item['id']);
+				// Delete Relationships
+				if((isset($relationships))&&(!empty($relationships))){
+					foreach($relationships as $id => $links){
+						$this->Auth->delete('relationships',$id);
+					}
+				}
+				// Delete Record
+				$this->Auth->delete('event_items',$item['id']);
+				// Return
+				$return = [
+					"success" => $this->Language->Field["Item removed!"],
+					"request" => $request,
+					"data" => $data,
+					"output" => [
+						'item' => $item,
+					],
+				];
+			} else {
+				// Return
+				$return = [
+					"error" => $this->Language->Field["Item not found"],
+					"request" => $request,
+					"data" => $data,
+				];
+			}
+		} else {
+			// Return
+			$return = [
+				"error" => $this->Language->Field["Unable to complete the request"],
+				"request" => $request,
+				"data" => $data,
+			];
+		}
+		// Return
+		return $return;
+	}
+
 	public function deletePicture($request = null, $data = null){
 		if(isset($data)){
 			if(!is_array($data)){ $data = json_decode($data, true); }
@@ -36,8 +151,6 @@ class eventsAPI extends CRUDAPI {
 					"data" => $data,
 				];
 			}
-			// Return
-			return $return;
 		} else {
 			// Return
 			$return = [
