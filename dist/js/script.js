@@ -1223,7 +1223,6 @@ API.Plugins.events = {
 				if($(this).val() != ''){
 					table.find('[data-csv]').hide();
 					table.find('[data-csv*="'+$(this).val().toLowerCase()+'"]').show();
-					// table.find('[data-csv*="'+$(this).val().toLowerCase()+'"]').each(function(){ $(this).show(); });
 				} else { table.find('[data-csv]').show(); }
 			});
 			search.find('button[data-action="create"]').off().click(function(){
@@ -1284,7 +1283,7 @@ API.Plugins.events = {
 						API.request('events','createItem',{data:form},function(result){
 							var response = JSON.parse(result);
 							if(response.success != undefined){
-								console.log(response.output);
+								API.Plugins.events.GUI.items(dataset,layout,response.output.item);
 							}
 						});
 						modal.modal('hide');
@@ -1359,7 +1358,8 @@ API.Plugins.events = {
 								API.request('events','saveItem',{data:item},function(result){
 									var response = JSON.parse(result);
 									if(response.success != undefined){
-										console.log(response.output);
+										table.find('tr[data-id="'+response.output.item.id+'"]').remove();
+										API.Plugins.events.GUI.items(dataset,layout,response.output.item);
 									}
 								});
 								modal.modal('hide');
