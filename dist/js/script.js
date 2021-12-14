@@ -1249,6 +1249,17 @@ API.Plugins.events = {
 					API.Builder.input(body.find('div.row'), 'description', null,{plugin:'events',type:'textarea'}, function(input){
 						input.wrap('<div class="col-md-12"></div>');
 					});
+					footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+API.Contents.Language['Create']+'</button>');
+					footer.find('button[data-action="create"]').off().click(function(){
+						// API.request('events','deletePicture',{data:picture},function(result){
+						// 	var response = JSON.parse(result);
+						// 	if(response.success != undefined){
+						// 		layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
+						// 	}
+						// });
+						alert('Create');
+						modal.modal('hide');
+					});
 					modal.modal('show');
 				});
 			});
@@ -1285,6 +1296,17 @@ API.Plugins.events = {
 							});
 							API.Builder.input(body.find('div.row'), 'description', item.description,{plugin:'events',type:'textarea'}, function(input){
 								input.wrap('<div class="col-md-12"></div>');
+							});
+							footer.append('<button class="btn btn-success" data-action="save"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>');
+							footer.find('button[data-action="save"]').off().click(function(){
+								// API.request('events','deletePicture',{data:picture},function(result){
+								// 	var response = JSON.parse(result);
+								// 	if(response.success != undefined){
+								// 		layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
+								// 	}
+								// });
+								alert('Save');
+								modal.modal('hide');
 							});
 							modal.modal('show');
 						});
