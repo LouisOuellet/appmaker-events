@@ -45,5 +45,6 @@
 		"SetGallery": "SetGallery",
 		"Item not found": "Item not found",
 		"Item has been updated": "Item has been updated",
-		"Item removed!": "Item removed!"
+		"Item removed!": "Item removed!",
+		"Item has been created": "Item has been created"
 }
