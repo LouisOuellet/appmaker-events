@@ -1261,7 +1261,7 @@ API.Plugins.events = {
 				switch(action){
 					case"edit":
 						API.Builder.modal($('body'), {
-						  title:'edit event',
+						  title:'Edit event',
 						  icon:'event',
 						  zindex:'top',
 						  css:{ dialog: "modal-lg", header: "bg-warning", body: "p-3"},
