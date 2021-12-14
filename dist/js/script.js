@@ -1397,9 +1397,6 @@ API.Plugins.events = {
 							modal.modal('show');
 						});
 						break;
-					default:
-						alert(item.title);
-						break;
 				}
 			});
 			// Code here
