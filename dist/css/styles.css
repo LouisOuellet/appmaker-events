@@ -22,8 +22,11 @@
   font-style: normal;
   font-display: swap;
 }
-.icon-events::before,.icon-event::before{
+.icon-events::before{
 	content: "\f561";
+}
+.icon-events::before{
+	content: "\f783";
 }
 .btn-ControlPanel{
   left: 0;

@@ -1227,7 +1227,7 @@ API.Plugins.events = {
 				  title:'Create a new event',
 				  icon:'event',
 				  zindex:'top',
-				  css:{ header: "bg-success", body: "p-3"},
+				  css:{ dialog: "modal-lg", header: "bg-success", body: "p-3"},
 				}, function(modal){
 					modal.on('hide.bs.modal',function(){ modal.remove(); });
 					var dialog = modal.find('.modal-dialog');
