@@ -1244,7 +1244,7 @@ API.Plugins.events = {
 						input.wrap('<div class="col-md-6"></div>');
 					});
 					API.Builder.input(body.find('div.row'), 'title', null,{plugin:'events',type:'input'}, function(input){
-						input.wrap('<div class="col-md-12"></div>');
+						input.wrap('<div class="col-md-12 py-2"></div>');
 					});
 					API.Builder.input(body.find('div.row'), 'description', null,{plugin:'events',type:'textarea'}, function(input){
 						input.wrap('<div class="col-md-12"></div>');
