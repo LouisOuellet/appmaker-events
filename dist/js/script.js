@@ -1127,10 +1127,10 @@ API.Plugins.events = {
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
 			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
-			var contacts = layout.content.contacts.find('div.row').eq(1);
-			var search = layout.content.contacts.find('div.row').eq(0);
 			var skeleton = {};
 			for(var [field, settings] of Object.entries(API.Contents.Settings.Structure.contacts)){ skeleton[field] = ''; }
+			var contacts = layout.content.contacts.find('div.row').eq(1);
+			var search = layout.content.contacts.find('div.row').eq(0);
 			search.find('div[data-action="clear"]').off().click(function(){
 				$(this).parent().find('input').val('');
 				contacts.find('[data-csv]').show();
@@ -1211,6 +1211,18 @@ API.Plugins.events = {
 			var defaults = {key: "setHosts",remove:false};
 			if(API.Helper.isSet(options,['remove'])){ defaults.remove = options.remove; }
 			if(API.Helper.isSet(options,['key'])){ defaults.key = options.key; }
+			var items = layout.content.event_items.find('div.row').eq(1);
+			var search = layout.content.event_items.find('div.row').eq(0);
+			search.find('div[data-action="clear"]').off().click(function(){
+				$(this).parent().find('input').val('');
+				items.find('[data-csv]').show();
+			});
+			search.find('input').off().on('input',function(){
+				if($(this).val() != ''){
+					items.find('[data-csv]').hide();
+					items.find('[data-csv*="'+$(this).val().toLowerCase()+'"]').each(function(){ $(this).show(); });
+				} else { items.find('[data-csv]').show(); }
+			});
 			layout.content.event_items.find('button[data-action="create"]').off().click(function(){
 				API.Builder.modal($('body'), {
 				  title:'Create a new event',
