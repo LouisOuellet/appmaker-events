@@ -1108,8 +1108,8 @@ API.Plugins.events = {
 				layout.content.menus.find('button[data-action]').off().click(function(){
 					dataset.this.raw.menuAdult = layout.content.menus.find('textarea[name="menuAdult"]').summernote('code');
 					dataset.this.raw.menuKid = layout.content.menus.find('textarea[name="menuKid"]').summernote('code');
-					layout.content.menus.find('textarea[name="menuAdult"]').summernote('destroy');
-					layout.content.menus.find('textarea[name="menuAdult"]').summernote({
+					layout.content.menus.find('textarea').summernote('destroy');
+					layout.content.menus.find('textarea').summernote({
 						toolbar: [
 							['font', ['fontname', 'fontsize']],
 							['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
@@ -1118,17 +1118,6 @@ API.Plugins.events = {
 						],
 						height: 500,
 						code: dataset.this.raw.menuAdult,
-					});
-					layout.content.menus.find('textarea[name="menuKid"]').summernote('destroy');
-					layout.content.menus.find('textarea[name="menuKid"]').summernote({
-						toolbar: [
-							['font', ['fontname', 'fontsize']],
-							['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-							['color', ['color']],
-							['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
-						],
-						height: 500,
-						code: dataset.this.raw.menuKid,
 					});
 					API.request('events','update',{data:dataset.this.raw});
 				});
@@ -1257,6 +1246,23 @@ API.Plugins.events = {
 						// 		layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
 						// 	}
 						// });
+						var form = {
+							date:body.find('input[data-key="date"]').val(),
+							time:body.find('input[data-key="time"]').val(),
+							title:body.find('input[data-key="title"]').val(),
+							description:body.find('textarea[data-key="description"]').summernote('code'),
+						};
+						body.find('textarea').summernote('destroy').summernote({
+							toolbar: [
+								['font', ['fontname', 'fontsize']],
+								['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+								['color', ['color']],
+								['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+							],
+							height: 500,
+							code: form.description,
+						});
+						console.log(form);
 						alert('Create');
 						modal.modal('hide');
 					});
@@ -1305,6 +1311,23 @@ API.Plugins.events = {
 								// 		layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
 								// 	}
 								// });
+								var form = {
+									date:body.find('input[data-key="date"]').val(),
+									time:body.find('input[data-key="time"]').val(),
+									title:body.find('input[data-key="title"]').val(),
+									description:body.find('textarea[data-key="description"]').summernote('code'),
+								};
+								body.find('textarea').summernote('destroy').summernote({
+									toolbar: [
+										['font', ['fontname', 'fontsize']],
+										['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+										['color', ['color']],
+										['paragraph', ['style', 'ul', 'ol', 'paragraph', 'height']],
+									],
+									height: 500,
+									code: form.description,
+								});
+								console.log(form);
 								alert('Save');
 								modal.modal('hide');
 							});
