@@ -832,7 +832,7 @@ API.Plugins.events = {
 				if(value == null){ value = '';item[key] = value; };
 				if(jQuery.inArray(key,['date','time','title','description']) != -1){
 					if(csv != ''){ csv += '|'; }
-					csv += API.Helper.html2text(value);
+					csv += API.Helper.html2text(value.toLowerCase());
 				}
 			}
 			var body = layout.content.event_items.find('tbody');
@@ -1222,7 +1222,8 @@ API.Plugins.events = {
 			search.find('input').off().on('input',function(){
 				if($(this).val() != ''){
 					table.find('[data-csv]').hide();
-					table.find('[data-csv*="'+$(this).val().toLowerCase()+'"]').each(function(){ $(this).show(); });
+					table.find('[data-csv*="'+$(this).val().toLowerCase()+'"]').show();
+					// table.find('[data-csv*="'+$(this).val().toLowerCase()+'"]').each(function(){ $(this).show(); });
 				} else { table.find('[data-csv]').show(); }
 			});
 			search.find('button[data-action="create"]').off().click(function(){
