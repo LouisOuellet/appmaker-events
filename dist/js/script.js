@@ -1252,7 +1252,8 @@ API.Plugins.events = {
 							title:body.find('input[data-key="title"]').val(),
 							description:body.find('textarea[data-key="description"]').summernote('code'),
 						};
-						body.find('textarea').summernote('destroy').summernote({
+						body.find('textarea').summernote('destroy');
+						body.find('textarea').summernote({
 							toolbar: [
 								['font', ['fontname', 'fontsize']],
 								['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
@@ -1317,7 +1318,8 @@ API.Plugins.events = {
 									title:body.find('input[data-key="title"]').val(),
 									description:body.find('textarea[data-key="description"]').summernote('code'),
 								};
-								body.find('textarea').summernote('destroy').summernote({
+								body.find('textarea').summernote('destroy');
+								body.find('textarea').summernote({
 									toolbar: [
 										['font', ['fontname', 'fontsize']],
 										['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
