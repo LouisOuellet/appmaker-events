@@ -1313,9 +1313,15 @@ API.Plugins.events = {
 							});
 							API.Builder.input(body.find('div.row'), 'setVows', item.setVows,{plugin:'events',type:'switch'}, function(input){
 								input.wrap('<div class="col-md-6 py-3"></div>');
+								modal.on('shown.bs.modal',function(e){
+								  input.find('input').last().bootstrapSwitch('state', item.setVows);
+								});
 							});
 							API.Builder.input(body.find('div.row'), 'setGallery', item.setGallery,{plugin:'events',type:'switch'}, function(input){
 								input.wrap('<div class="col-md-6 py-3"></div>');
+								modal.on('shown.bs.modal',function(e){
+								  input.find('input').last().bootstrapSwitch('state', item.setGallery);
+								});
 							});
 							footer.append('<button class="btn btn-success" data-action="save"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>');
 							footer.find('button[data-action="save"]').off().click(function(){
