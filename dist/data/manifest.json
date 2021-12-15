@@ -1,5 +1,5 @@
 {
-    "build": 184,
+    "build": 185,
     "version": "21.12-dev",
     "name": "events",
     "repository": {
@@ -15,7 +15,8 @@
         "table": [
             "events",
             "event_items",
-            "vows"
+            "vows",
+            "event_attendances"
         ]
     }
 }

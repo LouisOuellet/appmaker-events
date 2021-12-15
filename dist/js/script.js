@@ -796,7 +796,16 @@ API.Plugins.events = {
 				}
 			} else {
 				if(API.Auth.validate('custom', 'events_'+plugin+'_btn_link', 1)){
-					card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'navy',icon:'fas fa-link',action:'link',content:API.Contents.Language['Add User']}));
+					card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'teal',icon:'fas fa-link',action:'link',content:API.Contents.Language['Add User']}));
+				}
+			}
+			if(API.Helper.isSet(dataset,['event_attendances'])){
+				if(API.Auth.validate('custom', 'events_'+plugin+'_btn_attendance', 1)){
+					card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'navy',icon:'fas fa-calendar-check',action:'view',content:API.Contents.Language['Attendance']}));
+				}
+			} else {
+				if(API.Auth.validate('custom', 'events_'+plugin+'_btn_add_attendance', 1)){
+					card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'olive',icon:'fas fa-calendar-add',action:'link',content:API.Contents.Language['Add Attendance']}));
 				}
 			}
 			if(API.Auth.validate('custom', 'events_'+plugin+'_btn_edit', 1)){

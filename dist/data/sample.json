@@ -28,9 +28,11 @@
             "setStaffs": "",
             "setMinInvites": "40",
             "setMaxInvites": "90",
+            "setUnitPrice": null,
             "setToken": null
         }
     ],
     "event_items": [],
-    "vows": []
+    "vows": [],
+    "event_attendances": []
 }

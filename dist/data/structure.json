@@ -1,4 +1,81 @@
 {
+    "event_attendances": {
+        "id": {
+            "order": 1,
+            "type": "int(11)"
+        },
+        "1": "id",
+        "created": {
+            "order": 2,
+            "type": "datetime"
+        },
+        "2": "created",
+        "modified": {
+            "order": 3,
+            "type": "datetime"
+        },
+        "3": "modified",
+        "owner": {
+            "order": 4,
+            "type": "varchar(255)"
+        },
+        "4": "owner",
+        "updated_by": {
+            "order": 5,
+            "type": "varchar(255)"
+        },
+        "5": "updated_by",
+        "names": {
+            "order": 6,
+            "type": "text"
+        },
+        "6": "names",
+        "menu": {
+            "order": 7,
+            "type": "text"
+        },
+        "7": "menu",
+        "unit_price": {
+            "order": 8,
+            "type": "varchar(255)"
+        },
+        "8": "unit_price",
+        "quantity": {
+            "order": 9,
+            "type": "varchar(255)"
+        },
+        "9": "quantity",
+        "credit": {
+            "order": 10,
+            "type": "varchar(255)"
+        },
+        "10": "credit",
+        "total": {
+            "order": 11,
+            "type": "varchar(255)"
+        },
+        "11": "total",
+        "setEvent": {
+            "order": 12,
+            "type": "varchar(255)"
+        },
+        "12": "setEvent",
+        "setContact": {
+            "order": 13,
+            "type": "varchar(255)"
+        },
+        "13": "setContact",
+        "setMaxQty": {
+            "order": 14,
+            "type": "varchar(255)"
+        },
+        "14": "setMaxQty",
+        "setConfirmed": {
+            "order": 15,
+            "type": "varchar(255)"
+        },
+        "15": "setConfirmed"
+    },
     "event_items": {
         "id": {
             "order": 1,
@@ -197,11 +274,16 @@
             "type": "varchar(255)"
         },
         "27": "setMaxInvites",
-        "setToken": {
+        "setUnitPrice": {
             "order": 28,
             "type": "varchar(255)"
         },
-        "28": "setToken"
+        "28": "setUnitPrice",
+        "setToken": {
+            "order": 29,
+            "type": "varchar(255)"
+        },
+        "29": "setToken"
     },
     "vows": {
         "id": {
