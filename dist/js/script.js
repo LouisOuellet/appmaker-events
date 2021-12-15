@@ -1186,6 +1186,64 @@ API.Plugins.events = {
 						API.CRUD.read.show({ key:'username',keys:contact.users[Object.keys(contact.users)[0]], href:"?p=users&v=details&id="+contact.users[Object.keys(contact.users)[0]].username, modal:true });
 						break;
 					case"link":
+						API.Builder.modal($('body'), {
+							title:'Create or link a user',
+							icon:'event',
+							zindex:'top',
+							css:{ dialog: "modal-lg", header: "bg-success", body: "p-3"},
+						}, function(modal){
+							modal.on('hide.bs.modal',function(){ modal.remove(); });
+							var dialog = modal.find('.modal-dialog');
+							var header = modal.find('.modal-header');
+							var body = modal.find('.modal-body');
+							var footer = modal.find('.modal-footer');
+							header.find('button[data-control="hide"]').remove();
+							header.find('button[data-control="update"]').remove();
+							body.html('<div class="row"></div>');
+							footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+API.Contents.Language['Create']+'</button>');
+							footer.find('button[data-action="create"]').off().click(function(){ modal.modal('hide'); });
+							modal.modal('show');
+						});
+						break;
+					case"attendance":
+						API.Builder.modal($('body'), {
+							title:'View the attendance',
+							icon:'event',
+							zindex:'top',
+							css:{ dialog: "modal-lg", header: "bg-success", body: "p-3"},
+						}, function(modal){
+							modal.on('hide.bs.modal',function(){ modal.remove(); });
+							var dialog = modal.find('.modal-dialog');
+							var header = modal.find('.modal-header');
+							var body = modal.find('.modal-body');
+							var footer = modal.find('.modal-footer');
+							header.find('button[data-control="hide"]').remove();
+							header.find('button[data-control="update"]').remove();
+							body.html('<div class="row"></div>');
+							footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+API.Contents.Language['Create']+'</button>');
+							footer.find('button[data-action="create"]').off().click(function(){ modal.modal('hide'); });
+							modal.modal('show');
+						});
+						break;
+					case"add":
+						API.Builder.modal($('body'), {
+							title:'Add attendance to event',
+							icon:'event',
+							zindex:'top',
+							css:{ dialog: "modal-lg", header: "bg-success", body: "p-3"},
+						}, function(modal){
+							modal.on('hide.bs.modal',function(){ modal.remove(); });
+							var dialog = modal.find('.modal-dialog');
+							var header = modal.find('.modal-header');
+							var body = modal.find('.modal-body');
+							var footer = modal.find('.modal-footer');
+							header.find('button[data-control="hide"]').remove();
+							header.find('button[data-control="update"]').remove();
+							body.html('<div class="row"></div>');
+							footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+API.Contents.Language['Create']+'</button>');
+							footer.find('button[data-action="create"]').off().click(function(){ modal.modal('hide'); });
+							modal.modal('show');
+						});
 						break;
 					case"edit":
 						API.CRUD.update.show({ keys:contact, modal:true, plugin:'contacts' },function(user){

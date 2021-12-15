@@ -34,5 +34,23 @@
     ],
     "event_items": [],
     "vows": [],
-    "event_attendances": []
+    "event_attendances": [
+        {
+            "id": 100000,
+            "created": "2021-12-15 13:11:14",
+            "modified": "2021-12-15 13:11:14",
+            "owner": "2",
+            "updated_by": "2",
+            "names": "John Cena;John Doe",
+            "menu": null,
+            "unit_price": "250",
+            "quantity": "2",
+            "credit": "500",
+            "total": "0",
+            "setEvent": "1",
+            "setContact": "3",
+            "setMaxQty": "2",
+            "setConfirmed": null
+        }
+    ]
 }

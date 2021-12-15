@@ -49,5 +49,8 @@
 		"Item has been created": "Item has been created",
 		"Are you sure you want to delete this envent item?": "Are you sure you want to delete this envent item?",
 		"Attendance": "Attendance",
-		"Add Attendance": "Add Attendance"
+		"Add Attendance": "Add Attendance",
+		"Add attendance to event": "Add attendance to event",
+		"View the attendance": "View the attendance",
+		"Create or link a user": "Create or link a user"
 }
