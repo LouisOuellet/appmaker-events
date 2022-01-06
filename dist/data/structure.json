@@ -234,56 +234,56 @@
             "type": "varchar(255)"
         },
         "19": "hasVows",
-        "hasSeatingPlan": {
+        "hasMenu": {
             "order": 20,
             "type": "varchar(255)"
         },
-        "20": "hasSeatingPlan",
-        "hasMenu": {
+        "20": "hasMenu",
+        "setHosts": {
             "order": 21,
             "type": "varchar(255)"
         },
-        "21": "hasMenu",
-        "setHosts": {
+        "21": "setHosts",
+        "setHostType": {
             "order": 22,
             "type": "varchar(255)"
         },
-        "22": "setHosts",
-        "setHostType": {
+        "22": "setHostType",
+        "setPlanners": {
             "order": 23,
             "type": "varchar(255)"
         },
-        "23": "setHostType",
-        "setPlanners": {
+        "23": "setPlanners",
+        "setStaffs": {
             "order": 24,
             "type": "varchar(255)"
         },
-        "24": "setPlanners",
-        "setStaffs": {
+        "24": "setStaffs",
+        "setMinInvites": {
             "order": 25,
             "type": "varchar(255)"
         },
-        "25": "setStaffs",
-        "setMinInvites": {
+        "25": "setMinInvites",
+        "setMaxInvites": {
             "order": 26,
             "type": "varchar(255)"
         },
-        "26": "setMinInvites",
-        "setMaxInvites": {
+        "26": "setMaxInvites",
+        "setToken": {
             "order": 27,
             "type": "varchar(255)"
         },
-        "27": "setMaxInvites",
-        "setUnitPrice": {
+        "27": "setToken",
+        "hasSeatingPlan": {
             "order": 28,
             "type": "varchar(255)"
         },
-        "28": "setUnitPrice",
-        "setToken": {
+        "28": "hasSeatingPlan",
+        "setUnitPrice": {
             "order": 29,
             "type": "varchar(255)"
         },
-        "29": "setToken"
+        "29": "setUnitPrice"
     },
     "vows": {
         "id": {
