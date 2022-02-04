@@ -1,18 +1,18 @@
-API.Plugins.events = {
+Engine.Plugins.events = {
 	init:function(){
-		API.GUI.Sidebar.Nav.add('events', 'main_navigation');
+		Engine.GUI.Sidebar.Nav.add('events', 'main_navigation');
 	},
 	load:{
 		index:function(){
-			API.Builder.card($('#pagecontent'),{ title: 'Events', icon: 'events'}, function(card){
-				API.request('events','read',{
+			Engine.Builder.card($('#pagecontent'),{ title: 'Events', icon: 'events'}, function(card){
+				Engine.request('events','read',{
 					data:{options:{ link_to:'EventsIndex',plugin:'events',view:'index' }},
 				},function(result) {
 					var dataset = JSON.parse(result);
 					if(dataset.success != undefined){
-						for(var [key, value] of Object.entries(dataset.output.dom)){ API.Helper.set(API.Contents,['data','dom','events',value.id],value); }
-						for(var [key, value] of Object.entries(dataset.output.raw)){ API.Helper.set(API.Contents,['data','raw','events',value.id],value); }
-						API.Builder.table(card.children('.card-body'), dataset.output.dom, {
+						for(var [key, value] of Object.entries(dataset.output.dom)){ Engine.Helper.set(Engine.Contents,['data','dom','events',value.id],value); }
+						for(var [key, value] of Object.entries(dataset.output.raw)){ Engine.Helper.set(Engine.Contents,['data','raw','events',value.id],value); }
+						Engine.Builder.table(card.children('.card-body'), dataset.output.dom, {
 							headers:['id','name','type','date','time','address','city','zipcode','state','country'],
 							id:'EventsIndex',
 							modal:true,
@@ -31,7 +31,7 @@ API.Plugins.events = {
 			var container = $('div[data-plugin="events"][data-id]').last();
 			var url = new URL(window.location.href);
 			var id = url.searchParams.get("id");
-			API.request(url.searchParams.get("p"),'get',{data:{id:id,key:'id'}},function(result){
+			Engine.request(url.searchParams.get("p"),'get',{data:{id:id,key:'id'}},function(result){
 				var dataset = JSON.parse(result);
 				if(dataset.success != undefined){
 					container.attr('data-id',dataset.output.this.raw.id);
@@ -39,31 +39,31 @@ API.Plugins.events = {
 					// Adding Layout
 					if(dataset.output.this.raw.type == 'wedding'){ bgImage = '/plugins/events/dist/img/wedding.png'; }
 					else{ bgImage = '/plugins/events/dist/img/event.png'; }
-					API.GUI.Layouts.details.build(dataset.output,container,{title:"Event Details",image:bgImage},function(data,layout){
+					Engine.GUI.Layouts.details.build(dataset.output,container,{title:"Event Details",image:bgImage},function(data,layout){
 						if(layout.main.parents().eq(2).parent('.modal-body').length > 0){
 							var modal = layout.main.parents().eq(2).parent('.modal-body').parents().eq(2);
-							if(API.Auth.validate('plugin', 'events', 3)){
+							if(Engine.Auth.validate('plugin', 'events', 3)){
 								modal.find('.modal-header').find('.btn-group').find('[data-control="update"]').off().click(function(){
-									API.CRUD.update.show({ container:layout.main.parents().eq(2), keys:data.this.raw });
+									Engine.CRUD.update.show({ container:layout.main.parents().eq(2), keys:data.this.raw });
 								});
 							} else {
 								modal.find('.modal-header').find('.btn-group').find('[data-control="update"]').remove();
 							}
 						}
 						// History
-						API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-history",text:API.Contents.Language["History"]},function(data,layout,tab,content){
-							API.Helper.set(API.Contents,['layouts','events',data.this.raw.id,layout.main.attr('id')],layout);
+						Engine.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-history",text:Engine.Contents.Language["History"]},function(data,layout,tab,content){
+							Engine.Helper.set(Engine.Contents,['layouts','events',data.this.raw.id,layout.main.attr('id')],layout);
 							content.addClass('p-3');
 							content.append('<div class="timeline" data-plugin="events"></div>');
 							layout.timeline = content.find('div.timeline');
 							var today = new Date();
-							API.Builder.Timeline.add.date(layout.timeline,today);
+							Engine.Builder.Timeline.add.date(layout.timeline,today);
 							layout.timeline.find('.time-label').first().html('<div class="btn-group"></div>');
-							layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-primary" data-table="all">'+API.Contents.Language['All']+'</button>');
+							layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-primary" data-table="all">'+Engine.Contents.Language['All']+'</button>');
 							var options = {plugin:"events"}
 							// Debug
-							if(API.debug){
-								API.GUI.Layouts.details.button(data,layout,{icon:"fas fa-stethoscope"},function(data,layout,button){
+							if(Engine.debug){
+								Engine.GUI.Layouts.details.button(data,layout,{icon:"fas fa-stethoscope"},function(data,layout,button){
 									button.off().click(function(){
 										console.log(data);
 										console.log(layout);
@@ -71,28 +71,28 @@ API.Plugins.events = {
 								});
 							}
 							// Clear
-							if(API.Auth.validate('custom', 'events_clear', 1)){
-								API.GUI.Layouts.details.control(data,layout,{color:"danger",icon:"fas fa-snowplow",text:API.Contents.Language["Clear"]},function(data,layout,button){
+							if(Engine.Auth.validate('custom', 'events_clear', 1)){
+								Engine.GUI.Layouts.details.control(data,layout,{color:"danger",icon:"fas fa-snowplow",text:Engine.Contents.Language["Clear"]},function(data,layout,button){
 									button.off().click(function(){
-										API.request('events','clear',{ data:data.this.raw },function(){
-											API.Plugins.events.load.details();
+										Engine.request('events','clear',{ data:data.this.raw },function(){
+											Engine.Plugins.events.load.details();
 										});
 									});
 								});
 							}
 							// Page
-							if(API.Auth.validate('custom', 'events_page', 1)){
-								API.GUI.Layouts.details.control(data,layout,{color:"info",icon:"fas fa-globe",text:API.Contents.Language["Page"]},function(data,layout,button){
+							if(Engine.Auth.validate('custom', 'events_page', 1)){
+								Engine.GUI.Layouts.details.control(data,layout,{color:"info",icon:"fas fa-globe",text:Engine.Contents.Language["Page"]},function(data,layout,button){
 									button.off().click(function(){
-										API.GUI.Breadcrumbs.add(data.this.raw.name, '?p=events&v=page&id='+data.this.raw.id);
-										API.CRUD.read.show({ href:'?p=events&v=page&id='+data.this.raw.id});
+										Engine.GUI.Breadcrumbs.add(data.this.raw.name, '?p=events&v=page&id='+data.this.raw.id);
+										Engine.CRUD.read.show({ href:'?p=events&v=page&id='+data.this.raw.id});
 									});
 								});
 							}
 							// Name
 							options.field = "name";
-							if(API.Helper.isSet(options,['td'])){ delete options.td; }
-							API.GUI.Layouts.details.data(data,layout,options);
+							if(Engine.Helper.isSet(options,['td'])){ delete options.td; }
+							Engine.GUI.Layouts.details.data(data,layout,options);
 							// Address
 							options.field = "address";
 							options.td = '<td data-plugin="events">';
@@ -100,14 +100,14 @@ API.Plugins.events = {
 								options.td += '<span data-plugin="events" data-key="city">'+data.this.dom.city+'</span>, ';
 								options.td += '<span data-plugin="events" data-key="zipcode">'+data.this.dom.zipcode+'</span>';
 							options.td += '</td>';
-							API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){});
+							Engine.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){});
 							// Notes
-							if(API.Helper.isSet(API.Plugins,['notes']) && API.Auth.validate('custom', 'events_notes', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-sticky-note",text:API.Contents.Language["Notes"]},function(data,layout,tab,content){
-									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="notes">'+API.Contents.Language['Notes']+'</button>');
+							if(Engine.Helper.isSet(Engine.Plugins,['notes']) && Engine.Auth.validate('custom', 'events_notes', 1)){
+								Engine.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-sticky-note",text:Engine.Contents.Language["Notes"]},function(data,layout,tab,content){
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="notes">'+Engine.Contents.Language['Notes']+'</button>');
 									layout.content.notes = content;
 									layout.tabs.notes = tab;
-									if(API.Auth.validate('custom', 'events_notes', 2)){
+									if(Engine.Auth.validate('custom', 'events_notes', 2)){
 										content.append('<div><textarea title="Note" name="note" class="form-control"></textarea></div>');
 										content.find('textarea').summernote({
 											toolbar: [
@@ -121,20 +121,20 @@ API.Plugins.events = {
 										var html = '';
 										html += '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">';
 											html += '<form class="form-inline my-2 my-lg-0 ml-auto">';
-												html += '<button class="btn btn-warning my-2 my-sm-0" type="button" data-action="reply"><i class="fas fa-sticky-note mr-1"></i>'+API.Contents.Language['Add Note']+'</button>';
+												html += '<button class="btn btn-warning my-2 my-sm-0" type="button" data-action="reply"><i class="fas fa-sticky-note mr-1"></i>'+Engine.Contents.Language['Add Note']+'</button>';
 											html += '</form>';
 										html += '</nav>';
 										content.append(html);
 									}
 								});
-								API.Plugins.events.Events.notes(data,layout);
+								Engine.Plugins.events.Events.notes(data,layout);
 							}
 							// About
-							if(API.Auth.validate('custom', 'events_about', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-reader",text:API.Contents.Language["About"]},function(data,layout,tab,content){
+							if(Engine.Auth.validate('custom', 'events_about', 1)){
+								Engine.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-reader",text:Engine.Contents.Language["About"]},function(data,layout,tab,content){
 									layout.content.about = content;
 									layout.tabs.about = tab;
-									if(API.Auth.validate('custom', 'events_about', 3)){
+									if(Engine.Auth.validate('custom', 'events_about', 3)){
 										content.append('<div><textarea name="about" class="form-control"></textarea></div>');
 										content.find('textarea').html(data.this.raw.about).summernote({
 											toolbar: [
@@ -148,23 +148,23 @@ API.Plugins.events = {
 										var html = '';
 										html += '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">';
 											html += '<form class="form-inline my-2 my-lg-0 ml-auto">';
-												html += '<button class="btn btn-success my-2 my-sm-0" type="button" data-action="save"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>';
+												html += '<button class="btn btn-success my-2 my-sm-0" type="button" data-action="save"><i class="fas fa-save mr-1"></i>'+Engine.Contents.Language['Save']+'</button>';
 											html += '</form>';
 										html += '</nav>';
 										content.append(html);
 									}
 								});
-								API.Plugins.events.Events.about(data,layout);
+								Engine.Plugins.events.Events.about(data,layout);
 							}
 							// Galleries
-							if(API.Helper.isSet(API.Plugins,['galleries']) && API.Auth.validate('custom', 'events_galleries', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-images",text:API.Contents.Language["Galleries"]},function(data,layout,tab,content){
+							if(Engine.Helper.isSet(Engine.Plugins,['galleries']) && Engine.Auth.validate('custom', 'events_galleries', 1)){
+								Engine.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-images",text:Engine.Contents.Language["Galleries"]},function(data,layout,tab,content){
 									layout.content.galleries = content;
 									layout.tabs.galleries = tab;
 									content.addClass('p-3');
 									content.append('<div class="row"></div>');
 									layout.content.galleries.area = content.find('div.row').last();
-									if(API.Auth.validate('custom', 'events_galleries', 2)){
+									if(Engine.Auth.validate('custom', 'events_galleries', 2)){
 										var html = '';
 										html += '<div class="col-sm-12 col-md-6 col-lg-4">';
 											html += '<div class="card pointer addContact">';
@@ -177,18 +177,18 @@ API.Plugins.events = {
 										html += '</div>';
 										layout.content.galleries.area.append(html);
 									}
-									if(API.Helper.isSet(data,['relations','galleries']) && Object.keys(data.relations.galleries).length > 0){
+									if(Engine.Helper.isSet(data,['relations','galleries']) && Object.keys(data.relations.galleries).length > 0){
 										for(var [id, relation] of Object.entries(data.relations.galleries[Object.keys(data.relations.galleries)[0]].pictures)){
-											API.Plugins.events.GUI.picture(relation,layout);
+											Engine.Plugins.events.GUI.picture(relation,layout);
 										}
 									}
-									API.Plugins.events.Events.galleries(data,layout);
+									Engine.Plugins.events.Events.galleries(data,layout);
 								});
 							}
 							// Contacts
-							if(API.Helper.isSet(API.Plugins,['contacts']) && API.Auth.validate('custom', 'events_contacts', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-address-book",text:API.Contents.Language["Contacts"]},function(data,layout,tab,content){
-									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="contacts">'+API.Contents.Language['Contacts']+'</button>');
+							if(Engine.Helper.isSet(Engine.Plugins,['contacts']) && Engine.Auth.validate('custom', 'events_contacts', 1)){
+								Engine.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-address-book",text:Engine.Contents.Language["Contacts"]},function(data,layout,tab,content){
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="contacts">'+Engine.Contents.Language['Contacts']+'</button>');
 									layout.content.contacts = content;
 									layout.tabs.contacts = tab;
 									content.addClass('p-3');
@@ -201,7 +201,7 @@ API.Plugins.events = {
 													html += '<span class="input-group-text"><i class="fas fa-times" aria-hidden="true"></i></span>';
 												html += '</div>';
 												html += '<div class="input-group-append">';
-													html += '<span class="input-group-text"><i class="icon icon-search mr-1"></i>'+API.Contents.Language["Search"]+'</span>';
+													html += '<span class="input-group-text"><i class="icon icon-search mr-1"></i>'+Engine.Contents.Language["Search"]+'</span>';
 												html += '</div>';
 											html += '</div>';
 										html += '</div>';
@@ -209,7 +209,7 @@ API.Plugins.events = {
 									html += '<div class="row"></div>';
 									content.append(html);
 									area = content.find('div.row').last();
-									if(API.Auth.validate('custom', 'events_contacts', 2)){
+									if(Engine.Auth.validate('custom', 'events_contacts', 2)){
 										var html = '';
 										html += '<div class="col-sm-12 col-md-6">';
 											html += '<div class="card pointer addContact">';
@@ -222,26 +222,26 @@ API.Plugins.events = {
 										html += '</div>';
 										area.append(html);
 									}
-									if(API.Helper.isSet(data,['relations','contacts'])){
+									if(Engine.Helper.isSet(data,['relations','contacts'])){
 										for(var [id, relation] of Object.entries(data.relations.contacts)){
-											if(relation.isActive||API.Auth.validate('custom', 'events_contacts_isActive', 1)){
-												API.Plugins.events.GUI.contact(relation,layout);
+											if(relation.isActive||Engine.Auth.validate('custom', 'events_contacts_isActive', 1)){
+												Engine.Plugins.events.GUI.contact(relation,layout);
 											}
 										}
 									}
 								});
-								API.Plugins.events.Events.contacts(data,layout);
+								Engine.Plugins.events.Events.contacts(data,layout);
 							}
 							// Vows
-							if(API.Auth.validate('custom', 'events_vows', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-hand-sparkles",text:API.Contents.Language["Vows"]},function(data,layout,tab,content){
+							if(Engine.Auth.validate('custom', 'events_vows', 1)){
+								Engine.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-hand-sparkles",text:Engine.Contents.Language["Vows"]},function(data,layout,tab,content){
 									layout.content.vows = content;
 									layout.tabs.vows = tab;
 								});
 							}
 							// Planning
-							if(API.Auth.validate('custom', 'events_planning', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-calendar-day",text:API.Contents.Language["Planning"]},function(data,layout,tab,content){
+							if(Engine.Auth.validate('custom', 'events_planning', 1)){
+								Engine.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-calendar-day",text:Engine.Contents.Language["Planning"]},function(data,layout,tab,content){
 									layout.content.event_items = content;
 									layout.tabs.event_items = tab;
 									var html = '';
@@ -253,7 +253,7 @@ API.Plugins.events = {
 												html += '</div>';
 												html += '<input type="text" class="form-control">';
 												html += '<div class="input-group-append pointer" data-action="clear"><span class="input-group-text"><i class="fas fa-times"></i></span></div>';
-												html += '<div class="input-group-append"><span class="input-group-text"><i class="icon icon-search mr-1"></i>'+API.Contents.Language['Search']+'</span></div>';
+												html += '<div class="input-group-append"><span class="input-group-text"><i class="icon icon-search mr-1"></i>'+Engine.Contents.Language['Search']+'</span></div>';
 											html += '</div>';
 										html += '</div>';
 									html += '</div>';
@@ -261,31 +261,31 @@ API.Plugins.events = {
 										html += '<table class="table table-sm table-striped table-hover mb-0">';
 											html += '<thead>';
 												html += '<tr>';
-													html += '<th data-header="date" style="min-width:110px;">'+API.Contents.Language['Date']+'</th>';
-													html += '<th data-header="time" style="min-width:80px;">'+API.Contents.Language['Time']+'</th>';
-													html += '<th data-header="title" style="min-width:150px;">'+API.Contents.Language['Title']+'</th>';
-													html += '<th data-header="description">'+API.Contents.Language['Description']+'</th>';
-													html += '<th data-header="action" style="min-width:120px;">'+API.Contents.Language['Action']+'</th>';
+													html += '<th data-header="date" style="min-width:110px;">'+Engine.Contents.Language['Date']+'</th>';
+													html += '<th data-header="time" style="min-width:80px;">'+Engine.Contents.Language['Time']+'</th>';
+													html += '<th data-header="title" style="min-width:150px;">'+Engine.Contents.Language['Title']+'</th>';
+													html += '<th data-header="description">'+Engine.Contents.Language['Description']+'</th>';
+													html += '<th data-header="action" style="min-width:120px;">'+Engine.Contents.Language['Action']+'</th>';
 												html += '</tr>';
 											html += '</thead>';
 											html += '<tbody></tbody>';
 										html += '</table>';
 									html += '</div>';
 									content.append(html);
-									if(API.Helper.isSet(data,['relations','event_items'])){
+									if(Engine.Helper.isSet(data,['relations','event_items'])){
 										for(var [id, relation] of Object.entries(data.relations.event_items)){
-											API.Plugins.events.GUI.items(data,layout,relation);
+											Engine.Plugins.events.GUI.items(data,layout,relation);
 										}
 									}
-									API.Plugins.events.Events.planning(data,layout);
+									Engine.Plugins.events.Events.planning(data,layout);
 								});
 							}
 							// Menus
-							if(API.Auth.validate('custom', 'events_menus', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-open",text:API.Contents.Language["Menus"]},function(data,layout,tab,content){
+							if(Engine.Auth.validate('custom', 'events_menus', 1)){
+								Engine.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-book-open",text:Engine.Contents.Language["Menus"]},function(data,layout,tab,content){
 									layout.content.menus = content;
 									layout.tabs.menus = tab;
-									if(API.Auth.validate('custom', 'events_menus', 3)){
+									if(Engine.Auth.validate('custom', 'events_menus', 3)){
 										var html = '';
 										html += '<div class="btn-group btn-block">';
 										  html += '<button type="button" class="btn btn-flat btn-info" data-field="menuAdult">Adult</button>';
@@ -319,38 +319,38 @@ API.Plugins.events = {
 										var html = '';
 										html += '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">';
 											html += '<form class="form-inline my-2 my-lg-0 ml-auto">';
-												html += '<button class="btn btn-success my-2 my-sm-0" type="button" data-action="save"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>';
+												html += '<button class="btn btn-success my-2 my-sm-0" type="button" data-action="save"><i class="fas fa-save mr-1"></i>'+Engine.Contents.Language['Save']+'</button>';
 											html += '</form>';
 										html += '</nav>';
 										content.append(html);
 									}
 								});
-								API.Plugins.events.Events.menus(data,layout);
+								Engine.Plugins.events.Events.menus(data,layout);
 							}
 							// Seating Plan
-							if(API.Auth.validate('custom', 'events_seating_plan', 1)){
-								API.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-chair",text:API.Contents.Language["Seating Plan"]},function(data,layout,tab,content){
+							if(Engine.Auth.validate('custom', 'events_seating_plan', 1)){
+								Engine.GUI.Layouts.details.tab(data,layout,{icon:"fas fa-chair",text:Engine.Contents.Language["Seating Plan"]},function(data,layout,tab,content){
 									layout.content.seating_plan = content;
 									layout.tabs.seating_plan = tab;
 								});
 							}
 							// Hosts
-							if(API.Helper.isSet(API.Plugins,['users']) && API.Auth.validate('custom', 'events_hosts', 1)){
+							if(Engine.Helper.isSet(Engine.Plugins,['users']) && Engine.Auth.validate('custom', 'events_hosts', 1)){
 								if(layout.timeline.find('.time-label').first().find('div.btn-group button[data-table="users"]').length <= 0){
-									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Hosts']+'</button>');
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+Engine.Contents.Language['Hosts']+'</button>');
 								}
 								options.field = "setHosts";
 								options.td = '<td data-plugin="events" data-key="'+options.field+'"></td>';
-								API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
+								Engine.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
 									var td = tr.find('td[data-plugin="events"][data-key="'+options.field+'"]');
-									if(API.Helper.isSet(data.details,['users'])){
+									if(Engine.Helper.isSet(data.details,['users'])){
 										if(data.this.raw[options.field] == null){ data.this.raw[options.field] = ''; }
-										for(var [subKey, subDetails] of Object.entries(API.Helper.trim(data.this.raw[options.field],';').split(';'))){
+										for(var [subKey, subDetails] of Object.entries(Engine.Helper.trim(data.this.raw[options.field],';').split(';'))){
 											if(subDetails != ''){
 												var user = data.details.users.dom[subDetails];
 												td.append(
-													API.Plugins.events.GUI.buttons.details(user,{
-														remove:API.Auth.validate('custom', 'events_hosts', 4),
+													Engine.Plugins.events.GUI.buttons.details(user,{
+														remove:Engine.Auth.validate('custom', 'events_hosts', 4),
 														key: "username",
 														icon:{
 															details:"fas fa-user",
@@ -364,29 +364,29 @@ API.Plugins.events = {
 											}
 										}
 									}
-									if(API.Auth.validate('custom', 'events_hosts', 2)){
+									if(Engine.Auth.validate('custom', 'events_hosts', 2)){
 										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="add"><i class="fas fa-user-plus"></i></button>');
 									}
-									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_hosts', 4)});
+									Engine.Plugins.events.Events.users(data,layout,{key:options.field,remove:Engine.Auth.validate('custom', 'events_hosts', 4)});
 								});
 							}
 							// Planners
-							if(API.Helper.isSet(API.Plugins,['users']) && API.Auth.validate('custom', 'events_planners', 1)){
+							if(Engine.Helper.isSet(Engine.Plugins,['users']) && Engine.Auth.validate('custom', 'events_planners', 1)){
 								if(layout.timeline.find('.time-label').first().find('div.btn-group button[data-table="users"]').length <= 0){
-									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Planners']+'</button>');
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+Engine.Contents.Language['Planners']+'</button>');
 								}
 								options.field = "setPlanners";
 								options.td = '<td data-plugin="events" data-key="'+options.field+'"></td>';
-								API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
+								Engine.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
 									var td = tr.find('td[data-plugin="events"][data-key="'+options.field+'"]');
-									if(API.Helper.isSet(data.details,['users'])){
+									if(Engine.Helper.isSet(data.details,['users'])){
 										if(data.this.raw.setHosts == null){ data.this.raw.setHosts = ''; }
-										for(var [subKey, subDetails] of Object.entries(API.Helper.trim(data.this.raw[options.field],';').split(';'))){
+										for(var [subKey, subDetails] of Object.entries(Engine.Helper.trim(data.this.raw[options.field],';').split(';'))){
 											if(subDetails != ''){
 												var user = data.details.users.dom[subDetails];
 												td.append(
-													API.Plugins.events.GUI.buttons.details(user,{
-														remove:API.Auth.validate('custom', 'events_planners', 4),
+													Engine.Plugins.events.GUI.buttons.details(user,{
+														remove:Engine.Auth.validate('custom', 'events_planners', 4),
 														key: "username",
 														icon:{
 															details:"fas fa-user",
@@ -400,29 +400,29 @@ API.Plugins.events = {
 											}
 										}
 									}
-									if(API.Auth.validate('custom', 'events_planners', 2)){
+									if(Engine.Auth.validate('custom', 'events_planners', 2)){
 										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="add"><i class="fas fa-user-plus"></i></button>');
 									}
-									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_planners', 4)});
+									Engine.Plugins.events.Events.users(data,layout,{key:options.field,remove:Engine.Auth.validate('custom', 'events_planners', 4)});
 								});
 							}
 							// Staffs
-							if(API.Helper.isSet(API.Plugins,['users']) && API.Auth.validate('custom', 'events_staffs', 1)){
+							if(Engine.Helper.isSet(Engine.Plugins,['users']) && Engine.Auth.validate('custom', 'events_staffs', 1)){
 								if(layout.timeline.find('.time-label').first().find('div.btn-group button[data-table="users"]').length <= 0){
-									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+API.Contents.Language['Staffs']+'</button>');
+									layout.timeline.find('.time-label').first().find('div.btn-group').append('<button class="btn btn-secondary" data-table="users">'+Engine.Contents.Language['Staffs']+'</button>');
 								}
 								options.field = "setStaffs";
 								options.td = '<td data-plugin="events" data-key="'+options.field+'"></td>';
-								API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
+								Engine.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){
 									var td = tr.find('td[data-plugin="events"][data-key="'+options.field+'"]');
-									if(API.Helper.isSet(data.details,['users'])){
+									if(Engine.Helper.isSet(data.details,['users'])){
 										if(data.this.raw.setHosts == null){ data.this.raw.setHosts = ''; }
-										for(var [subKey, subDetails] of Object.entries(API.Helper.trim(data.this.raw[options.field],';').split(';'))){
+										for(var [subKey, subDetails] of Object.entries(Engine.Helper.trim(data.this.raw[options.field],';').split(';'))){
 											if(subDetails != ''){
 												var user = data.details.users.dom[subDetails];
 												td.append(
-													API.Plugins.events.GUI.buttons.details(user,{
-														remove:API.Auth.validate('custom', 'events_staffs', 4),
+													Engine.Plugins.events.GUI.buttons.details(user,{
+														remove:Engine.Auth.validate('custom', 'events_staffs', 4),
 														key: "username",
 														icon:{
 															details:"fas fa-user",
@@ -436,38 +436,38 @@ API.Plugins.events = {
 											}
 										}
 									}
-									if(API.Auth.validate('custom', 'events_staffs', 2)){
+									if(Engine.Auth.validate('custom', 'events_staffs', 2)){
 										td.append('<button type="button" class="btn btn-xs btn-success mx-1" data-action="add"><i class="fas fa-user-plus"></i></button>');
 									}
-									API.Plugins.events.Events.users(data,layout,{key:options.field,remove:API.Auth.validate('custom', 'events_staffs', 4)});
+									Engine.Plugins.events.Events.users(data,layout,{key:options.field,remove:Engine.Auth.validate('custom', 'events_staffs', 4)});
 								});
 							}
 							// Created
 							options.field = "created";
 							options.td = '<td><time class="timeago" datetime="'+data.this.raw.created.replace(/ /g, "T")+'" title="'+data.this.raw.created+'">'+data.this.raw.created+'</time></td>';
-							API.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){ tr.find('time').timeago(); });
+							Engine.GUI.Layouts.details.data(data,layout,options,function(data,layout,tr){ tr.find('time').timeago(); });
 							// Subscription
 							var icon = "fas fa-bell";
-							if(API.Helper.isSet(data,['relations','users',API.Contents.Auth.User.id])){ var icon = "fas fa-bell-slash"; }
-							API.GUI.Layouts.details.button(data,layout,{icon:icon},function(data,layout,button){
+							if(Engine.Helper.isSet(data,['relations','users',Engine.Contents.Auth.User.id])){ var icon = "fas fa-bell-slash"; }
+							Engine.GUI.Layouts.details.button(data,layout,{icon:icon},function(data,layout,button){
 								button.off().click(function(){
 									if(button.find('i').hasClass( "fa-bell" )){
 										button.find('i').removeClass("fa-bell").addClass("fa-bell-slash");
-										API.request("events",'subscribe',{data:{id:data.this.raw.id}},function(answer){
+										Engine.request("events",'subscribe',{data:{id:data.this.raw.id}},function(answer){
 											var subscription = JSON.parse(answer);
 											if(subscription.success != undefined){
 												var sub = {};
-												for(var [key, value] of Object.entries(API.Contents.Auth.User)){ sub[key] = value; }
+												for(var [key, value] of Object.entries(Engine.Contents.Auth.User)){ sub[key] = value; }
 												sub.created = subscription.output.relationship.created;
 												sub.name = '';
 												if((sub.first_name != '')&&(sub.first_name != null)){ if(sub.name != ''){sub.name += ' ';} sub.name += sub.first_name; }
 												if((sub.middle_name != '')&&(sub.middle_name != null)){ if(sub.name != ''){sub.name += ' ';} sub.name += sub.middle_name; }
 												if((sub.last_name != '')&&(sub.last_name != null)){ if(sub.name != ''){sub.name += ' ';} sub.name += sub.last_name; }
-												API.Builder.Timeline.add.subscription(layout.timeline,sub,'bell','lightblue',function(item){
-													if((API.Auth.validate('plugin','users',1))&&(API.Auth.validate('view','details',1,'users'))){
+												Engine.Builder.Timeline.add.subscription(layout.timeline,sub,'bell','lightblue',function(item){
+													if((Engine.Auth.validate('plugin','users',1))&&(Engine.Auth.validate('view','details',1,'users'))){
 														item.find('i').first().addClass('pointer');
 														item.find('i').first().off().click(function(){
-															API.CRUD.read.show({ key:'username',keys:data.relations.users[item.attr('data-id')], href:"?p=users&v=details&id="+data.relations.users[item.attr('data-id')].username, modal:true });
+															Engine.CRUD.read.show({ key:'username',keys:data.relations.users[item.attr('data-id')], href:"?p=users&v=details&id="+data.relations.users[item.attr('data-id')].username, modal:true });
 														});
 													}
 												});
@@ -475,10 +475,10 @@ API.Plugins.events = {
 										});
 									} else {
 										button.find('i').removeClass("fa-bell-slash").addClass("fa-bell");
-										API.request(url.searchParams.get("p"),'unsubscribe',{data:{id:dataset.output.this.raw.id}},function(answer){
+										Engine.request(url.searchParams.get("p"),'unsubscribe',{data:{id:dataset.output.this.raw.id}},function(answer){
 											var subscription = JSON.parse(answer);
 											if(subscription.success != undefined){
-												layout.timeline.find('[data-type="bell"][data-id="'+API.Contents.Auth.User.id+'"]').remove();
+												layout.timeline.find('[data-type="bell"][data-id="'+Engine.Contents.Auth.User.id+'"]').remove();
 											}
 										});
 									}
@@ -487,21 +487,21 @@ API.Plugins.events = {
 							// Timeline
 							for(var [rid, relations] of Object.entries(data.relationships)){
 								for(var [uid, relation] of Object.entries(relations)){
-									if(API.Helper.isSet(API.Plugins,[relation.relationship]) && (API.Auth.validate('custom', 'events_'+relation.relationship, 1) || relation.owner == API.Contents.Auth.User.username) && API.Helper.isSet(data,['relations',relation.relationship,relation.link_to])){
+									if(Engine.Helper.isSet(Engine.Plugins,[relation.relationship]) && (Engine.Auth.validate('custom', 'events_'+relation.relationship, 1) || relation.owner == Engine.Contents.Auth.User.username) && Engine.Helper.isSet(data,['relations',relation.relationship,relation.link_to])){
 										var details = {};
 										for(var [key, value] of Object.entries(data.relations[relation.relationship][relation.link_to])){ details[key] = value; }
 										if(typeof relation.statuses !== 'undefined'){ details.status = data.details.statuses.dom[relation.statuses].order; }
 										details.created = relation.created;
 										details.owner = relation.owner;
-										if(!API.Helper.isSet(details,['isActive'])||(API.Helper.isSet(details,['isActive']) && details.isActive)||(API.Helper.isSet(details,['isActive']) && !details.isActive && (API.Auth.validate('custom', 'events_'+relation.relationship+'_isActive', 1)||API.Auth.validate('custom', relation.relationship+'_isActive', 1)))){
+										if(!Engine.Helper.isSet(details,['isActive'])||(Engine.Helper.isSet(details,['isActive']) && details.isActive)||(Engine.Helper.isSet(details,['isActive']) && !details.isActive && (Engine.Auth.validate('custom', 'events_'+relation.relationship+'_isActive', 1)||Engine.Auth.validate('custom', relation.relationship+'_isActive', 1)))){
 											switch(relation.relationship){
 												case"notes":
-													API.Builder.Timeline.add.card(layout.timeline,details,'sticky-note','warning',function(item){
+													Engine.Builder.Timeline.add.card(layout.timeline,details,'sticky-note','warning',function(item){
 														item.find('.timeline-footer').remove();
-														if(API.Auth.validate('custom', 'events_notes', 4)){
+														if(Engine.Auth.validate('custom', 'events_notes', 4)){
 															$('<a class="time bg-warning pointer"><i class="fas fa-trash-alt"></i></a>').insertAfter(item.find('span.time.bg-warning'));
 															item.find('a.pointer').off().click(function(){
-																API.CRUD.delete.show({ keys:data.relations.notes[item.attr('data-id')],key:'id', modal:true, plugin:'notes' },function(note){
+																Engine.CRUD.delete.show({ keys:data.relations.notes[item.attr('data-id')],key:'id', modal:true, plugin:'notes' },function(note){
 																	item.remove();
 																});
 															});
@@ -509,7 +509,7 @@ API.Plugins.events = {
 													});
 													break;
 												case"contacts":
-													API.Builder.Timeline.add.contact(layout.timeline,details,'address-card','secondary',function(item){
+													Engine.Builder.Timeline.add.contact(layout.timeline,details,'address-card','secondary',function(item){
 														item.find('i').first().addClass('pointer');
 														item.find('i').first().off().click(function(){
 															value = item.attr('data-name').toLowerCase();
@@ -521,11 +521,11 @@ API.Plugins.events = {
 													});
 													break;
 												case"users":
-													API.Builder.Timeline.add.subscription(layout.timeline,details,'bell','lightblue',function(item){
-														if((API.Auth.validate('plugin','users',1))&&(API.Auth.validate('view','details',1,'users'))){
+													Engine.Builder.Timeline.add.subscription(layout.timeline,details,'bell','lightblue',function(item){
+														if((Engine.Auth.validate('plugin','users',1))&&(Engine.Auth.validate('view','details',1,'users'))){
 															item.find('i').first().addClass('pointer');
 															item.find('i').first().off().click(function(){
-																API.CRUD.read.show({ key:'username',keys:data.details.users.dom[item.attr('data-id')], href:"?p=users&v=details&id="+data.details.users.dom[item.attr('data-id')].username, modal:true });
+																Engine.CRUD.read.show({ key:'username',keys:data.details.users.dom[item.attr('data-id')], href:"?p=users&v=details&id="+data.details.users.dom[item.attr('data-id')].username, modal:true });
 															});
 														}
 													});
@@ -567,30 +567,30 @@ API.Plugins.events = {
 			$('div.wrapper').hide();
 			var url = new URL(window.location.href);
 			var id = url.searchParams.get("id");
-			API.request(url.searchParams.get("p"),'get',{data:{id:id,key:'id'}},function(result){
+			Engine.request(url.searchParams.get("p"),'get',{data:{id:id,key:'id'}},function(result){
 				var dataset = JSON.parse(result);
 				if(dataset.success != undefined){
 					var data = dataset.output;
 					var hosts = {};
-					for(var [key, host] of Object.entries(API.Helper.trim(data.this.raw.setHosts,';').split(';'))){
-						if(API.Helper.isSet(data,['relations',data.this.raw.setHostType,host])){
-							API.Helper.set(hosts,[host],data.relations[data.this.raw.setHostType][host]);
+					for(var [key, host] of Object.entries(Engine.Helper.trim(data.this.raw.setHosts,';').split(';'))){
+						if(Engine.Helper.isSet(data,['relations',data.this.raw.setHostType,host])){
+							Engine.Helper.set(hosts,[host],data.relations[data.this.raw.setHostType][host]);
 						}
 					}
 					var planners = {};
-					for(var [key, planner] of Object.entries(API.Helper.trim(data.this.raw.setPlanners,';').split(';'))){
-						if(API.Helper.isSet(data,['relations','users',planner])){
-							API.Helper.set(planners,[planner],data.relations.users[planner]);
+					for(var [key, planner] of Object.entries(Engine.Helper.trim(data.this.raw.setPlanners,';').split(';'))){
+						if(Engine.Helper.isSet(data,['relations','users',planner])){
+							Engine.Helper.set(planners,[planner],data.relations.users[planner]);
 						}
 					}
 					var staffs = {};
-					for(var [key, staff] of Object.entries(API.Helper.trim(data.this.raw.setStaffs,';').split(';'))){
-						if(API.Helper.isSet(data,['relations','users',staff])){
-							API.Helper.set(staffs,[staff],data.relations.users[staff]);
+					for(var [key, staff] of Object.entries(Engine.Helper.trim(data.this.raw.setStaffs,';').split(';'))){
+						if(Engine.Helper.isSet(data,['relations','users',staff])){
+							Engine.Helper.set(staffs,[staff],data.relations.users[staff]);
 						}
 					}
 					var items = {};
-					if(API.Helper.isSet(data,['relations','event_items'])){
+					if(Engine.Helper.isSet(data,['relations','event_items'])){
 						for(var [key, item] of Object.entries(data.relations.event_items)){
 							items[item.date+'T'+item.time] = item;
 						}
@@ -602,17 +602,17 @@ API.Plugins.events = {
 					var count = 0;
 					$('div.events-content-wrapper').remove();
 					html += '<div class="events-content-wrapper events-background row m-0 align-items-center text-center justify-content-center">';
-						if(API.Helper.isSet(hosts,[API.Contents.Auth.User.id])||API.Helper.isSet(planners,[API.Contents.Auth.User.id])){
+						if(Engine.Helper.isSet(hosts,[Engine.Contents.Auth.User.id])||Engine.Helper.isSet(planners,[Engine.Contents.Auth.User.id])){
 							html += '<button class="btn btn-warning btn-flat btn-ControlPanel" data-action="ControlPanel"><i class="fas fa-bars"></i></button>';
 						}
 					  html += '<div class="w-auto events-box bg-black noselect" id="events-1">';
-					    html += '<p><h2>'+API.Contents.Language["Welcome to the wedding of"]+'</h2></p>';
+					    html += '<p><h2>'+Engine.Contents.Language["Welcome to the wedding of"]+'</h2></p>';
 							for(var [id, host] of Object.entries(hosts)){
 								if(count > 0){ html += '<p><h1>&</h1></p>'; }
 								html += '<p><h1 class="mt-3">'+host.name+'</h1></p>';
 								count++;
 							}
-					    html += '<p class="mt-4"><button class="btn btn-warning btn-lg mt-4">'+API.Contents.Language["Enter"]+'</button></p>';
+					    html += '<p class="mt-4"><button class="btn btn-warning btn-lg mt-4">'+Engine.Contents.Language["Enter"]+'</button></p>';
 					  html += '</div>';
 					  html += '<div class="events-box pt-0 bg-black noselect hide" id="events-2">';
 							html += '<nav class="navbar navbar-expand-lg navbar-dark bg-transparent">';
@@ -621,25 +621,25 @@ API.Plugins.events = {
 							  html += '</button>';
 							  html += '<div class="collapse navbar-collapse justify-content-center" id="navbarevents">';
 							    html += '<div class="navbar-nav">';
-							      html += '<a class="nav-item nav-link active" data-page="about">'+API.Contents.Language["About"]+'</a>';
-							      html += '<a class="nav-item nav-link" data-page="gallery">'+API.Contents.Language["Gallery"]+'</a>';
-							      html += '<a class="nav-item nav-link" data-page="attendance">'+API.Contents.Language["Attendances"]+'</a>';
-							      html += '<a class="nav-item nav-link" data-page="vows">'+API.Contents.Language["Vows"]+'</a>';
-							      html += '<a class="nav-item nav-link" data-page="planning">'+API.Contents.Language["Planning"]+'</a>';
-							      html += '<a class="nav-item nav-link" data-page="menu">'+API.Contents.Language["Menu"]+'</a>';
-							      html += '<a class="nav-item nav-link" data-page="seating_plan">'+API.Contents.Language["Seating Plan"]+'</a>';
+							      html += '<a class="nav-item nav-link active" data-page="about">'+Engine.Contents.Language["About"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="gallery">'+Engine.Contents.Language["Gallery"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="attendance">'+Engine.Contents.Language["Attendances"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="vows">'+Engine.Contents.Language["Vows"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="planning">'+Engine.Contents.Language["Planning"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="menu">'+Engine.Contents.Language["Menu"]+'</a>';
+							      html += '<a class="nav-item nav-link" data-page="seating_plan">'+Engine.Contents.Language["Seating Plan"]+'</a>';
 							    html += '</div>';
 							  html += '</div>';
 							html += '</nav>';
 							html += '<div class="events-pages">';
 								html += '<div class="events-page active" data-page="about">';
-									html += '<p><h2>'+API.Contents.Language["About"]+'</h2></p>';
+									html += '<p><h2>'+Engine.Contents.Language["About"]+'</h2></p>';
 									html += data.this.raw.about;
 								html += '</div>';
 								html += '<div class="events-page hide" data-page="gallery">';
-									html += '<p><h2>'+API.Contents.Language["Gallery"]+'</h2></p>';
+									html += '<p><h2>'+Engine.Contents.Language["Gallery"]+'</h2></p>';
 									html += '<div class="row justify-content-center">';
-										if(API.Helper.isSet(data,['relations','galleries']) && Object.keys(data.relations.galleries).length > 0){
+										if(Engine.Helper.isSet(data,['relations','galleries']) && Object.keys(data.relations.galleries).length > 0){
 											for(var [key, picture] of Object.entries(data.relations.galleries[Object.keys(data.relations.galleries)[0]].pictures)){
 												html += '<div class="col-lg-4 col-sm-6 mb-4">';
 													html += '<div class="portfolio-item">';
@@ -669,22 +669,22 @@ API.Plugins.events = {
 											}
 										}
 										html += '<div class="col-12">';
-											html += '<button class="btn btn-warning btn-lg btn-block" data-action="Download"><i class="fas fa-angle-down mr-1"></i>'+API.Contents.Language["Download All"]+'</button>';
+											html += '<button class="btn btn-warning btn-lg btn-block" data-action="Download"><i class="fas fa-angle-down mr-1"></i>'+Engine.Contents.Language["Download All"]+'</button>';
 										html += '</div>';
 									html += '</div>';
 								html += '</div>';
 								html += '<div class="events-page hide" data-page="attendance">';
-									html += '<p><h2>'+API.Contents.Language["Attendances"]+'</h2></p>';
+									html += '<p><h2>'+Engine.Contents.Language["Attendances"]+'</h2></p>';
 									html += '<p class="text-justify">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>';
 									html += '<p class="text-justify">The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>';
 								html += '</div>';
 								html += '<div class="events-page hide" data-page="vows">';
-									html += '<p><h2>'+API.Contents.Language["Vows"]+'</h2></p>';
+									html += '<p><h2>'+Engine.Contents.Language["Vows"]+'</h2></p>';
 									html += '<p class="text-justify">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>';
 									html += '<p class="text-justify">The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>';
 								html += '</div>';
 								html += '<div class="events-page hide" data-page="planning">';
-									html += '<p><h2>'+API.Contents.Language["Planning"]+'</h2></p>';
+									html += '<p><h2>'+Engine.Contents.Language["Planning"]+'</h2></p>';
 		              html += '<ul class="timeline">';
 										var inverted = ' class="timeline-inverted"';
 										for(var [stamp, item] of Object.entries(items)){
@@ -702,7 +702,7 @@ API.Plugins.events = {
 		              html += '</ul>';
 								html += '</div>';
 								html += '<div class="events-page hide" data-page="menu">';
-									html += '<p><h2>'+API.Contents.Language["Menu"]+'</h2></p>';
+									html += '<p><h2>'+Engine.Contents.Language["Menu"]+'</h2></p>';
 									if(data.this.raw.menuKid != '' && data.this.raw.menuKid != null){
 										html += '<div class="btn-group btn-block">';
 											html += '<button class="btn btn-outline-warning btn-lg active" data-menu="adult">Adulte</button>';
@@ -719,7 +719,7 @@ API.Plugins.events = {
 									html += '</div>';
 								html += '</div>';
 								html += '<div class="events-page hide" data-page="seating_plan">';
-									html += '<p><h2>'+API.Contents.Language["Seating Plan"]+'</h2></p>';
+									html += '<p><h2>'+Engine.Contents.Language["Seating Plan"]+'</h2></p>';
 									html += '<p class="text-justify">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>';
 									html += '<p class="text-justify">The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>';
 								html += '</div>';
@@ -760,7 +760,7 @@ API.Plugins.events = {
 					pictures.find('div.download-modal[data-file][data-basename]').off().click(function(){
 						var file = $(this).attr('data-file');
 						var basename = $(this).attr('data-basename');
-						API.Helper.download(file,basename);
+						Engine.Helper.download(file,basename);
 					});
 				} else { $('div.wrapper').show(); }
 			});
@@ -788,31 +788,31 @@ API.Plugins.events = {
 		},
 		contact:function(dataset,layout,plugin = 'contacts'){
 			var area = layout.content[plugin].find('div.row').eq(1);
-			area.prepend(API.Plugins.events.GUI.card(dataset));
+			area.prepend(Engine.Plugins.events.GUI.card(dataset));
 			var card = area.find('div.col-sm-12.col-md-6').first();
-			if(API.Helper.isSet(dataset,['users'])){
-				if(API.Auth.validate('custom', 'events_'+plugin+'_btn_details', 1)){
-					card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'primary',icon:'fas fa-user',action:'details',content:API.Contents.Language['Details']}));
+			if(Engine.Helper.isSet(dataset,['users'])){
+				if(Engine.Auth.validate('custom', 'events_'+plugin+'_btn_details', 1)){
+					card.find('div.btn-group').append(Engine.Plugins.events.GUI.button(dataset,{id:'id',color:'primary',icon:'fas fa-user',action:'details',content:Engine.Contents.Language['Details']}));
 				}
 			} else {
-				if(API.Auth.validate('custom', 'events_'+plugin+'_btn_link', 1)){
-					card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'teal',icon:'fas fa-link',action:'link',content:API.Contents.Language['Add User']}));
+				if(Engine.Auth.validate('custom', 'events_'+plugin+'_btn_link', 1)){
+					card.find('div.btn-group').append(Engine.Plugins.events.GUI.button(dataset,{id:'id',color:'teal',icon:'fas fa-link',action:'link',content:Engine.Contents.Language['Add User']}));
 				}
 			}
-			if(API.Helper.isSet(dataset,['event_attendances'])){
-				if(API.Auth.validate('custom', 'events_'+plugin+'_btn_attendance', 1)){
-					card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'navy',icon:'fas fa-calendar-check',action:'attendance',content:API.Contents.Language['Attendance']}));
+			if(Engine.Helper.isSet(dataset,['event_attendances'])){
+				if(Engine.Auth.validate('custom', 'events_'+plugin+'_btn_attendance', 1)){
+					card.find('div.btn-group').append(Engine.Plugins.events.GUI.button(dataset,{id:'id',color:'navy',icon:'fas fa-calendar-check',action:'attendance',content:Engine.Contents.Language['Attendance']}));
 				}
 			} else {
-				if(API.Auth.validate('custom', 'events_'+plugin+'_btn_add_attendance', 1)){
-					card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'olive',icon:'fas fa-calendar-plus',action:'add',content:API.Contents.Language['Add Attendance']}));
+				if(Engine.Auth.validate('custom', 'events_'+plugin+'_btn_add_attendance', 1)){
+					card.find('div.btn-group').append(Engine.Plugins.events.GUI.button(dataset,{id:'id',color:'olive',icon:'fas fa-calendar-plus',action:'add',content:Engine.Contents.Language['Add Attendance']}));
 				}
 			}
-			if(API.Auth.validate('custom', 'events_'+plugin+'_btn_edit', 1)){
-				card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'warning',icon:'fas fa-edit',action:'edit',content:API.Contents.Language['Edit']}));
+			if(Engine.Auth.validate('custom', 'events_'+plugin+'_btn_edit', 1)){
+				card.find('div.btn-group').append(Engine.Plugins.events.GUI.button(dataset,{id:'id',color:'warning',icon:'fas fa-edit',action:'edit',content:Engine.Contents.Language['Edit']}));
 			}
-			if(API.Auth.validate('custom', 'events_'+plugin+'_btn_delete', 1)){
-				card.find('div.btn-group').append(API.Plugins.events.GUI.button(dataset,{id:'id',color:'danger',icon:'fas fa-trash-alt',action:'delete',content:''}));
+			if(Engine.Auth.validate('custom', 'events_'+plugin+'_btn_delete', 1)){
+				card.find('div.btn-group').append(Engine.Plugins.events.GUI.button(dataset,{id:'id',color:'danger',icon:'fas fa-trash-alt',action:'delete',content:''}));
 			}
 		},
 		button:function(dataset,options = {}){
@@ -824,12 +824,12 @@ API.Plugins.events = {
 				id:"id",
 				content:"",
 			};
-			if(API.Helper.isSet(options,['icon'])){ defaults.icon = options.icon; }
-			if(API.Helper.isSet(options,['action'])){ defaults.action = options.action; }
-			if(API.Helper.isSet(options,['color'])){ defaults.color = options.color; }
-			if(API.Helper.isSet(options,['key'])){ defaults.key = options.key; }
-			if(API.Helper.isSet(options,['id'])){ defaults.id = options.id; }
-			if(API.Helper.isSet(options,['content'])){ defaults.content = options.content; }
+			if(Engine.Helper.isSet(options,['icon'])){ defaults.icon = options.icon; }
+			if(Engine.Helper.isSet(options,['action'])){ defaults.action = options.action; }
+			if(Engine.Helper.isSet(options,['color'])){ defaults.color = options.color; }
+			if(Engine.Helper.isSet(options,['key'])){ defaults.key = options.key; }
+			if(Engine.Helper.isSet(options,['id'])){ defaults.id = options.id; }
+			if(Engine.Helper.isSet(options,['content'])){ defaults.content = options.content; }
 			else { defaults.content = dataset[defaults.key]; }
 			if(defaults.content != ''){ defaults.icon += ' mr-1'; }
 			return '<button type="button" class="btn btn-sm bg-'+defaults.color+'" data-id="'+dataset[defaults.id]+'" data-action="'+defaults.action+'"><i class="'+defaults.icon+'"></i>'+defaults.content+'</button>';
@@ -841,7 +841,7 @@ API.Plugins.events = {
 				if(value == null){ value = '';item[key] = value; };
 				if(jQuery.inArray(key,['date','time','title','description']) != -1){
 					if(csv != ''){ csv += '|'; }
-					csv += API.Helper.html2text(value.toLowerCase());
+					csv += Engine.Helper.html2text(value.toLowerCase());
 				}
 			}
 			var body = layout.content.event_items.find('tbody');
@@ -853,7 +853,7 @@ API.Plugins.events = {
 				html += '<td>'+item.description+'</td>';
 				html += '<td>';
 					html += '<div class="btn-group btn-block m-0">';
-						html += '<button class="btn btn-sm btn-warning" data-action="edit"><i class="fas fa-edit mr-1"></i>'+API.Contents.Language['Edit']+'</button>';
+						html += '<button class="btn btn-sm btn-warning" data-action="edit"><i class="fas fa-edit mr-1"></i>'+Engine.Contents.Language['Edit']+'</button>';
 						html += '<button class="btn btn-sm btn-danger" data-action="delete"><i class="fas fa-trash-alt"></i></button>';
 					html += '</div>';
 				html += '</td>';
@@ -873,16 +873,16 @@ API.Plugins.events = {
 					content:"",
 					remove:false,
 				};
-				if(API.Helper.isSet(options,['icon','details'])){ defaults.icon.details = options.icon.details; }
-				if(API.Helper.isSet(options,['icon','remove'])){ defaults.icon.remove = options.icon.remove; }
-				if(API.Helper.isSet(options,['color','details'])){ defaults.color.details = options.color.details; }
-				if(API.Helper.isSet(options,['color','remove'])){ defaults.color.remove = options.color.remove; }
-				if(API.Helper.isSet(options,['action','details'])){ defaults.action.details = options.action.details; }
-				if(API.Helper.isSet(options,['action','remove'])){ defaults.action.remove = options.action.remove; }
-				if(API.Helper.isSet(options,['key'])){ defaults.key = options.key; }
-				if(API.Helper.isSet(options,['id'])){ defaults.id = options.id; }
-				if(API.Helper.isSet(options,['remove'])){ defaults.remove = options.remove; }
-				if(API.Helper.isSet(options,['content'])){ defaults.content = options.content; }
+				if(Engine.Helper.isSet(options,['icon','details'])){ defaults.icon.details = options.icon.details; }
+				if(Engine.Helper.isSet(options,['icon','remove'])){ defaults.icon.remove = options.icon.remove; }
+				if(Engine.Helper.isSet(options,['color','details'])){ defaults.color.details = options.color.details; }
+				if(Engine.Helper.isSet(options,['color','remove'])){ defaults.color.remove = options.color.remove; }
+				if(Engine.Helper.isSet(options,['action','details'])){ defaults.action.details = options.action.details; }
+				if(Engine.Helper.isSet(options,['action','remove'])){ defaults.action.remove = options.action.remove; }
+				if(Engine.Helper.isSet(options,['key'])){ defaults.key = options.key; }
+				if(Engine.Helper.isSet(options,['id'])){ defaults.id = options.id; }
+				if(Engine.Helper.isSet(options,['remove'])){ defaults.remove = options.remove; }
+				if(Engine.Helper.isSet(options,['content'])){ defaults.content = options.content; }
 				else { defaults.content = dataset[defaults.key]; }
 				var html = '';
 				html += '<div class="btn-group m-1" data-id="'+dataset[defaults.id]+'">';
@@ -907,7 +907,7 @@ API.Plugins.events = {
 			var html = '';
 			html += '<div class="col-sm-12 col-md-6 contactCard" data-csv="'+csv+'" data-id="'+dataset.id+'">';
 			  html += '<div class="card">';
-					if(!dataset.isActive){ html += '<div class="ribbon-wrapper ribbon-xl"><div class="ribbon bg-danger text-xl">'+API.Contents.Language['Inactive']+'</div></div>'; }
+					if(!dataset.isActive){ html += '<div class="ribbon-wrapper ribbon-xl"><div class="ribbon bg-danger text-xl">'+Engine.Contents.Language['Inactive']+'</div></div>'; }
 			    html += '<div class="card-header border-bottom-0">';
 			      html += '<b class="mr-1">Title:</b>'+dataset.job_title;
 			    html += '</div>';
@@ -943,15 +943,15 @@ API.Plugins.events = {
 		users:function(dataset,layout,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {key: "setHosts",remove:false};
-			if(API.Helper.isSet(options,['remove'])){ defaults.remove = options.remove; }
-			if(API.Helper.isSet(options,['key'])){ defaults.key = options.key; }
+			if(Engine.Helper.isSet(options,['remove'])){ defaults.remove = options.remove; }
+			if(Engine.Helper.isSet(options,['key'])){ defaults.key = options.key; }
 			var td = layout.details.find('td[data-plugin="events"][data-key="'+defaults.key+'"]');
 			td.find('button').off().click(function(){
 				var button = $(this);
 				if(button.attr('data-action') != "add"){
-					if(API.Helper.isSet(API.Contents,['data','raw','users',button.attr('data-id')])){
-						var user = {raw:API.Contents.data.raw.users[button.attr('data-id')],dom:{}};
-						user.dom = API.Contents.data.dom.users[user.raw.username];
+					if(Engine.Helper.isSet(Engine.Contents,['data','raw','users',button.attr('data-id')])){
+						var user = {raw:Engine.Contents.data.raw.users[button.attr('data-id')],dom:{}};
+						user.dom = Engine.Contents.data.dom.users[user.raw.username];
 					} else {
 						var user = {
 							dom:dataset.details.users.dom[button.attr('data-id')],
@@ -961,10 +961,10 @@ API.Plugins.events = {
 				}
 				switch(button.attr('data-action')){
 					case"details":
-						API.CRUD.read.show({ key:'username',keys:user.dom, href:"?p=users&v=details&id="+user.raw.username, modal:true });
+						Engine.CRUD.read.show({ key:'username',keys:user.dom, href:"?p=users&v=details&id="+user.raw.username, modal:true });
 						break;
 					case"remove":
-						API.request('events','unlink',{data:{id:dataset.this.raw.id,relationship:{relationship:defaults.key,link_to:button.attr('data-id')}}},function(result){
+						Engine.request('events','unlink',{data:{id:dataset.this.raw.id,relationship:{relationship:defaults.key,link_to:button.attr('data-id')}}},function(result){
 							var sub_dataset = JSON.parse(result);
 							if(sub_dataset.success != undefined){
 								td.find('.btn-group[data-id="'+sub_dataset.output.id+'"]').remove();
@@ -972,7 +972,7 @@ API.Plugins.events = {
 						});
 						break;
 					case"add":
-						API.Builder.modal($('body'), {
+						Engine.Builder.modal($('body'), {
 							title:'Add a user',
 							icon:'user',
 							zindex:'top',
@@ -985,19 +985,19 @@ API.Plugins.events = {
 							var footer = modal.find('.modal-footer');
 							header.find('button[data-control="hide"]').remove();
 							header.find('button[data-control="update"]').remove();
-							API.Builder.input(body, 'user', null, function(input){});
-							footer.append('<button class="btn btn-secondary" data-action="add"><i class="fas fa-user-plus mr-1"></i>'+API.Contents.Language['Add']+'</button>');
+							Engine.Builder.input(body, 'user', null, function(input){});
+							footer.append('<button class="btn btn-secondary" data-action="add"><i class="fas fa-user-plus mr-1"></i>'+Engine.Contents.Language['Add']+'</button>');
 							footer.find('button[data-action="add"]').off().click(function(){
 								if((typeof body.find('select').select2('val') !== "undefined")&&(body.find('select').select2('val') != '')){
-									API.request('events','link',{data:{id:dataset.this.dom.id,relationship:{relationship:defaults.key,link_to:body.find('select').select2('val')}}},function(result){
+									Engine.request('events','link',{data:{id:dataset.this.dom.id,relationship:{relationship:defaults.key,link_to:body.find('select').select2('val')}}},function(result){
 										var sub_dataset = JSON.parse(result);
 										if(sub_dataset.success != undefined){
-											API.Helper.set(API.Contents,['data','dom','users',sub_dataset.output.dom.id],sub_dataset.output.dom);
-											API.Helper.set(API.Contents,['data','raw','users',sub_dataset.output.raw.id],sub_dataset.output.raw);
-											API.Helper.set(dataset.details,['users','dom',sub_dataset.output.dom.id],sub_dataset.output.dom);
-											API.Helper.set(dataset.details,['users','raw',sub_dataset.output.raw.id],sub_dataset.output.raw);
-											API.Helper.set(dataset,['relations','users',sub_dataset.output.dom.id],sub_dataset.output.dom);
-											var html = API.Plugins.events.GUI.buttons.details(sub_dataset.output.dom,{
+											Engine.Helper.set(Engine.Contents,['data','dom','users',sub_dataset.output.dom.id],sub_dataset.output.dom);
+											Engine.Helper.set(Engine.Contents,['data','raw','users',sub_dataset.output.raw.id],sub_dataset.output.raw);
+											Engine.Helper.set(dataset.details,['users','dom',sub_dataset.output.dom.id],sub_dataset.output.dom);
+											Engine.Helper.set(dataset.details,['users','raw',sub_dataset.output.raw.id],sub_dataset.output.raw);
+											Engine.Helper.set(dataset,['relations','users',sub_dataset.output.dom.id],sub_dataset.output.dom);
+											var html = Engine.Plugins.events.GUI.buttons.details(sub_dataset.output.dom,{
 												remove:defaults.remove,
 												key: "username",
 												icon:{details:"fas fa-user",remove:"fas fa-user-minus"},
@@ -1008,7 +1008,7 @@ API.Plugins.events = {
 											} else { td.append(html); }
 											sub_dataset.output.dom.owner = sub_dataset.output.timeline.owner;
 											sub_dataset.output.dom.created = sub_dataset.output.timeline.created;
-											API.Plugins.events.Events.users(dataset,layout,defaults);
+											Engine.Plugins.events.Events.users(dataset,layout,defaults);
 										}
 									});
 									modal.modal('hide');
@@ -1027,12 +1027,12 @@ API.Plugins.events = {
 		notes:function(dataset,layout,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
-			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
-			if(API.Auth.validate('custom', 'events_notes', 2)){
+			if(Engine.Helper.isSet(options,['field'])){ defaults.field = options.field; }
+			if(Engine.Auth.validate('custom', 'events_notes', 2)){
 				layout.content.notes.find('button').off().click(function(){
 				  if(!layout.content.notes.find('textarea').summernote('isEmpty')){
 				    var note = {
-				      by:API.Contents.Auth.User.id,
+				      by:Engine.Contents.Auth.User.id,
 				      content:layout.content.notes.find('textarea').summernote('code'),
 				      relationship:'events',
 				      link_to:dataset.this.dom.id,
@@ -1050,15 +1050,15 @@ API.Plugins.events = {
 				      ],
 				      height: 250,
 				    });
-				    API.request('events','note',{data:note},function(result){
+				    Engine.request('events','note',{data:note},function(result){
 				      var data = JSON.parse(result);
 				      if(data.success != undefined){
-				        API.Builder.Timeline.add.card(layout.timeline,data.output.note.dom,'sticky-note','warning',function(item){
+				        Engine.Builder.Timeline.add.card(layout.timeline,data.output.note.dom,'sticky-note','warning',function(item){
 				          item.find('.timeline-footer').remove();
-				          if(API.Auth.validate('custom', 'events_notes', 4)){
+				          if(Engine.Auth.validate('custom', 'events_notes', 4)){
 				            $('<a class="time bg-warning pointer"><i class="fas fa-trash-alt"></i></a>').insertAfter(item.find('span.time.bg-warning'));
 										item.find('a.pointer').off().click(function(){
-											API.CRUD.delete.show({ keys:data.output.note.dom,key:'id', modal:true, plugin:'notes' },function(note){
+											Engine.CRUD.delete.show({ keys:data.output.note.dom,key:'id', modal:true, plugin:'notes' },function(note){
 												item.remove();
 											});
 										});
@@ -1078,7 +1078,7 @@ API.Plugins.events = {
 				      ],
 				      height: 250,
 				    });
-				    alert(API.Contents.Language['Note is empty']);
+				    alert(Engine.Contents.Language['Note is empty']);
 				  }
 				});
 			}
@@ -1086,8 +1086,8 @@ API.Plugins.events = {
 		about:function(dataset,layout,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
-			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
-			if(API.Auth.validate('custom', 'events_about', 3)){
+			if(Engine.Helper.isSet(options,['field'])){ defaults.field = options.field; }
+			if(Engine.Auth.validate('custom', 'events_about', 3)){
 				layout.content.about.find('button').off().click(function(){
 					dataset.this.raw.about = layout.content.about.find('textarea').summernote('code');
 					layout.content.about.find('textarea').summernote('destroy');
@@ -1101,21 +1101,21 @@ API.Plugins.events = {
 						height: 500,
 						code: dataset.this.raw.about,
 					});
-					API.request('events','update',{data:dataset.this.raw});
+					Engine.request('events','update',{data:dataset.this.raw});
 				});
 			}
 		},
 		menus:function(dataset,layout,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
-			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
+			if(Engine.Helper.isSet(options,['field'])){ defaults.field = options.field; }
 			layout.content.menus.find('button[data-field]').off().click(function(){
 				layout.content.menus.find('button[data-field].btn-info').removeClass('btn-info').addClass('btn-secondary');
 				$(this).removeClass('btn-secondary').addClass('btn-info');
 				layout.content.menus.find('div[data-field]').hide();
 				layout.content.menus.find('div[data-field="'+$(this).attr('data-field')+'"]').show();
 			});
-			if(API.Auth.validate('custom', 'events_menus', 3)){
+			if(Engine.Auth.validate('custom', 'events_menus', 3)){
 				layout.content.menus.find('button[data-action]').off().click(function(){
 					dataset.this.raw.menuAdult = layout.content.menus.find('textarea[name="menuAdult"]').summernote('code');
 					dataset.this.raw.menuKid = layout.content.menus.find('textarea[name="menuKid"]').summernote('code');
@@ -1130,16 +1130,16 @@ API.Plugins.events = {
 						height: 500,
 						code: dataset.this.raw.menuAdult,
 					});
-					API.request('events','update',{data:dataset.this.raw});
+					Engine.request('events','update',{data:dataset.this.raw});
 				});
 			}
 		},
 		contacts:function(dataset,layout,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
-			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
+			if(Engine.Helper.isSet(options,['field'])){ defaults.field = options.field; }
 			var skeleton = {};
-			for(var [field, settings] of Object.entries(API.Contents.Settings.Structure.contacts)){ skeleton[field] = ''; }
+			for(var [field, settings] of Object.entries(Engine.Contents.Settings.Structure.contacts)){ skeleton[field] = ''; }
 			var contacts = layout.content.contacts.find('div.row').eq(1);
 			var search = layout.content.contacts.find('div.row').eq(0);
 			search.find('div[data-action="clear"]').off().click(function(){
@@ -1152,20 +1152,20 @@ API.Plugins.events = {
 					contacts.find('[data-csv*="'+$(this).val().toLowerCase()+'"]').each(function(){ $(this).show(); });
 				} else { contacts.find('[data-csv]').show(); }
 			});
-			if(API.Auth.validate('custom', 'events_contacts', 2)){
+			if(Engine.Auth.validate('custom', 'events_contacts', 2)){
 				contacts.find('.addContact').off().click(function(){
-					API.CRUD.create.show({ plugin:'contacts', keys:skeleton, set:{isActive:'true',relationship:'events',link_to:dataset.this.raw.id} },function(created,user){
+					Engine.CRUD.create.show({ plugin:'contacts', keys:skeleton, set:{isActive:'true',relationship:'events',link_to:dataset.this.raw.id} },function(created,user){
 						if(created){
 							user.dom.name = '';
 							if((user.dom.first_name != '')&&(user.dom.first_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.first_name; }
 							if((user.dom.middle_name != '')&&(user.dom.middle_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.middle_name; }
 							if((user.dom.last_name != '')&&(user.dom.last_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.last_name; }
-							API.Helper.set(dataset,['details','contacts','dom',user.dom.id],user.dom);
-							API.Helper.set(dataset,['details','contacts','raw',user.raw.id],user.raw);
-							API.Helper.set(dataset,['relations','contacts',user.dom.id],user.dom);
-							API.Plugins.events.GUI.contact(user.dom,layout);
-							API.Plugins.events.Events.contacts(dataset,layout);
-							API.Builder.Timeline.add.contact(layout.timeline,user.dom,'address-card','secondary',function(item){
+							Engine.Helper.set(dataset,['details','contacts','dom',user.dom.id],user.dom);
+							Engine.Helper.set(dataset,['details','contacts','raw',user.raw.id],user.raw);
+							Engine.Helper.set(dataset,['relations','contacts',user.dom.id],user.dom);
+							Engine.Plugins.events.GUI.contact(user.dom,layout);
+							Engine.Plugins.events.Events.contacts(dataset,layout);
+							Engine.Builder.Timeline.add.contact(layout.timeline,user.dom,'address-card','secondary',function(item){
 								item.find('i').first().addClass('pointer');
 								item.find('i').first().off().click(function(){
 									value = item.attr('data-name').toLowerCase();
@@ -1183,10 +1183,10 @@ API.Plugins.events = {
 				var contact = dataset.relations.contacts[$(this).attr('data-id')];
 				switch($(this).attr('data-action')){
 					case"details":
-						API.CRUD.read.show({ key:'username',keys:contact.users[Object.keys(contact.users)[0]], href:"?p=users&v=details&id="+contact.users[Object.keys(contact.users)[0]].username, modal:true });
+						Engine.CRUD.read.show({ key:'username',keys:contact.users[Object.keys(contact.users)[0]], href:"?p=users&v=details&id="+contact.users[Object.keys(contact.users)[0]].username, modal:true });
 						break;
 					case"link":
-						API.Builder.modal($('body'), {
+						Engine.Builder.modal($('body'), {
 							title:'Create or link a user',
 							icon:'event',
 							zindex:'top',
@@ -1200,13 +1200,13 @@ API.Plugins.events = {
 							header.find('button[data-control="hide"]').remove();
 							header.find('button[data-control="update"]').remove();
 							body.html('<div class="row"></div>');
-							footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+API.Contents.Language['Create']+'</button>');
+							footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+Engine.Contents.Language['Create']+'</button>');
 							footer.find('button[data-action="create"]').off().click(function(){ modal.modal('hide'); });
 							modal.modal('show');
 						});
 						break;
 					case"attendance":
-						API.Builder.modal($('body'), {
+						Engine.Builder.modal($('body'), {
 							title:'View the attendance',
 							icon:'event',
 							zindex:'top',
@@ -1220,13 +1220,13 @@ API.Plugins.events = {
 							header.find('button[data-control="hide"]').remove();
 							header.find('button[data-control="update"]').remove();
 							body.html('<div class="row"></div>');
-							footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+API.Contents.Language['Create']+'</button>');
+							footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+Engine.Contents.Language['Create']+'</button>');
 							footer.find('button[data-action="create"]').off().click(function(){ modal.modal('hide'); });
 							modal.modal('show');
 						});
 						break;
 					case"add":
-						API.Builder.modal($('body'), {
+						Engine.Builder.modal($('body'), {
 							title:'Add attendance to event',
 							icon:'event',
 							zindex:'top',
@@ -1240,40 +1240,40 @@ API.Plugins.events = {
 							header.find('button[data-control="hide"]').remove();
 							header.find('button[data-control="update"]').remove();
 							body.html('<div class="row"></div>');
-							API.Builder.input(body.find('div.row'), 'setVows', item.setVows,{plugin:'events',type:'switch'}, function(input){
+							Engine.Builder.input(body.find('div.row'), 'setVows', item.setVows,{plugin:'events',type:'switch'}, function(input){
 								input.wrap('<div class="col-md-6 py-3"></div>');
 								modal.on('shown.bs.modal',function(e){
 								  input.find('input').last().bootstrapSwitch('state', item.setVows);
 								});
 							});
-							footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+API.Contents.Language['Create']+'</button>');
+							footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+Engine.Contents.Language['Create']+'</button>');
 							footer.find('button[data-action="create"]').off().click(function(){ modal.modal('hide'); });
 							modal.modal('show');
 						});
 						break;
 					case"edit":
-						API.CRUD.update.show({ keys:contact, modal:true, plugin:'contacts' },function(user){
+						Engine.CRUD.update.show({ keys:contact, modal:true, plugin:'contacts' },function(user){
 							user.dom.name = '';
 							if((user.dom.first_name != '')&&(user.dom.first_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.first_name; }
 							if((user.dom.middle_name != '')&&(user.dom.middle_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.middle_name; }
 							if((user.dom.last_name != '')&&(user.dom.last_name != null)){ if(user.dom.name != ''){user.dom.name += ' ';} user.dom.name += user.dom.last_name; }
-							API.Helper.set(dataset,['relations','contacts',user.dom.id],user.dom);
+							Engine.Helper.set(dataset,['relations','contacts',user.dom.id],user.dom);
 							contacts.find('[data-id="'+user.raw.id+'"]').remove();
-							API.Plugins.events.GUI.contact(user.dom,layout);
-							API.Plugins.events.Events.contacts(dataset,layout);
+							Engine.Plugins.events.GUI.contact(user.dom,layout);
+							Engine.Plugins.events.Events.contacts(dataset,layout);
 						});
 						break;
 					case"delete":
 						contact.link_to = dataset.this.raw.id;
-						API.CRUD.delete.show({ keys:contact,key:'name', modal:true, plugin:'contacts' },function(user){
-							if(contacts.find('[data-id="'+contact.id+'"]').find('.ribbon-wrapper').length > 0 || !API.Auth.validate('custom', 'events_contacts_isActive', 1)){
+						Engine.CRUD.delete.show({ keys:contact,key:'name', modal:true, plugin:'contacts' },function(user){
+							if(contacts.find('[data-id="'+contact.id+'"]').find('.ribbon-wrapper').length > 0 || !Engine.Auth.validate('custom', 'events_contacts_isActive', 1)){
 								contacts.find('[data-id="'+contact.id+'"]').remove();
 								layout.timeline.find('[data-type="address-card"][data-id="'+contact.id+'"]').remove();
 							}
-							if(contact.isActive && API.Auth.validate('custom', 'events_contacts_isActive', 1)){
+							if(contact.isActive && Engine.Auth.validate('custom', 'events_contacts_isActive', 1)){
 								contact.isActive = user.isActive;
-								API.Helper.set(dataset,['relations','contacts',contact.id,'isActive'],contact.isActive);
-								contacts.find('[data-id="'+contact.id+'"] .card').prepend('<div class="ribbon-wrapper ribbon-xl"><div class="ribbon bg-danger text-xl">'+API.Contents.Language['Inactive']+'</div></div>');
+								Engine.Helper.set(dataset,['relations','contacts',contact.id,'isActive'],contact.isActive);
+								contacts.find('[data-id="'+contact.id+'"] .card').prepend('<div class="ribbon-wrapper ribbon-xl"><div class="ribbon bg-danger text-xl">'+Engine.Contents.Language['Inactive']+'</div></div>');
 							}
 						});
 						break;
@@ -1284,8 +1284,8 @@ API.Plugins.events = {
 		planning:function(dataset,layout,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {key: "setHosts",remove:false};
-			if(API.Helper.isSet(options,['remove'])){ defaults.remove = options.remove; }
-			if(API.Helper.isSet(options,['key'])){ defaults.key = options.key; }
+			if(Engine.Helper.isSet(options,['remove'])){ defaults.remove = options.remove; }
+			if(Engine.Helper.isSet(options,['key'])){ defaults.key = options.key; }
 			var search = layout.content.event_items.find('div.row').eq(0);
 			var table = layout.content.event_items.find('table');
 			search.find('div[data-action="clear"]').off().click(function(){
@@ -1299,7 +1299,7 @@ API.Plugins.events = {
 				} else { table.find('[data-csv]').show(); }
 			});
 			search.find('button[data-action="create"]').off().click(function(){
-				API.Builder.modal($('body'), {
+				Engine.Builder.modal($('body'), {
 				  title:'Create a new event',
 				  icon:'event',
 				  zindex:'top',
@@ -1313,25 +1313,25 @@ API.Plugins.events = {
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
 					body.html('<div class="row"></div>');
-					API.Builder.input(body.find('div.row'), 'date', null,{plugin:'events'}, function(input){
+					Engine.Builder.input(body.find('div.row'), 'date', null,{plugin:'events'}, function(input){
 						input.wrap('<div class="col-md-6"></div>');
 					});
-					API.Builder.input(body.find('div.row'), 'time', null,{plugin:'events'}, function(input){
+					Engine.Builder.input(body.find('div.row'), 'time', null,{plugin:'events'}, function(input){
 						input.wrap('<div class="col-md-6"></div>');
 					});
-					API.Builder.input(body.find('div.row'), 'title', null,{plugin:'events',type:'input'}, function(input){
+					Engine.Builder.input(body.find('div.row'), 'title', null,{plugin:'events',type:'input'}, function(input){
 						input.wrap('<div class="col-md-12 py-3"></div>');
 					});
-					API.Builder.input(body.find('div.row'), 'description', null,{plugin:'events',type:'textarea'}, function(input){
+					Engine.Builder.input(body.find('div.row'), 'description', null,{plugin:'events',type:'textarea'}, function(input){
 						input.wrap('<div class="col-md-12"></div>');
 					});
-					API.Builder.input(body.find('div.row'), 'setVows', null,{plugin:'events',type:'switch'}, function(input){
+					Engine.Builder.input(body.find('div.row'), 'setVows', null,{plugin:'events',type:'switch'}, function(input){
 						input.wrap('<div class="col-md-6 py-3"></div>');
 					});
-					API.Builder.input(body.find('div.row'), 'setGallery', null,{plugin:'events',type:'switch'}, function(input){
+					Engine.Builder.input(body.find('div.row'), 'setGallery', null,{plugin:'events',type:'switch'}, function(input){
 						input.wrap('<div class="col-md-6 py-3"></div>');
 					});
-					footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+API.Contents.Language['Create']+'</button>');
+					footer.append('<button class="btn btn-success" data-action="create"><i class="fas fa-calendar-day mr-1"></i>'+Engine.Contents.Language['Create']+'</button>');
 					footer.find('button[data-action="create"]').off().click(function(){
 						var form = {
 							date:body.find('input[data-key="date"]').val(),
@@ -1353,11 +1353,11 @@ API.Plugins.events = {
 							height: 500,
 							code: form.description,
 						});
-						API.request('events','createItem',{data:form},function(result){
+						Engine.request('events','createItem',{data:form},function(result){
 							var response = JSON.parse(result);
 							if(response.success != undefined){
-								API.Plugins.events.GUI.items(dataset,layout,response.output.item);
-								API.Plugins.events.Events.planning(data,layout);
+								Engine.Plugins.events.GUI.items(dataset,layout,response.output.item);
+								Engine.Plugins.events.Events.planning(data,layout);
 							}
 						});
 						modal.modal('hide');
@@ -1372,7 +1372,7 @@ API.Plugins.events = {
 				var item = dataset.relations.event_items[row.attr('data-id')];
 				switch(action){
 					case"delete":
-						API.Builder.modal($('body'), {
+						Engine.Builder.modal($('body'), {
 							title:'Are you sure?',
 							icon:'delete',
 							zindex:'top',
@@ -1385,10 +1385,10 @@ API.Plugins.events = {
 							var footer = modal.find('.modal-footer');
 							header.find('button[data-control="hide"]').remove();
 							header.find('button[data-control="update"]').remove();
-							body.html(API.Contents.Language['Are you sure you want to delete this envent item?']);
-							footer.append('<button class="btn btn-danger" data-action="delete"><i class="fas fa-trash-alt mr-1"></i>'+API.Contents.Language['Delete']+'</button>');
+							body.html(Engine.Contents.Language['Are you sure you want to delete this envent item?']);
+							footer.append('<button class="btn btn-danger" data-action="delete"><i class="fas fa-trash-alt mr-1"></i>'+Engine.Contents.Language['Delete']+'</button>');
 							footer.find('button[data-action="delete"]').off().click(function(){
-								API.request('events','deleteItem',{data:item},function(result){
+								Engine.request('events','deleteItem',{data:item},function(result){
 									var response = JSON.parse(result);
 									if(response.success != undefined){
 										table.find('tr[data-id="'+response.output.item.id+'"]').remove();
@@ -1400,7 +1400,7 @@ API.Plugins.events = {
 						});
 						break;
 					case"edit":
-						API.Builder.modal($('body'), {
+						Engine.Builder.modal($('body'), {
 						  title:'Edit event',
 						  icon:'event',
 						  zindex:'top',
@@ -1414,31 +1414,31 @@ API.Plugins.events = {
 							header.find('button[data-control="hide"]').remove();
 							header.find('button[data-control="update"]').remove();
 							body.html('<div class="row"></div>');
-							API.Builder.input(body.find('div.row'), 'date', item.date,{plugin:'events'}, function(input){
+							Engine.Builder.input(body.find('div.row'), 'date', item.date,{plugin:'events'}, function(input){
 								input.wrap('<div class="col-md-6"></div>');
 							});
-							API.Builder.input(body.find('div.row'), 'time', item.time,{plugin:'events'}, function(input){
+							Engine.Builder.input(body.find('div.row'), 'time', item.time,{plugin:'events'}, function(input){
 								input.wrap('<div class="col-md-6"></div>');
 							});
-							API.Builder.input(body.find('div.row'), 'title', item.title,{plugin:'events',type:'input'}, function(input){
+							Engine.Builder.input(body.find('div.row'), 'title', item.title,{plugin:'events',type:'input'}, function(input){
 								input.wrap('<div class="col-md-12 py-3"></div>');
 							});
-							API.Builder.input(body.find('div.row'), 'description', item.description,{plugin:'events',type:'textarea'}, function(input){
+							Engine.Builder.input(body.find('div.row'), 'description', item.description,{plugin:'events',type:'textarea'}, function(input){
 								input.wrap('<div class="col-md-12"></div>');
 							});
-							API.Builder.input(body.find('div.row'), 'setVows', item.setVows,{plugin:'events',type:'switch'}, function(input){
+							Engine.Builder.input(body.find('div.row'), 'setVows', item.setVows,{plugin:'events',type:'switch'}, function(input){
 								input.wrap('<div class="col-md-6 py-3"></div>');
 								modal.on('shown.bs.modal',function(e){
 								  input.find('input').last().bootstrapSwitch('state', item.setVows);
 								});
 							});
-							API.Builder.input(body.find('div.row'), 'setGallery', item.setGallery,{plugin:'events',type:'switch'}, function(input){
+							Engine.Builder.input(body.find('div.row'), 'setGallery', item.setGallery,{plugin:'events',type:'switch'}, function(input){
 								input.wrap('<div class="col-md-6 py-3"></div>');
 								modal.on('shown.bs.modal',function(e){
 								  input.find('input').last().bootstrapSwitch('state', item.setGallery);
 								});
 							});
-							footer.append('<button class="btn btn-success" data-action="save"><i class="fas fa-save mr-1"></i>'+API.Contents.Language['Save']+'</button>');
+							footer.append('<button class="btn btn-success" data-action="save"><i class="fas fa-save mr-1"></i>'+Engine.Contents.Language['Save']+'</button>');
 							footer.find('button[data-action="save"]').off().click(function(){
 								item.date = body.find('input[data-key="date"]').val();
 								item.time = body.find('input[data-key="time"]').val();
@@ -1457,12 +1457,12 @@ API.Plugins.events = {
 									height: 500,
 									code: item.description,
 								});
-								API.request('events','saveItem',{data:item},function(result){
+								Engine.request('events','saveItem',{data:item},function(result){
 									var response = JSON.parse(result);
 									if(response.success != undefined){
 										table.find('tr[data-id="'+response.output.item.id+'"]').remove();
-										API.Plugins.events.GUI.items(dataset,layout,response.output.item);
-										API.Plugins.events.Events.planning(data,layout);
+										Engine.Plugins.events.GUI.items(dataset,layout,response.output.item);
+										Engine.Plugins.events.Events.planning(data,layout);
 									}
 								});
 								modal.modal('hide');
@@ -1478,9 +1478,9 @@ API.Plugins.events = {
 		galleries:function(dataset,layout,options = {},callback = null){
 			if(options instanceof Function){ callback = options; options = {}; }
 			var defaults = {field: "name"};
-			if(API.Helper.isSet(options,['field'])){ defaults.field = options.field; }
+			if(Engine.Helper.isSet(options,['field'])){ defaults.field = options.field; }
 			layout.content.galleries.area.find('div.addContact div.card-body.py-4').parent().off().click(function(){
-				API.Builder.modal($('body'), {
+				Engine.Builder.modal($('body'), {
 				  title:'Upload',
 				  icon:'picture',
 				  zindex:'top',
@@ -1493,7 +1493,7 @@ API.Plugins.events = {
 					var footer = modal.find('.modal-footer');
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
-					API.Builder.dropzone(body,{acceptedFiles:"image/*"},function(action,zone,data){
+					Engine.Builder.dropzone(body,{acceptedFiles:"image/*"},function(action,zone,data){
 						switch(action){
 							case"sending":
 								var checkStatus = setInterval(function(){
@@ -1508,10 +1508,10 @@ API.Plugins.events = {
 											dataURL:data.dataURL,
 											event:dataset.this.raw.id,
 										};
-										API.request('events','upload',{data:picture},function(result){
+										Engine.request('events','upload',{data:picture},function(result){
 											var response = JSON.parse(result);
 											if(response.success != undefined){
-												API.Plugins.events.GUI.picture(response.output.picture,layout);
+												Engine.Plugins.events.GUI.picture(response.output.picture,layout);
 											}
 										});
 									}
@@ -1527,7 +1527,7 @@ API.Plugins.events = {
 			});
 			layout.content.galleries.area.find('div[data-picture] img').off().click(function(){
 				var pictureID = $(this).attr('data-picture');
-				API.Builder.modal($('body'), {
+				Engine.Builder.modal($('body'), {
 				  title:'View',
 				  icon:'picture',
 				  zindex:'top',
@@ -1549,7 +1549,7 @@ API.Plugins.events = {
 			layout.content.galleries.area.find('div[data-picture] button').off().click(function(){
 				var pictureID = $(this).attr('data-picture');
 				var picture = dataset.relations.galleries[Object.keys(dataset.relations.galleries)[0]].pictures[pictureID];
-				API.Builder.modal($('body'), {
+				Engine.Builder.modal($('body'), {
 				  title:'Are you sure?',
 				  icon:'delete',
 				  zindex:'top',
@@ -1562,10 +1562,10 @@ API.Plugins.events = {
 					var footer = modal.find('.modal-footer');
 					header.find('button[data-control="hide"]').remove();
 					header.find('button[data-control="update"]').remove();
-					body.html(API.Contents.Language['Are you sure you want to delete this picture?']);
-					footer.append('<button class="btn btn-danger" data-action="delete"><i class="fas fa-trash-alt mr-1"></i>'+API.Contents.Language['Delete']+'</button>');
+					body.html(Engine.Contents.Language['Are you sure you want to delete this picture?']);
+					footer.append('<button class="btn btn-danger" data-action="delete"><i class="fas fa-trash-alt mr-1"></i>'+Engine.Contents.Language['Delete']+'</button>');
 					footer.find('button[data-action="delete"]').off().click(function(){
-						API.request('events','deletePicture',{data:picture},function(result){
+						Engine.request('events','deletePicture',{data:picture},function(result){
 							var response = JSON.parse(result);
 							if(response.success != undefined){
 								layout.content.galleries.area.find('div[data-picture="'+response.output.picture.id+'"]').remove();
@@ -1580,4 +1580,4 @@ API.Plugins.events = {
 	},
 }
 
-API.Plugins.events.init();
+Engine.Plugins.events.init();

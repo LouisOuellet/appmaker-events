@@ -1,6 +1,6 @@
 {
-    "build": 191,
-    "version": "22.01-dev",
+    "build": 192,
+    "version": "22.02-dev",
     "name": "events",
     "repository": {
         "name": "appmaker-events",
