@@ -1,10 +1,10 @@
 {
-    "build": 196,
-    "version": "22.05-dev",
+    "build": 197,
+    "version": "22.05-pre-release",
     "name": "events",
     "repository": {
         "name": "appmaker-events",
-        "branch": "dev",
+        "branch": "pre-release",
         "host": {
             "git": "https:\/\/github.com\/LouisOuellet\/",
             "raw": "https:\/\/raw.githubusercontent.com\/LouisOuellet\/"
